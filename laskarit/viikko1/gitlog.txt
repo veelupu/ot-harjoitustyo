@@ -1,0 +1,130 @@
+commit a25e2e1d9cf88da6d62deea53dcb5cd8a46519d2
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:48:52 2020 +0200
+
+    miksi tämä ykkönen jäi tänne?
+
+ file1 | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit d3901c63a76f613b61443f00dcf80694c226da4f
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:48:12 2020 +0200
+
+    vikat harjoittelun muutokset
+
+ tiedostoja/{file2 => file22} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit fb722f2b69b0d5c2d3d1d717b764a78c5e86c3b7
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:42:18 2020 +0200
+
+    tiedostojen 1-3 lisäys
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 6f454cfdcdca6e4c4f3d062f7f71009bbb0be3e7
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:36:01 2020 +0200
+
+    ekaan ja kolmoseen muutoksia
+
+ eka.txt    | 2 +-
+ kolmas.txt | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 90a66ce844227f96c711a8307352bfa45f28c127
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:32:52 2020 +0200
+
+    ekajuttu
+
+ eka.txt | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+commit 6d1c2edec62da46ebddfe39eeeca226dfcb3e741
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:32:07 2020 +0200
+
+    uudelleennimentä
+
+ tiedosto.txt | 40 ----------------------------------------
+ 1 file changed, 40 deletions(-)
+
+commit a8f772cebf8d377f1b1ea468507150f3eddde3e1
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:30:34 2020 +0200
+
+    tokan poisto
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 57b8b51807916ba2f3e1059176564bb1d5fa8650
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:28:19 2020 +0200
+
+    poisto ja lisäys
+
+ tiedosto.txt | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+commit 1feb0d346700943af9cac8da4978f19bf7d19724
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:26:23 2020 +0200
+
+    tiedosto.txt
+
+ tiedosto.txt | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+commit 5a385f7066cc8c1ae30cc62da9fab501d35bb99b
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:11:06 2020 +0200
+
+    stuffijutut
+
+ stuff/jokintiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 050965410a8fb4d9c2bd3f84b95b04fa78f94c83
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:09:38 2020 +0200
+
+    muutoksia tokaan ja kolmoseen
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit cbfa63933d6ae983b45f0412ccf15ba9b9cc4f29
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 13:07:29 2020 +0200
+
+    kolmosen lisäys
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit cd79e4d421e3e1d9f758a947cec302a7627d139a
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 12:54:14 2020 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 7290003948c20fc4f9c34679a1215eb860bf167d
+Author: Veera Lupunen <veera.lupunen@helsinki.fi>
+Date:   Tue Mar 17 12:50:57 2020 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
