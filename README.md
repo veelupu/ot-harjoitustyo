@@ -3,10 +3,18 @@
 
 ## Tämä on tämän työn ensimmäinen alaotsikko
 
+### Aluksi
+
 Tämän harjoituksen tarkoituksena on **oppia** hieman siitä, miten *Markdown-notaatiota* käytetään.
 
 * Ensinnäkin, otsikoiden ja listojen luominen vaikuttaa selkeältä ja helpolta.
 * Toiseksi, kun kytki syntaksivärityksen päälle, on entistä helpompi hahmottaa tekstin rakennetta sitä kirjoittaessa. 
+
+### Linkit
+
+[gitlog.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+
+[komentorivi.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
 ## Tämä on tämän työn toinen alaotsikko
  
