@@ -34,4 +34,17 @@ if (haluaaOppia) {
 }
 ```
 
+## Tämän otsikon alla ovat muutokset, jotka tein epäsynkronointi-tehtävää varten
+
+Oppiminen voi olla...
+
+ | Vaikeaa | Helppoa
+Mukavaa | |
+Kamalaa | |
+
+...ja välillä kaikkia näitä asioita yhtä aikaa.
+
+
+
+
 
