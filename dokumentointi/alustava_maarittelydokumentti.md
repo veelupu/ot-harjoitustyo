@@ -12,7 +12,7 @@ Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan muun muassa men
 
 ## Perusversion tarjoama toiminnallisuus
 
-Vaelluspäiväkirjan perusversiossa käyttäjä voi luoda, muokata ja selata vaelluksiaan, jotka on ryhmitelty menneisiin ja tuleviin vaelluksiin ja järjestetty alkamispäivän mukaan. Käyttäjä voi myös selata, luoda ja muokata varuste- ja ruokalistoja sekä liittää näitä vaelluksiin. Ruokalistoihin tallennettuja ruokalajeja voi liittää myös yksittäisiin päivämatkoihin.
+Vaelluspäiväkirjan perusversiossa käyttäjä voi luoda, muokata ja selata vaelluksiaan, jotka on ryhmitelty menneisiin ja tuleviin vaelluksiin ja järjestetty alkamispäivän mukaan. Käyttäjä voi myös selata, luoda ja muokata varuste- ja ruokalistoja sekä liittää näitä vaelluksiinsa. Ruokalistoihin tallennettuja yksittäisiä ruokalajeja voi liittää myös yksittäisiin päivämatkoihin.
 
 ### Vaellus
 
@@ -25,13 +25,15 @@ Vaellus koostuu
 * rinkan alku- ja loppupainosta.
 * Käyttäjä voi valita, mitkä tiedot hän tallentaa (pl. päivämatkat, joita on oltava vähintään yksi).
 
+### Päivämatka
+
 Päivämatkalla on
 * päivämäärä
 * alku- ja loppupisteet (käyttäjän valinnan mukana nimiä tai koordinaatteja)
 * kuljettu matka (km) 
 * kävelyaika (tunteja ja minuutteja) sekä
 * mahdollisesti päiväkohtaiset ruokalajit.
-* Lisäksi on päivämatkalle on mahdollista tallentaa (lyhyt) kuvaus päivän säästä.
+* Lisäksi on päivämatkalle on mahdollista kirjoittaa (lyhyt) kuvaus päivän säästä.
 * Käyttäjä voi valita, mitkä tiedot hän tallentaa.
 
 ### Varuste- ja ruokalistat
