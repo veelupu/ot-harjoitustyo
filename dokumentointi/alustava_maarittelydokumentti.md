@@ -10,6 +10,8 @@ Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käy
 ## Käyttöliittymäluonnos
 Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan muun muassa menneiden vaellusten listaukseen, tulevien vaellusten listaukseen sekä _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
 
+_Tähän piirretyt luonnoskuvat eri näkymistä._
+
 ## Perusversion tarjoama toiminnallisuus
 
 Vaelluspäiväkirjan perusversiossa käyttäjä voi luoda, muokata ja selata vaelluksiaan, jotka on ryhmitelty menneisiin ja tuleviin vaelluksiin ja järjestetty alkamispäivän mukaan. Käyttäjä voi myös selata, luoda ja muokata varuste- ja ruokalistoja sekä liittää näitä vaelluksiinsa. Ruokalistoihin tallennettuja yksittäisiä ruokalajeja voi liittää myös yksittäisiin päivämatkoihin.
@@ -17,7 +19,7 @@ Vaelluspäiväkirjan perusversiossa käyttäjä voi luoda, muokata ja selata vae
 ### Vaellus
 
 Vaellus koostuu
-* päivämatkoista, joita on vähintään yksi vaellusta kohti
+* päivämatkoista, joita on vähintään yksi vaellusta kohti (päivämatka on järjestetty päivämäärän mukaan)
 * kohteesta (paikannimi)
 * varustelistasta
 * ruokalistasta
