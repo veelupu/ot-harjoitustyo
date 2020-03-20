@@ -12,6 +12,10 @@ Tämän harjoituksen tarkoituksena on **oppia** hieman siitä, miten *Markdown-n
 
 ### Linkit
 
+[Alustava määrittelydokumentti](dokumentointi/alustava_maarittelydokumentti.md)
+
+[Työajanseuranta](tyoajanseuranta.md)
+
 [gitlog.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
 
 [komentorivi.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
