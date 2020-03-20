@@ -38,9 +38,10 @@ if (haluaaOppia) {
 
 Oppiminen voi olla...
 
- | Vaikeaa | Helppoa
-Mukavaa | |
-Kamalaa | |
+| | Vaikeaa | Helppoa |
+| -- | ---- | ----|
+| Mukavaa | | |
+| Kamalaa | | |
 
 ...ja välillä kaikkia näitä asioita yhtä aikaa.
 
