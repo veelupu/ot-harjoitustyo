@@ -8,9 +8,10 @@ Vaelluspäiväkirjan avulla käyttäjä voi pitää kätevästi kirjaa menneiden
 Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käyttäjä_.
 
 ## Käyttöliittymäluonnos
-Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan menneiden vaellusten listaukseen, tulevien vaellusten listaukseen sekä _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
+Sovellus avautuu aloitusnäkymässä, josta pääsee luomaan uuden vaelluksen sekä navigoimaan menneiden vaellusten listaukseen, tulevien vaellusten listaukseen ja _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
 
-_Tähän piirretyt luonnoskuvat eri näkymistä._
+Alla olevassa luonnoskuvassa on esitelty kolme näkymää: aloitusnäkymä, menneiden vaellusten listaus ja valitun vaelluksen tiedot esittelevä näkymä.
+![Image of user interface (sketch)](/OHTE_luonnos_kayttoliittymasta.jpg)
 
 ## Perusversion tarjoama toiminnallisuus
 
@@ -42,7 +43,7 @@ Päivämatkalla on
 Käyttäjä voi luoda varustelistoja, jotka tallentavat listan vaellukselle mukaan otettavista varusteista. Samaan tapaan käyttäjä voi luoda myös ruokalistoja, jotka tallentavat vaellukselle suunnitellut ruokalajit. Ruokalajien kohdalle voi merkitä vaelluspäivän, jolle se on suunniteltu. Saman varuste- tai ruokalistan voi liittää useampaan vaellukseen, ja listoja voi myös muokata.
 
 ### Asetukset
-Aloittaessaan sovelluksen käytön, käyttäjä luo itselleen käyttäjänimen, joka voi olla käyttäjän oma nimi tai itse keksitty nimimerkki. Nimen voi vaihtaa asetuksissa.
+Aloittaessaan sovelluksen käytön käyttäjä luo itselleen käyttäjänimen, joka voi olla käyttäjän oma nimi tai itse keksitty nimimerkki. Nimen voi vaihtaa asetuksissa.
 
 ## Jatkokehitysideoita
 Myöhemmin sovellukseen lisättäviä toiminnallisuuksia voivat esimerkiksi olla 
