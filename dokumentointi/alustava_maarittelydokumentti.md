@@ -8,7 +8,7 @@ Vaelluspäiväkirjan avulla käyttäjä voi pitää kätevästi kirjaa menneiden
 Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käyttäjä_.
 
 ## Käyttöliittymäluonnos
-Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan muun muassa menneiden vaellusten listaukseen, tulevien vaellusten listaukseen sekä _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
+Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan menneiden vaellusten listaukseen, tulevien vaellusten listaukseen sekä _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
 
 _Tähän piirretyt luonnoskuvat eri näkymistä._
 
