@@ -5,7 +5,7 @@
 Vaelluspäiväkirjan avulla käyttäjä voi pitää kätevästi kirjaa menneiden ja tulevien vaellusreissujensa reiteistä ja päivämatkoista. Lisäksi sovellukseen voi tallentaa esimerkiksi tiedon matkaseuralaisista, rinkan painosta, päiväkohtaisesta säästä sekä vaelluksen ruoka- ja varustelistat. Sovelluksessa näkee helposti tekemiensä vaellusten tiedot, joita voi hyödyntää seuraavia vaelluksia suunnitellessa.  
 
 ## Käyttäjät
-Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käyttäjä_. 
+Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käyttäjä_.
 
 ## Käyttöliittymäluonnos
 Sovellus avautuu aloitusnäkymässä, josta pääsee navigoimaan muun muassa menneiden vaellusten listaukseen, tulevien vaellusten listaukseen sekä _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
@@ -42,10 +42,9 @@ Päivämatkalla on
 Käyttäjä voi luoda varustelistoja, jotka tallentavat listan vaellukselle mukaan otettavista varusteista. Samaan tapaan käyttäjä voi luoda myös ruokalistoja, jotka tallentavat vaellukselle suunnitellut ruokalajit. Ruokalajien kohdalle voi merkitä vaelluspäivän, jolle se on suunniteltu. Saman varuste- tai ruokalistan voi liittää useampaan vaellukseen, ja listoja voi myös muokata.
 
 ### Asetukset
-* Aloittaessaan sovelluksen käytön, käyttäjä luo itselleen käyttäjänimen, joka voi olla käyttäjän oma nimi tai itse keksitty nimimerkki. Nimen pystyy vaihtamaan asetuksissa.
-* _Muuta?_
+Aloittaessaan sovelluksen käytön, käyttäjä luo itselleen käyttäjänimen, joka voi olla käyttäjän oma nimi tai itse keksitty nimimerkki. Nimen voi vaihtaa asetuksissa.
 
 ## Jatkokehitysideoita
-Myöhemmin sovellukseen lisättäviä toiminnallisuuksia ovat 
-* käyttäjäprofiilin laajentaminen (mm. profiilikuva, ikä)
-* käyttäjien välinen kommunikointi
+Myöhemmin sovellukseen lisättäviä toiminnallisuuksia voivat esimerkiksi olla 
+* käyttäjäprofiilin laajentaminen (mm. profiilikuva, ikä) ja
+* käyttäjien välinen kommunikointi.
