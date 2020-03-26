@@ -11,7 +11,7 @@ Sovelluksen käyttäjien käyttäjärooli on lähtökohtaisesti _tavallinen käy
 Sovellus avautuu aloitusnäkymässä, josta pääsee luomaan uuden vaelluksen sekä navigoimaan menneiden vaellusten listaukseen, tulevien vaellusten listaukseen ja _Asetuksiin_. Menneiden ja tulevien vaellusten listauksissa käyttäjä voi valita tarkasteltavaksi jonkin tietyn vaelluksen. Kun jokin tietty vaellus valitaan, aukeaa uusi näkymä, jossa on ko. vaellukseen tallennetut tiedot. Osa tiedoista, esimerkiksi ruoka- ja varustelistat, ovat linkkejä seuraaviin näkymiin. Aloittaessaan sovelluksen käytön ensimmäistä kertaa käyttäjä luo itselleen käyttäjäprofiilin, jota pääsee myöhemmin muokkaamaan _Asetuksista_.
 
 Alla olevassa luonnoskuvassa on esitelty kolme näkymää: aloitusnäkymä, menneiden vaellusten listaus ja valitun vaelluksen tiedot esittelevä näkymä.
-![Image of user interface (sketch)](/OHTE_luonnos_kayttoliittymasta.jpg)
+![Image of user interface (sketch)](../dokumentointi/OHTE_luonnos_kayttoliittymasta.jpg)
 
 ## Perusversion tarjoama toiminnallisuus
 
