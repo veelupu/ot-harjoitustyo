@@ -5,26 +5,47 @@
 package hikingDiary.ui;
 
 import hikingDiary.domain.Hike;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
  *
  * @author veeralupunen
  */
-public class Controller implements ControllerInterface {
+public class Controller {
     
-    private HashMap<String, Hike> hikes;
+    HashMap<String, Hike> hikes;
     
     public Controller() {
         this.hikes = new HashMap<>();
     }
     
-    @Override
-    public boolean createNewHike(String name, int year) {
+    public Hike getHike(String name) {
+        if (hikes.containsKey(name)) {
+            return hikes.get(name);
+        }
+        return null;
+    }
+    
+    public boolean createNewHike(String name, int year, boolean upcoming) {
         if (!hikes.containsKey(name)) {
-            hikes.put(name, new Hike(name, year));
+            hikes.put(name, new Hike(name, year, upcoming));
             return true;
         }
         return false;
     }
+    
+    public ArrayList<Hike> listPastHikes() {
+        ArrayList<Hike> pastHikes = new ArrayList<>();
+        for (String hike: hikes.keySet()) {
+            if (!hikes.get(hike).isUpcoming()) {
+                pastHikes.add(hikes.get(hike));
+            }
+        }
+        Collections.sort(pastHikes);
+        Collections.reverse(pastHikes);
+        return pastHikes;
+    }
+    
 }
