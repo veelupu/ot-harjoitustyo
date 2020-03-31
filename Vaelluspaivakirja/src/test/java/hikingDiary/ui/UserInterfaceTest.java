@@ -29,6 +29,7 @@ public class UserInterfaceTest {
     String pastHike1;
     String pastHike2;
     String upcomingHike1;
+    String upcomingHike2;
     
     public UserInterfaceTest() {
     }
@@ -48,6 +49,7 @@ public class UserInterfaceTest {
         pastHike1 = "1\nKaldoaivi\n2019\nA\n";
         pastHike2 = "1\nKevo\n2013\nA\n";
         upcomingHike1 = "1\nLofootit\n2020\nB\n";
+        upcomingHike2 = "1\nHalti\n2021\nB\n";
     }
     
 //    @After
@@ -105,6 +107,17 @@ public class UserInterfaceTest {
         assertEquals(2019, ui.c.listPastHikes().get(0).getYear());
         assertEquals("Kevo", ui.c.listPastHikes().get(1).getName());
         assertEquals(2013, ui.c.listPastHikes().get(1).getYear());
+    }
+    
+    //Option 3: Upcoming hikes
+    public void mainMenuOption3Works() {
+        InputStream testInput = IOUtils.toInputStream(upcomingHike1 + upcomingHike2 + "3\n" + quit, java.nio.charset.StandardCharsets.UTF_8);
+        UserInterface ui = new UserInterface(testInput, u);
+        ui.start();
+        assertEquals("Lofootit", ui.c.listPastHikes().get(0).getName());
+        assertEquals(2020, ui.c.listPastHikes().get(0).getYear());
+        assertEquals("Halti", ui.c.listPastHikes().get(1).getName());
+        assertEquals(2021, ui.c.listPastHikes().get(1).getYear());
     }
     
     //Option 4: Settings

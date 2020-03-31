@@ -55,13 +55,14 @@ public class UserInterface {
             } else if (option.equals("2")) {
                 pastHikes();
             } else if (option.equals("3")) {
-                //Tee tätä
+                upcomingHikes();
             } else if (option.equals("4")) {
                 changeSettings();
             } else if (option.equals("5")) {
                 System.out.println("Do you really want to leave?");
                 String answer = reader.nextLine();
                 if (answer.equals("Yes")) {
+                    System.out.println("Ok! See you soon, " + user.getName() + "!");
                     return;
                 }
             } else {
@@ -105,6 +106,13 @@ public class UserInterface {
     //Option 2: Past hikes
     private void pastHikes() {
         for (Hike hike: c.listPastHikes()) {
+            System.out.println(hike.toString());
+        }
+    }
+    
+    //Option 3: Upcoming hikes
+    private void upcomingHikes() {
+        for (Hike hike: c.listUpcomingHikes()) {
             System.out.println(hike.toString());
         }
     }

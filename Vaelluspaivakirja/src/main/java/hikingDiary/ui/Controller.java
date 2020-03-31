@@ -21,19 +21,19 @@ public class Controller {
         this.hikes = new HashMap<>();
     }
     
-    public Hike getHike(String name) {
-        if (hikes.containsKey(name)) {
-            return hikes.get(name);
-        }
-        return null;
-    }
-    
     public boolean createNewHike(String name, int year, boolean upcoming) {
         if (!hikes.containsKey(name)) {
             hikes.put(name, new Hike(name, year, upcoming));
             return true;
         }
         return false;
+    }
+    
+    public Hike getHike(String name) {
+        if (hikes.containsKey(name)) {
+            return hikes.get(name);
+        }
+        return null;
     }
     
     public ArrayList<Hike> listPastHikes() {
@@ -46,6 +46,17 @@ public class Controller {
         Collections.sort(pastHikes);
         Collections.reverse(pastHikes);
         return pastHikes;
+    }
+    
+    public ArrayList<Hike> listUpcomingHikes() {
+        ArrayList<Hike> upcomingHikes = new ArrayList<>();
+        for (String hike: hikes.keySet()) {
+            if (hikes.get(hike).isUpcoming()) {
+                upcomingHikes.add(hikes.get(hike));
+            }
+        }
+        Collections.sort(upcomingHikes);
+        return upcomingHikes;
     }
     
 }

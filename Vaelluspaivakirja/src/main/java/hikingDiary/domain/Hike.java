@@ -51,4 +51,16 @@ public class Hike implements Comparable<Hike> {
             return 0;
         }
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Hike)) {
+            return false;
+        }
+        Hike oHike = (Hike) o;
+        return (this.name.equals(oHike.name) && this.year == oHike.year && this.upcoming == oHike.upcoming);
+    }
 }
