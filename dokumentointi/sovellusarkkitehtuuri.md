@@ -3,7 +3,7 @@
 ## Rakenne
 Ohjelman rakenne noudattaa kolmitasoista kerrosarkkitehtuuria. Lähdekoodin pakkausrakenne on niin ikään kolmiosainen:
 
-_Tähän kuva pakkausrakenteesta_
+![Image of package structure (sketch)](../dokumentointi/vaelluspaivakirja_pakkauskaavio_1.jpg)
 
 Pakkauksessa hikingDiary.ui on sekä tekstikäyttöliittymän että JavaFX:llä toteutettu graafisen käyttöliittymän lähdekoodi. Pakkauksessa hikingDiary.domain sisältää ohjelman sovelluslogiikan. Pakkauksessa hikingDiary.dao oleva lähdekoodi taas hoitaa ohjelmaan liittyvän pysyväistalletuksen.
 
@@ -17,7 +17,9 @@ Käyttöliittymässä on useita eri näkymiä. Kun sovellus käynnistetään, av
 
 ## Sovelluslogiikka
 
-_Tähän logiikka-kaaviot_
+_Tähän sanallinen kuvaus sovelluslogiikasta_
+
+![Imgae of class structure (sketch)](../dokumentointi/vaelluspaivakirja_luokkakaavio_1.jpg)
 
 ## Tietojen pysyväistalletus
 
