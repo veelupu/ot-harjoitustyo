@@ -1,53 +1,20 @@
 
-# Tämä on tämän harjoitustyön otsikko
+# Vaelluspäiväkirja
 
-## Tämä on tämän työn ensimmäinen alaotsikko
+Vaelluspäiväkirja-sovelluksen avulla sovelluksen käyttäjän on helppoa ja kätevää pitää kirjaa menneistä vaelluksistaan sekä suunnitella tulevia vaelluksiaan. Sovellukseen voi tallentaa tiedot vaelluksistaan päivämatkoja, rinkan painoa, seuralaisia, säätä sekä ruoka- ja varustelistoja myöten. Sovelluksessa voi selata ja hakea erikseen menneitä ja tulevia vaelluksiaan sekä käyttää menneiden vaellusten listoja ja päivämatkatietoja uusien vaellusten suunnittelun pohjana.
 
-### Aluksi
+## Dokumentaatio
 
-Tämän harjoituksen tarkoituksena on **oppia** hieman siitä, miten *Markdown-notaatiota* käytetään.
-
-* Ensinnäkin, otsikoiden ja listojen luominen vaikuttaa selkeältä ja helpolta.
-* Toiseksi, kun kytki syntaksivärityksen päälle, on entistä helpompi hahmottaa tekstin rakennetta sitä kirjoittaessa. 
-
-### Linkit
+[Käyttöohje]
+_Tähän käyttöohjedokumentti_
 
 [Alustava määrittelydokumentti](dokumentointi/alustava_maarittelydokumentti.md)
 
+[Arkkitehtuuri]
+
+[Testaus]
+
 [Työajanseuranta](tyoajanseuranta.md)
-
-[gitlog.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
-
-[komentorivi.txt](https://github.com/veelupu/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
-
-## Tämä on tämän työn toinen alaotsikko
- 
-_Mitä on oppia?_
-
-Joku joskus sanoi viisaasti:
-
-> Uuden oppiminen vaatii lähinnä istumalihaksia.
-
-Toisin ilmaistuna
-
-```java
-if (haluaaOppia) {
-	istuAlas;
-	opiskele;
-	return tulokset;
-}
-```
-
-## Tämän otsikon alla ovat muutokset, jotka tein epäsynkronointi-tehtävää varten
-
-Oppiminen voi olla...
-
-| | Vaikeaa | Helppoa |
-| -- | ---- | ----|
-| Mukavaa | | |
-| Kamalaa | | |
-
-...ja välillä kaikkia näitä asioita yhtä aikaa.
 
 
 
