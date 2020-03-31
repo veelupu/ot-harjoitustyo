@@ -8,4 +8,4 @@ _Tähän tarkemmin yksikkö- ja integraatiotestauksesta_
 
 ### Testauskattavuus
 
-Testit ovat tähän mennessä toteutetun toiminnallisuuden osalta kattavat. 
+Testit ovat tähän mennessä toteutetun toiminnallisuuden osalta melko kattavat. 
