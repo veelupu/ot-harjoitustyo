@@ -8,5 +8,6 @@
 | 24.3.2020 | 2 | Graafisen käyttöliittymän luonnos, alustavan määrittelydokumentin hiominen |
 | 26.3.2020 | 2 | Luokka- ja pakkauskaavioiden laatiminen, pakkausten ja luokkien luominen |
 | 27.3.2020 | 3,5 | Tekstikäyttöliittymän ja testien työstäminen |
+| 31.3.2020 | 7,5 | Lisää testejä, graafisen käyttöliittymän aloittaminen |
 
-**Yhteensä** 10,5 tuntia
+**Yhteensä** 18 tuntia
