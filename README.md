@@ -10,9 +10,9 @@ _Tähän käyttöohjedokumentti_
 
 [Alustava määrittelydokumentti](dokumentointi/alustava_maarittelydokumentti.md)
 
-[Arkkitehtuuri]
+[Sovellusarkkitehtuuri](dokumentointi/sovellusarkkitehtuuri.md)
 
-[Testaus]
+[Testaus](dokumentointi/testaus.md)
 
 [Työajanseuranta](tyoajanseuranta.md)
 
