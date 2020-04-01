@@ -16,7 +16,7 @@ _Tähän käyttöohjedokumentti_
 
 [Testaus](dokumentointi/testaus.md)
 
-[Työajanseuranta](tyoajanseuranta.md)
+[Työajanseuranta](dokumentointi/tyoajanseuranta.md)
 
 
 
