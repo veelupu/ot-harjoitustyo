@@ -9,6 +9,6 @@
 | 26.3.2020 | 2 | Luokka- ja pakkauskaavioiden laatiminen, pakkausten ja luokkien luominen |
 | 27.3.2020 | 3,5 | Tekstikäyttöliittymän ja testien työstäminen |
 | 31.3.2020 | 7,5 | Lisää testejä, graafisen käyttöliittymän aloittaminen |
-| 6.4.2020 | 4 | Checkstylen käyttöönotto, lisää graafista käyttöliittymää |
+| 6.4.2020 | 6 | Checkstylen käyttöönotto, lisää graafista käyttöliittymää |
 
-**Yhteensä** 22 tuntia
+**Yhteensä** 24 tuntia
