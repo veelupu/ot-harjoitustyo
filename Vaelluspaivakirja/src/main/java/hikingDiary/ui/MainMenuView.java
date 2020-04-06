@@ -35,7 +35,7 @@ public class MainMenuView {
         
         b1.setOnAction((event) -> ui.bp.setCenter(new CreateHikeView(c).getView()));
             //avaa näkymä, jossa voi luoda uuden Hike-olion           
-        b2.setOnAction((event) -> ui.bp.setCenter(new ListPastHikesView(c).getView()));
+        b2.setOnAction((event) -> ui.bp.setCenter(new ListPastHikesView(c, ui, gp).getView()));
             //avaa näkymä, jossa on lista menneistä vaelluksista            
         b3.setOnAction((event) -> ui.bp.setCenter(new ListUpcomingHikesView(c).getView()));
             //avaa näkymä, jossa on lista tulevista vaelluksista

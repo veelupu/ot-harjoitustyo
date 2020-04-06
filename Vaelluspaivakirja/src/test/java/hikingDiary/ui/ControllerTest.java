@@ -5,6 +5,7 @@
 package hikingdiary.ui;
 
 import hikingdiary.domain.Hike;
+import hikingdiary.domain.User;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,13 +21,15 @@ import static org.junit.Assert.*;
 public class ControllerTest {
     
     private Controller c;
+    private User u;
     
     public ControllerTest() {
+        u = new User("Veera");
     }
     
     @Before
     public void setUp() {
-        c = new Controller();
+        c = new Controller(u);
     }
     
     @Test

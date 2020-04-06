@@ -50,4 +50,6 @@ public class GraphicalUserInterface extends Application {
         window.setScene(view);
         window.show();
     }  
+    
+    
 }
