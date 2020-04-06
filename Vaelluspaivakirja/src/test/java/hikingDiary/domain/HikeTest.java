@@ -2,7 +2,7 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.domain;
+package hikingdiary.domain;
 
 import org.junit.After;
 import org.junit.AfterClass;

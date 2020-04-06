@@ -2,9 +2,10 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.ui;
+package hikingdiary.ui;
 
-import hikingDiary.domain.Hike;
+import hikingdiary.domain.Hike;
+import hikingdiary.domain.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,9 +17,11 @@ import java.util.HashMap;
 public class Controller {
     
     HashMap<String, Hike> hikes;
+    User user;
     
-    public Controller() {
+    public Controller(User user) {
         this.hikes = new HashMap<>();
+        this.user = user;
     }
     
     public boolean createNewHike(String name, int year, boolean upcoming) {
@@ -57,6 +60,10 @@ public class Controller {
         }
         Collections.sort(upcomingHikes);
         return upcomingHikes;
+    }
+    
+    public void changeUsername(String newName) {
+        user.setName(newName);
     }
     
 }

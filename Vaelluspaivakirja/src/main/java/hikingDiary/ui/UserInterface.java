@@ -1,10 +1,10 @@
 /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.ui;
+package hikingdiary.ui;
 
-import hikingDiary.domain.Hike;
-import hikingDiary.domain.User;
+import hikingdiary.domain.Hike;
+import hikingdiary.domain.User;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -19,20 +19,20 @@ public class UserInterface {
     Controller c;
 
     public UserInterface(Scanner reader, User user) {
-        c = new Controller();
         this.reader = reader;
         this.user = user;
+        c = new Controller(this.user);
     }
 
     public UserInterface(InputStream ips, User user) {
-        c = new Controller();
-        this.reader = new Scanner(ips);
         this.user = user;
+        c = new Controller(this.user);
+        this.reader = new Scanner(ips);
     }
 
     public UserInterface(User user) {
-        c = new Controller();
         this.user = user;
+        c = new Controller(this.user);
     }
 
     public void start() {

@@ -2,9 +2,9 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.ui;
+package hikingdiary.ui;
 
-import hikingDiary.domain.Hike;
+import hikingdiary.domain.Hike;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;

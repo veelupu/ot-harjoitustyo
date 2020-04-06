@@ -1,13 +1,13 @@
-package hikingDiary.ui;
+package hikingdiary.ui;
 
 /*
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
 
-import hikingDiary.domain.User;
-import hikingDiary.ui.UserInterface;
-import hikingDiary.ui.Controller;
+import hikingdiary.domain.User;
+import hikingdiary.ui.UserInterface;
+import hikingdiary.ui.Controller;
 import java.io.InputStream;
 import java.util.Scanner;
 import org.apache.commons.io.IOUtils;

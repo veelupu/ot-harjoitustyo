@@ -2,7 +2,7 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.ui;
+package hikingdiary.ui;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -34,17 +34,13 @@ public class MainMenuView {
         createButtons();
         
         b1.setOnAction((event) -> ui.bp.setCenter(new CreateHikeView(c).getView()));
-            //avaa näkymä, jossa voi luoda uuden Hike-olion
-            
-        b2.setOnAction((event) -> {
-            //avaa näkymä, jossa on lista menneistä vaelluksista
-        });
-        b3.setOnAction((event) -> {
+            //avaa näkymä, jossa voi luoda uuden Hike-olion           
+        b2.setOnAction((event) -> ui.bp.setCenter(new ListPastHikesView(c).getView()));
+            //avaa näkymä, jossa on lista menneistä vaelluksista            
+        b3.setOnAction((event) -> ui.bp.setCenter(new ListUpcomingHikesView(c).getView()));
             //avaa näkymä, jossa on lista tulevista vaelluksista
-        });
-        b4.setOnAction((event) -> {
+        b4.setOnAction((event) -> ui.bp.setCenter(new SettingsView(c).getView()));
             //avaa näkymä, jossa voi muuttaa käyttäjänimeä
-        });
         b5.setOnAction((event) -> {
             //sulkee sovelluksen
         });

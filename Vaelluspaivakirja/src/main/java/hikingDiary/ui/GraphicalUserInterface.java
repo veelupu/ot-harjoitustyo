@@ -2,9 +2,9 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingDiary.ui;
+package hikingdiary.ui;
 
-import hikingDiary.domain.User;
+import hikingdiary.domain.User;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -27,8 +27,8 @@ public class GraphicalUserInterface extends Application {
 
     
     public GraphicalUserInterface() {
-        this.c = new Controller();
         this.user = new User("Veera");
+        this.c = new Controller(user);
         this.gp = new GridPane();
         this.bp = new BorderPane();
     }
