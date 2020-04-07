@@ -10,6 +10,6 @@
 | 27.3.2020 | 3,5 | Tekstikäyttöliittymän ja testien työstäminen |
 | 31.3.2020 | 7,5 | Lisää testejä, graafisen käyttöliittymän aloittaminen |
 | 6.4.2020 | 6 | Checkstylen käyttöönotto, lisää graafista käyttöliittymää |
-| 7.4.2020 | 2,5 | DAOjen aloitus |
+| 7.4.2020 | 3 | DAOjen aloitus |
 
-**Yhteensä** 26,5 tuntia
+**Yhteensä** 27 tuntia
