@@ -16,7 +16,7 @@ import java.util.List;
 public class FakeDBHikeDao implements HikeDao<Hike, Integer>{
 
     @Override
-    public void create(Hike object) throws SQLException {
+    public void create(Hike object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -36,7 +36,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer>{
     }
 
     @Override
-    public List<Hike> list() throws SQLException {
+    public List<Hike> list() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

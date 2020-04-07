@@ -12,11 +12,11 @@ import java.util.*;
  * @author veeralupunen
  */
 public interface HikeDao<T, K> {
-    void create(T object) throws SQLException;
+    void create(T object);
     T read(K key) throws SQLException;
     T update(T object) throws SQLException;
     void delete(K key) throws SQLException;
-    List<T> list() throws SQLException;
+    List<T> list();
     List<T> listPastHikes() throws SQLException;
     List<T> listUpcomingHikes() throws SQLException;
 }

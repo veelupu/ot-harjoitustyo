@@ -25,31 +25,41 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Connection failed.");
             System.err.println(e.getMessage());
         }
-        
-
+        try {
+            createHikeTable();
+        } catch (Exception e) {
+            System.err.println("Table creation failed.");
+            System.err.println(e.getMessage());
+        }
     }
 
     public void createHikeTable() throws SQLException {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");
-        s.execute("CREATE TABLE Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL)");
         s.execute("COMMIT");
     }
 
     @Override
-    public void create(Hike hike) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)");
-        ps.setString(1, hike.getName());
-        ps.setInt(2, hike.getYear());
-        ps.setBoolean(3, hike.isUpcoming());
+    public void create(Hike hike) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)");
+            ps.setString(1, hike.getName());
+            ps.setInt(2, hike.getYear());
+            ps.setBoolean(3, hike.isUpcoming());
 
-        ps.executeUpdate();
-        ps.close();
-        connection.close();
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Tulostus: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Hike creation failed.");
+            System.err.println(e.getMessage());
+        }
+        //connection.close(); //tee tälle oma metodi ja kutsu sitä kun lopetetaan
     }
-    
-        @Override
+
+    @Override
     public Hike read(Integer key) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE id = ?");
         ps.setInt(1, key);
@@ -77,17 +87,14 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
-    public List<Hike> list() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE");
-        ResultSet rs = ps.executeQuery();
-
-        if (!rs.next()) {
-            return null;
-        }
-
+    public List<Hike> list() {
         ArrayList<Hike> hikes = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes");
+        ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
             //boolean upcoming = rs.getBoolean("upcoming");
@@ -97,7 +104,10 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
         ps.close();
         rs.close();
-
+        } catch (SQLException e) {
+            System.err.println("Listing all hikes failed.");
+            System.err.println(e.getMessage());
+        }
         return hikes;
     }
 
@@ -106,10 +116,6 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 0");
         ResultSet rs = ps.executeQuery();
 
-        if (!rs.next()) {
-            return null;
-        }
-
         ArrayList<Hike> hikes = new ArrayList<>();
 
         while (rs.next()) {
@@ -123,15 +129,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
         return hikes;
     }
-    
+
     @Override
     public List<Hike> listUpcomingHikes() throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 1");
         ResultSet rs = ps.executeQuery();
-
-        if (!rs.next()) {
-            return null;
-        }
 
         ArrayList<Hike> hikes = new ArrayList<>();
 
