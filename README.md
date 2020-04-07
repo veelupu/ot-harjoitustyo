@@ -18,7 +18,30 @@ _Tähän käyttöohjedokumentti_
 
 [Työajanseuranta](dokumentointi/tyoajanseuranta.md)
 
+## Komentorivitoiminnot
 
+Ohjelman suoritetaan komennolla
 
+```
+mvn compile exec:java -Dexec.mainClass=hikingdiary.ui.Main
+```
 
+Testit suoritetaan komennolla
+
+```
+mvn test
+```
+
+Testikattavuusraportti luodaan komennolla
+
+```
+mvn jacoco:report
+```
+Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto target/site/jacoco/index.html
+
+Checkstyle-tarkistukset luodaan tiedostoon [checkstyle.xml](Vaelluspaivakirja/checkstyle.xml) komennolla
+
+```
+mvn jxr:jxr checkstyle:checkstyle
+```
 
