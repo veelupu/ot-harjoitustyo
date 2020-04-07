@@ -44,10 +44,12 @@ public class Controller {
     }
 
     public Hike getHike(String name) {
-        if (hikes.containsKey(name)) {
-            return hikes.get(name);
-        }
-        return null;
+        Hike hike = hikeDao.read(name);
+//        if (hikes.containsKey(name)) {
+//            return hikes.get(name);
+//        }
+//        return null;
+        return hike;
     }
 
     public List<Hike> listPastHikes() {

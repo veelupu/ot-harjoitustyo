@@ -9,4 +9,7 @@
     <suppress files="hikingdiary.ui.UserInterface.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="hikingdiary.ui.CreateHikeView.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="hikingdiary.ui.GraphicalUserInterface.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.HikeView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.ListPastHikesView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.SettingsView.java" checks="[a-zA-Z0-9]*"/>
 </suppressions>

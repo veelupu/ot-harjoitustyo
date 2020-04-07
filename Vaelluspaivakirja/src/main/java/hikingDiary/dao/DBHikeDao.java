@@ -60,22 +60,23 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public Hike read(Integer key) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE id = ?");
-        ps.setInt(1, key);
-        ResultSet rs = ps.executeQuery();
+    public Hike read(String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
 
-        if (!rs.next()) {
-            return null;
+            boolean upcoming = rs.getBoolean("upcoming");
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming);
+
+            ps.close();
+            rs.close();
+            return hike;
+        } catch (SQLException e) {
+            System.err.println("Hike get failed.");
+            System.err.println(e.getMessage());
         }
-
-        boolean upcoming = rs.getBoolean("upcoming");
-        Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming);
-
-        ps.close();
-        rs.close();
-
-        return hike;
+        return null;
     }
 
     @Override
@@ -91,19 +92,19 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public List<Hike> list() {
         ArrayList<Hike> hikes = new ArrayList<>();
-        
+
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes");
-        ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            //boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
-            hikes.add(hike);
-        }
+            while (rs.next()) {
+                //boolean upcoming = rs.getBoolean("upcoming");
+                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+                hikes.add(hike);
+            }
 
-        ps.close();
-        rs.close();
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             System.err.println("Listing all hikes failed.");
             System.err.println(e.getMessage());

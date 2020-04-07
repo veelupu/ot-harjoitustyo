@@ -4,6 +4,7 @@
  */
 package hikingdiary.dao;
 
+import hikingdiary.domain.Hike;
 import java.sql.*;
 import java.util.*;
 
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public interface HikeDao<T, K> {
     void create(T object);
-    T read(K key) throws SQLException;
+    Hike read(String name);
     T update(T object) throws SQLException;
     void delete(K key) throws SQLException;
     List<T> list();
