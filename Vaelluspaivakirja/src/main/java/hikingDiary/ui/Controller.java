@@ -4,9 +4,11 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.dao.HikeDao;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -18,17 +20,30 @@ public class Controller {
     
     HashMap<String, Hike> hikes;
     User user;
+    private HikeDao hikeDao;
     
-    public Controller(User user) {
+    public Controller(User user, HikeDao hikeDao) {
         this.hikes = new HashMap<>();
         this.user = user;
+        this.hikeDao = hikeDao;
     }
     
     public boolean createNewHike(String name, int year, boolean upcoming) {
-        if (!hikes.containsKey(name)) {
-            hikes.put(name, new Hike(name, year, upcoming));
-            return true;
+        Hike hike = new Hike(name, year, upcoming);
+        
+        try {
+            if (!hikeDao.list().contains(hike)) {
+                hikeDao.create(hike);
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
+        
+//        if (!hikes.containsKey(name)) {
+//            hikes.put(name, new Hike(name, year, upcoming));
+//            return true;
+//        }
         return false;
     }
     
@@ -39,25 +54,40 @@ public class Controller {
         return null;
     }
     
-    public ArrayList<Hike> listPastHikes() {
-        ArrayList<Hike> pastHikes = new ArrayList<>();
-        for (String hike: hikes.keySet()) {
-            if (!hikes.get(hike).isUpcoming()) {
-                pastHikes.add(hikes.get(hike));
-            }
+    public List<Hike> listPastHikes() {
+        List<Hike> pastHikes = new ArrayList<>();
+        
+        try {
+            pastHikes = hikeDao.listUpcomingHikes();
+        } catch (Exception e) {
+            System.err.println("Something went wrong with listing past hikes.");
         }
+        
+//        ArrayList<Hike> pastHikes = new ArrayList<>();
+//        for (String hike: hikes.keySet()) {
+//            if (!hikes.get(hike).isUpcoming()) {
+//                pastHikes.add(hikes.get(hike));
+//            }
+//        }
         Collections.sort(pastHikes);
         Collections.reverse(pastHikes);
         return pastHikes;
     }
     
-    public ArrayList<Hike> listUpcomingHikes() {
-        ArrayList<Hike> upcomingHikes = new ArrayList<>();
-        for (String hike: hikes.keySet()) {
-            if (hikes.get(hike).isUpcoming()) {
-                upcomingHikes.add(hikes.get(hike));
-            }
+    public List<Hike> listUpcomingHikes() {
+        List<Hike> upcomingHikes = new ArrayList<>();
+        
+        try {
+            upcomingHikes = hikeDao.listUpcomingHikes();
+        } catch (Exception e) {
+            System.err.println("Something went wrong with listing upcoming hikes.");
         }
+        
+//        for (String hike: hikes.keySet()) {
+//            if (hikes.get(hike).isUpcoming()) {
+//                upcomingHikes.add(hikes.get(hike));
+//            }
+//        }
         Collections.sort(upcomingHikes);
         return upcomingHikes;
     }

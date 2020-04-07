@@ -4,6 +4,8 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.dao.DBHikeDao;
+import hikingdiary.dao.HikeDao;
 import hikingdiary.domain.User;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -24,11 +26,12 @@ public class GraphicalUserInterface extends Application {
     Controller c;
     GridPane gp;
     BorderPane bp;
-
+    HikeDao hikeDao;
     
     public GraphicalUserInterface() {
         this.user = new User("Veera");
-        this.c = new Controller(user);
+        this.hikeDao = new DBHikeDao();
+        this.c = new Controller(user, hikeDao);
         this.gp = new GridPane();
         this.bp = new BorderPane();
     }

@@ -35,7 +35,7 @@ public class HikeView {
         Button bJourney = new Button(getOrDefault(hike.getKilometres(), "Add day trips"));
         Button bEquipment = new Button("Equipment\nlist");
         Button bRucksacStart = new Button("Rucksac\nin the beginning\n" + getOrDefault(hike.getRucksackWeightStart(), "?"));
-        Button bRucksacEnd = new Button("Rucksac\nin the beginning\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
+        Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
         
         gp.add(lName, 0, 1);
         gp.add(bLocation, 1, 1);

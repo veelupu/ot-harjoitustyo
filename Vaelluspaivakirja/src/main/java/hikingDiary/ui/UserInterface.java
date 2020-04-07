@@ -3,6 +3,8 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.dao.DBHikeDao;
+import hikingdiary.dao.HikeDao;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.io.InputStream;
@@ -17,22 +19,26 @@ public class UserInterface {
     Scanner reader;
     User user;
     Controller c;
+    HikeDao hikeDao;
 
     public UserInterface(Scanner reader, User user) {
         this.reader = reader;
         this.user = user;
-        c = new Controller(this.user);
+        this.hikeDao = new DBHikeDao();
+        c = new Controller(this.user, this.hikeDao);
     }
 
     public UserInterface(InputStream ips, User user) {
         this.user = user;
-        c = new Controller(this.user);
+        this.hikeDao = new DBHikeDao();
+        c = new Controller(this.user, this.hikeDao);
         this.reader = new Scanner(ips);
     }
 
     public UserInterface(User user) {
+        this.hikeDao = new DBHikeDao();
         this.user = user;
-        c = new Controller(this.user);
+        c = new Controller(this.user, this.hikeDao);
     }
 
     public void start() {

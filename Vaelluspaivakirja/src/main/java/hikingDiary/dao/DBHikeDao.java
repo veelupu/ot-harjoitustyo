@@ -1,0 +1,149 @@
+/*
+ * /*
+ * Copyright (c) Veera Lupunen 2020. All rights reserved.
+ */
+package hikingdiary.dao;
+
+import hikingdiary.domain.Hike;
+import java.util.*;
+import java.sql.*;
+
+/**
+ *
+ * @author veeralupunen
+ */
+public class DBHikeDao implements HikeDao<Hike, Integer> {
+
+    private String homeAddress;
+    private Connection connection;
+
+    public DBHikeDao() {
+        homeAddress = System.getProperty("user.home");
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + homeAddress + "/.hikes.db");
+        } catch (SQLException e) {
+            System.err.println("Connection failed.");
+            System.err.println(e.getMessage());
+        }
+        
+
+    }
+
+    public void createHikeTable() throws SQLException {
+        Statement s = connection.createStatement();
+        s.execute("BEGIN TRANSACTION");
+        s.execute("PRAGMA foreign_keys = ON");
+        s.execute("CREATE TABLE Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL)");
+        s.execute("COMMIT");
+    }
+
+    @Override
+    public void create(Hike hike) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)");
+        ps.setString(1, hike.getName());
+        ps.setInt(2, hike.getYear());
+        ps.setBoolean(3, hike.isUpcoming());
+
+        ps.executeUpdate();
+        ps.close();
+        connection.close();
+    }
+    
+        @Override
+    public Hike read(Integer key) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE id = ?");
+        ps.setInt(1, key);
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) {
+            return null;
+        }
+
+        boolean upcoming = rs.getBoolean("upcoming");
+        Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming);
+
+        ps.close();
+        rs.close();
+
+        return hike;
+    }
+
+    @Override
+    public Hike update(Hike object) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(Integer key) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public List<Hike> list() throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE");
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) {
+            return null;
+        }
+
+        ArrayList<Hike> hikes = new ArrayList<>();
+
+        while (rs.next()) {
+            //boolean upcoming = rs.getBoolean("upcoming");
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+            hikes.add(hike);
+        }
+
+        ps.close();
+        rs.close();
+
+        return hikes;
+    }
+
+    @Override
+    public List<Hike> listPastHikes() throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 0");
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) {
+            return null;
+        }
+
+        ArrayList<Hike> hikes = new ArrayList<>();
+
+        while (rs.next()) {
+            //boolean upcoming = rs.getBoolean("upcoming");
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+            hikes.add(hike);
+        }
+
+        ps.close();
+        rs.close();
+
+        return hikes;
+    }
+    
+    @Override
+    public List<Hike> listUpcomingHikes() throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 1");
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) {
+            return null;
+        }
+
+        ArrayList<Hike> hikes = new ArrayList<>();
+
+        while (rs.next()) {
+            //boolean upcoming = rs.getBoolean("upcoming");
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true);
+            hikes.add(hike);
+        }
+
+        ps.close();
+        rs.close();
+
+        return hikes;
+    }
+}
