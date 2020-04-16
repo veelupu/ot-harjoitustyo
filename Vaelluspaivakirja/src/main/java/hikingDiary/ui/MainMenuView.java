@@ -55,7 +55,7 @@ public class MainMenuView {
         b4 = new Button("Settings");
         b5 = new Button("Quit");
         
-        Button[] buttons = new Button[]{b1, b2, b3, b4, b5};
+        Button[] buttons = new Button[]{b1, b2, b3, b4};
         for (Button b : buttons) {
             b.setStyle(
                     "-fx-text-alignment: center;"
@@ -66,18 +66,18 @@ public class MainMenuView {
                     + "-fx-max-height: 120px;"
             );
         }
-        b5.setStyle("-fx-text-alignment: center;" +
-                "-fx-background-radius: 5em; " +
-                "-fx-min-width: 70px; " +
-                "-fx-min-height: 70px; " +
-                "-fx-max-width: 70px; " +
-                "-fx-max-height: 70px;");
+//        b5.setStyle("-fx-text-alignment: center;" +
+//                "-fx-background-radius: 5em; " +
+//                "-fx-min-width: 70px; " +
+//                "-fx-min-height: 70px; " +
+//                "-fx-max-width: 70px; " +
+//                "-fx-max-height: 70px;");
 
         gp.add(buttons[0], 1, 1);
         gp.add(buttons[1], 2, 1);
         gp.add(buttons[2], 1, 2);
         gp.add(buttons[3], 2, 2);
-        gp.add(buttons[4], 3, 2);
+        //gp.add(buttons[4], 3, 2);
     }
     
 }

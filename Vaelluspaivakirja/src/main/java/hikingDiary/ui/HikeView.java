@@ -34,7 +34,7 @@ public class HikeView {
         Button bDayTrips = new Button("Day trips");
         Button bJourney = new Button(getOrDefault(hike.getKilometres(), "Add day trips"));
         Button bEquipment = new Button("Equipment\nlist");
-        Button bRucksacStart = new Button("Rucksac\nin the beginning\n" + getOrDefault(hike.getRucksackWeightStart(), "?"));
+        Button bRucksacStart = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightStart(), "?"));
         Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
 
         gp.add(lName, 0, 1);
@@ -52,10 +52,10 @@ public class HikeView {
             b.setStyle(
                     "-fx-text-alignment: center;"
                     + "-fx-background-radius: 5em; "
-                    + "-fx-min-width: 120px; "
-                    + "-fx-min-height: 120px; "
-                    + "-fx-max-width: 120px; "
-                    + "-fx-max-height: 120px;"
+                    + "-fx-min-width: 100px; "
+                    + "-fx-min-height: 100px; "
+                    + "-fx-max-width: 100px; "
+                    + "-fx-max-height: 100px;"
             );
         }
 
@@ -63,13 +63,15 @@ public class HikeView {
                 "-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
                 + "-fx-min-width: 100px; "
-                + "-fx-min-height: 160px; "
+                + "-fx-min-height: 100px; "
                 + "-fx-max-width: 100px; "
-                + "-fx-max-height: 160px;");
+                + "-fx-max-height: 100px;");
 
+        //Miten ihmeessä tämän näkymän saisi oikean kokoiseksi heti kättelyssä!?
+        //gp.setPrefSize(1200, 600);
         gp.setAlignment(Pos.CENTER);
-        gp.setVgap(10);
-        gp.setHgap(10);
+        gp.setVgap(5);
+        gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
 
         return gp;

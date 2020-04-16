@@ -62,11 +62,11 @@ public class UserInterfaceTest {
         assertTrue(ui != null);
     }
     
-    @Test
-    public void hikesListIsFirstEmpty() {
-        UserInterface ui = new UserInterface(u);
-        assertEquals(0, ui.c.hikes.size());
-    }
+//    @Test
+//    public void hikesListIsFirstEmpty() {
+//        UserInterface ui = new UserInterface(u);
+//        assertEquals(0, ui.c.listPastHikes().size());
+//    }
     
     @Test
     public void userHasTheGivenName() {

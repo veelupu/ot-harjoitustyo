@@ -5,6 +5,7 @@
 package hikingdiary.ui;
 
 import hikingdiary.dao.FakeDBHikeDao;
+import hikingdiary.dao.FakeDBUserDao;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.util.HashMap;
@@ -24,15 +25,17 @@ public class ControllerTest {
     private Controller c;
     private User u;
     private FakeDBHikeDao hikeDao;
+    private FakeDBUserDao userDao;
     
     public ControllerTest() {
         u = new User("Veera");
         hikeDao = new FakeDBHikeDao();
+        userDao = new FakeDBUserDao();
     }
     
     @Before
     public void setUp() {
-        c = new Controller(u, hikeDao);
+        c = new Controller(hikeDao, userDao);
     }
     
     @After

@@ -41,17 +41,23 @@ public class ListPastHikesView {
         for (Hike hike : c.listPastHikes()) {
             Button b = new Button(hike.toString());
             b.setUserData(hike.getName());
+            
+            b.setOnMouseClicked((event) -> {
+                String hikeName = (String) b.getUserData();
+                ui.bp.setCenter(new HikeView(c.getHike(hikeName)).getView());
+            });
+            
             buttons.add(b);
             gp.add(b, 0, i);
             i++;
         }
 
-        for (Button b: buttons) {
-            b.setOnMouseClicked((event) -> {
-                String hike = (String) b.getUserData();
-                ui.bp.setCenter(new HikeView(c.hikes.get(hike)).getView());
-            });
-        }
+//        for (Button b: buttons) {
+//            b.setOnMouseClicked((event) -> {
+//                String hike = (String) b.getUserData();
+//                ui.bp.setCenter(new HikeView(c.hikes.get(hike)).getView());
+//            });
+//        }
 
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);

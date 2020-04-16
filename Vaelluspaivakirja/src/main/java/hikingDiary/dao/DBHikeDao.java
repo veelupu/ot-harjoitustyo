@@ -37,7 +37,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");
-        s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
         s.execute("COMMIT");
     }
 
@@ -50,7 +50,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.setBoolean(3, hike.isUpcoming());
 
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Tulostus: " + executeUpdate);
+            System.out.println("Create hike: " + executeUpdate);
             ps.close();
         } catch (SQLException e) {
             System.err.println("Hike creation failed.");
@@ -148,5 +148,39 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         rs.close();
 
         return hikes;
+    }
+    
+    public boolean addRucksacWeightBeg(int weight, String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacBeg) VALUES (?) WHERE name=?");
+            ps.setInt(1, weight);
+            ps.setString(2, name);
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Create hike: " + executeUpdate);
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Adding rucksac weight in the beginning failed.");
+            System.err.println(e.getMessage());
+        }
+        return false;
+    }
+    
+    public boolean addRucksacWeightEnd(int weight, String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacEnd) VALUES (?) WHERE name=?");
+            ps.setInt(1, weight);
+            ps.setString(2, name);
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Create hike: " + executeUpdate);
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Adding rucksac weight in the end failed.");
+            System.err.println(e.getMessage());
+        }
+        return false;
     }
 }

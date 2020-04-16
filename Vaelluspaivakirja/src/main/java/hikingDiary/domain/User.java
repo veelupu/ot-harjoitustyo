@@ -4,6 +4,8 @@
  */
 package hikingdiary.domain;
 
+import hikingdiary.dao.UserDao;
+
 /**
  *
  * @author veeralupunen
@@ -22,7 +24,7 @@ public class User {
     
     public void setName(String newName) {
         this.name = newName;
-        //LISÄÄ TÄHÄN: Päivitä tiedot tietokantaan daon kautta
     }
     
+    //Lisää jos tarvetta: käyttäjänimen poistaminen
 }

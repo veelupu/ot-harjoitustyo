@@ -22,7 +22,7 @@ public class Hike implements Comparable<Hike> {
     private ArrayList<String> companions;
     private MealList mealList;
     private EquipmentList equList;
-    private double rucksackWeightStart;
+    private double rucksackWeightBeg;
     private double rucksackWeightEnd;
     
     public Hike(String name, int year, boolean upcoming) {
@@ -64,11 +64,11 @@ public class Hike implements Comparable<Hike> {
     }
 
     public double getRucksackWeightStart() {
-        return rucksackWeightStart;
+        return rucksackWeightBeg;
     }
 
     public void setRucksackWeightStart(double rucksackWeight) {
-        this.rucksackWeightStart = rucksackWeight;
+        this.rucksackWeightBeg = rucksackWeight;
     }
 
     public double getRucksackWeightEnd() {

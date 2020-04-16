@@ -41,13 +41,14 @@ public class SettingsView {
         
         bReady.setOnMouseClicked((event) -> {
             try {
-                if (newName != null) {
+                if (newName.getText() != null) {
                     //ui.user.setName(newName.toString());
-                    c.changeUsername(newName.toString());
+                    c.changeUsername(newName.getText());
                     gp.add(new Label("Username changed successfully!"), 0, 4);
                 }
             } catch (Exception e) {
-                gp.add(new Label("That was not a correct username.\nTry again!"), 0, 4);
+                gp.add(new Label("Sorry, changing username failed.\nTry again!"), 0, 4);
+                System.out.println("Error when trying to change username: " + e.getMessage());
             }
         });
         

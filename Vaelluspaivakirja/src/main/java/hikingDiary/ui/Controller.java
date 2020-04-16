@@ -5,12 +5,13 @@
 package hikingdiary.ui;
 
 import hikingdiary.dao.HikeDao;
+import hikingdiary.dao.UserDao;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
-import java.util.HashMap;
+//import java.util.HashMap;
 
 /**
  *
@@ -18,17 +19,18 @@ import java.util.HashMap;
  */
 public class Controller {
 
-    HashMap<String, Hike> hikes;
-    User user;
+    //HashMap<String, Hike> hikes;
     private HikeDao hikeDao;
+    private UserDao userDao;
 
-    public Controller(User user, HikeDao hikeDao) {
-        this.hikes = new HashMap<>();
-        this.user = user;
+    public Controller(HikeDao hikeDao, UserDao userDao) {
+        //this.hikes = new HashMap<>();
         this.hikeDao = hikeDao;
+        this.userDao = userDao;
     }
 
     public boolean createNewHike(String name, int year, boolean upcoming) {
+        //Siirrä tämä toiminnallisuus Hike-luokkaan?
         Hike hike = new Hike(name, year, upcoming);
 
         if (!hikeDao.list().contains(hike)) {
@@ -90,8 +92,12 @@ public class Controller {
         return upcomingHikes;
     }
 
+    public void createUser(String name) {
+        userDao.create(new User(name));
+    }
+    
     public void changeUsername(String newName) {
-        user.setName(newName);
+        userDao.update(userDao.read(), newName);
     }
 
 }
