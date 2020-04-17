@@ -9,6 +9,7 @@ import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
 import hikingdiary.domain.User;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -91,22 +93,60 @@ public class GraphicalUserInterface extends Application {
     private void openMainMenuView(Stage window) {
         window.setTitle(userDao.read().getName() + "’s Hiking Diary");
 
+        ArrayList<Button> buttons = new ArrayList<>();
+        
         Button bMainmenu = new Button("Main\nmenu");
-
-        bMainmenu.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 70px; "
-                + "-fx-min-height: 70px; "
-                + "-fx-max-width: 70px; "
-                + "-fx-max-height: 70px;");
-
+        buttons.add(bMainmenu);
+        
         bMainmenu.setOnAction((event) -> {
             bp.setCenter(new MainMenuView(this, c).getView());
         });
+        
+        Button createHike = new Button("Create\nnew hike");
+        buttons.add(createHike);
+        
+        createHike.setOnAction((event) -> {
+            bp.setCenter(new CreateHikeView(c).getView());
+        });
+        
+        Button listPast = new Button("List\npast\nhikes");
+        buttons.add(listPast);
+        
+        listPast.setOnAction((event) -> {
+            bp.setCenter(new ListPastHikesView(c, this, gp).getView());
+        });
+        
+        Button listUpcoming = new Button("List\nupcoming\nhikes");
+        buttons.add(listUpcoming);
+        
+        listUpcoming.setOnAction((event) -> {
+            bp.setCenter(new ListUpcomingHikesView(c).getView());
+        });
+        
+        Button settings = new Button("Settings");
+        buttons.add(settings);
+        
+        settings.setOnAction((event) -> {
+            bp.setCenter(new SettingsView(c).getView());
+        });
+        
+        HBox box = new HBox();
+        
+        for (Button b: buttons) {
+            box.getChildren().add(b);
+            b.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 80px; "
+                + "-fx-min-height: 80px; "
+                + "-fx-max-width: 80px; "
+                + "-fx-max-height: 80px;");
+        }
 
-        bp.setCenter(new MainMenuView(this, c).getView());
-        //bp.setBottom(bMainmenu);
-        bp.setRight(bMainmenu);
+        bp.setTop(box);
+        
+        //Alla olevan sijaan joku kuva tms.?
+        //bp.setCenter(new MainMenuView(this, c).getView());
+        
         Scene view = new Scene(bp);
 
         window.setScene(view);
