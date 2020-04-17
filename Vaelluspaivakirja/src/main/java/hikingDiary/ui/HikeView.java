@@ -29,7 +29,7 @@ public class HikeView {
 
         Label lName = new Label(hike.toString());
         Button bLocation = new Button(getOrDefault(hike.getLocation(), "Add location"));
-        Button bCompanion = new Button(getOrDefault(hike.getCompanion(), "Add companion"));
+        Button bCompanion = new Button(getOrDefault(hike.formatCompanions(), "Add companion"));
         Button bMeals = new Button("Meal\nlist");
         Button bDayTrips = new Button("Day trips");
         Button bJourney = new Button(getOrDefault(hike.getKilometres(), "Add day trips"));

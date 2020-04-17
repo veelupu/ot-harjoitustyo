@@ -98,14 +98,14 @@ public class Hike implements Comparable<Hike> {
         this.dayTrips.put(date, new DayTrip(date));
     }
     
-    public void addACompanion(String name) {
-        this.companions.add(name);
+    public void setCompanions(ArrayList<String> companion) {
+        this.companions = companion;
     }
     
-    public String getCompanion() {
+    public String formatCompanions() {
         StringBuilder companion = new StringBuilder();
-        for (String person: this.companions) {
-            companion.append(person + "\n");
+        for (String name: this.companions) {
+            companion.append(name + "\n");
         }
         return companion.toString();
     }

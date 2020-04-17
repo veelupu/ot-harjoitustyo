@@ -5,6 +5,7 @@
 package hikingdiary.ui;
 
 import hikingdiary.domain.Hike;
+import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -19,9 +20,11 @@ import javafx.scene.layout.GridPane;
 public class ListUpcomingHikesView {
     
     Controller c;
+    GraphicalUserInterface ui;
     
-    public ListUpcomingHikesView(Controller c) {
+    public ListUpcomingHikesView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
+        this.ui = ui;
     }
     
     public Parent getView() {
@@ -30,12 +33,28 @@ public class ListUpcomingHikesView {
         Label lName = new Label("Upcoming Hikes");
         gp.add(lName, 0, 1);
         
+        ArrayList<Button> buttons = new ArrayList<>();
         int i = 2;
-        for (Hike hike: c.listUpcomingHikes()) {
+        for (Hike hike : c.listUpcomingHikes()) {
             Button b = new Button(hike.toString());
+            b.setUserData(hike.getName());
+            
+            b.setOnMouseClicked((event) -> {
+                String hikeName = (String) b.getUserData();
+                ui.bp.setCenter(new HikeView(c.getHike(hikeName)).getView());
+            });
+            
+            buttons.add(b);
             gp.add(b, 0, i);
             i++;
         }
+        
+//        int i = 2;
+//        for (Hike hike: c.listUpcomingHikes()) {
+//            Button b = new Button(hike.toString());
+//            gp.add(b, 0, i);
+//            i++;
+//        }
         
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);

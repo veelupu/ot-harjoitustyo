@@ -24,10 +24,9 @@ public class ListPastHikesView {
     GraphicalUserInterface ui;
     GridPane gp;
 
-    public ListPastHikesView(Controller c, GraphicalUserInterface ui, GridPane gp) {
+    public ListPastHikesView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
         this.ui = ui;
-        this.gp = gp;
     }
 
     public Parent getView() {

@@ -95,12 +95,12 @@ public class GraphicalUserInterface extends Application {
 
         ArrayList<Button> buttons = new ArrayList<>();
         
-        Button bMainmenu = new Button("Main\nmenu");
-        buttons.add(bMainmenu);
-        
-        bMainmenu.setOnAction((event) -> {
-            bp.setCenter(new MainMenuView(this, c).getView());
-        });
+//        Button bMainmenu = new Button("Main\nmenu");
+//        buttons.add(bMainmenu);
+//        
+//        bMainmenu.setOnAction((event) -> {
+//            bp.setCenter(new MainMenuView(this, c).getView());
+//        });
         
         Button createHike = new Button("Create\nnew hike");
         buttons.add(createHike);
@@ -113,21 +113,21 @@ public class GraphicalUserInterface extends Application {
         buttons.add(listPast);
         
         listPast.setOnAction((event) -> {
-            bp.setCenter(new ListPastHikesView(c, this, gp).getView());
+            bp.setCenter(new ListPastHikesView(c, this).getView());
         });
         
         Button listUpcoming = new Button("List\nupcoming\nhikes");
         buttons.add(listUpcoming);
         
         listUpcoming.setOnAction((event) -> {
-            bp.setCenter(new ListUpcomingHikesView(c).getView());
+            bp.setCenter(new ListUpcomingHikesView(c, this).getView());
         });
         
         Button settings = new Button("Settings");
         buttons.add(settings);
         
         settings.setOnAction((event) -> {
-            bp.setCenter(new SettingsView(c).getView());
+            bp.setCenter(new SettingsView(c, this, window).getView());
         });
         
         HBox box = new HBox();
@@ -143,6 +143,7 @@ public class GraphicalUserInterface extends Application {
         }
 
         bp.setTop(box);
+        bp.setPrefSize(300, 500);
         
         //Alla olevan sijaan joku kuva tms.?
         //bp.setCenter(new MainMenuView(this, c).getView());

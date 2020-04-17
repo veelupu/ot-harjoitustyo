@@ -4,6 +4,7 @@
  */
 package hikingdiary.dao;
 
+import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import java.util.*;
 import java.sql.*;
@@ -30,7 +31,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
         hikes.clear();
     }
 
-    @Override
+    //@Override
     public void create(Hike hike) {
         hikes.put(hike.getName(), hike);
     }
@@ -43,7 +44,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
         return null;
     }
 
-    @Override
+    //@Override
     public Hike update(Hike object) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -85,5 +86,25 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
         }
         Collections.sort(hikesToReturn);
         return hikesToReturn;
+    }
+
+    @Override
+    public void createHike(Hike object) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createCompanion(Hike hike, Companion comp) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateHike(Hike hike) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateCompanion(Hike hike, Companion comp) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -4,6 +4,7 @@
  */
 package hikingdiary.dao;
 
+import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import java.util.*;
 import java.sql.*;
@@ -26,23 +27,25 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println(e.getMessage());
         }
         try {
-            createHikeTable();
+            createTables();
         } catch (Exception e) {
             System.err.println("Table creation failed.");
             System.err.println(e.getMessage());
         }
     }
 
-    public void createHikeTable() throws SQLException {
+    public void createTables() throws SQLException {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");
         s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
+        s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE)");
         s.execute("COMMIT");
     }
 
     @Override
-    public void create(Hike hike) {
+    public void createHike(Hike hike) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, hike.getName());
@@ -63,6 +66,30 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         //connection.close(); //tee tälle oma metodi ja kutsu sitä kun lopetetaan
     }
+    
+    @Override
+    public void createCompanion(Hike hike, Companion comp) {
+        try {
+            PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            ps1.setString(1, comp.getName());
+            
+            int executeUpdate = ps1.executeUpdate();
+            ResultSet rs = ps1.getGeneratedKeys();
+            rs.next();
+            comp.setId(rs.getInt(1));
+            
+            PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
+            ps2.setInt(1, hike.getId());
+            ps2.setInt(2, comp.getId());
+
+            System.out.println("Create companion: " + executeUpdate);
+            ps1.close();
+            ps2.close();
+        } catch (SQLException e) {
+            System.err.println("Companion creation failed.");
+            System.err.println(e.getMessage());
+        }
+    }
 
     @Override
     public Hike read(String name) {
@@ -73,7 +100,10 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
             boolean upcoming = rs.getBoolean("upcoming");
             Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
+            hike.setId(rs.getInt("id"));
 
+            hike.setCompanions(fetchCompanions(hike));
+            
             ps.close();
             rs.close();
             return hike;
@@ -83,9 +113,31 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         return null;
     }
+    
+    private ArrayList<String> fetchCompanions(Hike hike) {
+        ArrayList<String> companion = new ArrayList<>();
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT C.name FROM Hikes H JOIN Hi_Co ON H.id = h_id JOIN Companion C ON c_id = C.id WHERE h_id = ?");
+            ps.setInt(1, hike.getId());
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String comp = rs.getString("name");
+                companion.add(comp);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Companion get failed.");
+            System.err.println(e.getMessage());
+        }
+        
+        Collections.sort(companion);
+        return companion;
+    }
 
     @Override
-    public void update(Hike hike) {
+    public void updateHike(Hike hike) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE Hikes SET name=?, year=?, upcoming=?, rucksacBeg=?, rucksacEnd=? WHERE id=?");
             ps.setString(1, hike.getName());
@@ -101,6 +153,22 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             
         } catch (SQLException e) {
             System.err.println("Hike update failed.");
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    @Override
+    public void updateCompanion(Hike hike, Companion comp) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT Hi_Co (h_id, c_id) VALUES (?, ?)");
+            ps.setInt(1, hike.getId());
+            ps.setInt(2, comp.getId());
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Update hike: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Companion update failed.");
             System.err.println(e.getMessage());
         }
     }

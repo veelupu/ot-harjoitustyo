@@ -32,12 +32,12 @@ public class Controller {
     //Hike actions
     public Hike createNewHike(String name, int year, boolean upcoming) {
         Hike hike = new Hike(name, year, upcoming);
-        hikeDao.create(hike);
+        hikeDao.createHike(hike);
         return hike;
     }
     
     public void updateHike(Hike hike) {
-        hikeDao.update(hike);
+        hikeDao.updateHike(hike);
     }
 
     public Hike getHike(String name) {

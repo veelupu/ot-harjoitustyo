@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  *
@@ -18,15 +19,19 @@ import javafx.scene.layout.GridPane;
 public class SettingsView {
     
     Controller c;
+    GraphicalUserInterface ui;
+    Stage window;
     
-    public SettingsView(Controller c) {
+    public SettingsView(Controller c, GraphicalUserInterface ui, Stage window) {
         this.c = c;
+        this.ui = ui;
+        this.window = window;
     }
     
     public Parent getView() {
         GridPane gp = new GridPane();
         
-        Label lNewName = new Label("If you want to change your username,\nplease type your new username here.");
+        Label lNewName = new Label("To change your username,\nplease type your new username here.");
         TextField newName = new TextField();
         Button bReady = new Button("Ready to change my username!");
         
@@ -44,6 +49,8 @@ public class SettingsView {
                 if (newName.getText() != null) {
                     //ui.user.setName(newName.toString());
                     c.changeUsername(newName.getText());
+                    ui.setTitle(window);
+                    newName.clear();
                     gp.add(new Label("Username changed successfully!"), 0, 4);
                 }
             } catch (Exception e) {
