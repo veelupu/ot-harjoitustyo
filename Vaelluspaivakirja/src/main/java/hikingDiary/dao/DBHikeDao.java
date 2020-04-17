@@ -148,6 +148,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.setInt(6, hike.getId());
             
             int executeUpdate = ps.executeUpdate();
+            
             System.out.println("Update hike: " + executeUpdate);
             ps.close();
             
@@ -160,7 +161,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public void updateCompanion(Hike hike, Companion comp) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT Hi_Co (h_id, c_id) VALUES (?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
             ps.setInt(1, hike.getId());
             ps.setInt(2, comp.getId());
             

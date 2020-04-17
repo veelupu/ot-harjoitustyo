@@ -43,7 +43,7 @@ public class ListPastHikesView {
             
             b.setOnMouseClicked((event) -> {
                 String hikeName = (String) b.getUserData();
-                ui.bp.setCenter(new HikeView(c.getHike(hikeName)).getView());
+                ui.bp.setCenter(new HikeView(c.getHike(hikeName), c, ui).getView());
             });
             
             buttons.add(b);

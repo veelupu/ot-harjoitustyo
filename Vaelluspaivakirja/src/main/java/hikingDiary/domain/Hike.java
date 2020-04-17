@@ -102,6 +102,10 @@ public class Hike implements Comparable<Hike> {
         this.companions = companion;
     }
     
+    public void addACompanion(String name) {
+        this.companions.add(name);
+    }
+    
     public String formatCompanions() {
         StringBuilder companion = new StringBuilder();
         for (String name: this.companions) {

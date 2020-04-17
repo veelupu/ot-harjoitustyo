@@ -19,9 +19,13 @@ import javafx.scene.layout.GridPane;
 public class HikeView {
 
     Hike hike;
+    Controller c;
+    GraphicalUserInterface ui;
 
-    public HikeView(Hike hike) {
+    public HikeView(Hike hike, Controller c, GraphicalUserInterface ui) {
         this.hike = hike;
+        this.c = c;
+        this.ui = ui;
     }
 
     public Parent getView() {
@@ -37,6 +41,11 @@ public class HikeView {
         Button bRucksacStart = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?"));
         Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
 
+        bCompanion.setOnAction((event) -> {
+            CompanionView cw = new CompanionView(c);
+            ui.bp.setCenter(new CompanionView(c).getView(hike));
+        });
+        
         gp.add(lName, 0, 1);
         gp.add(bLocation, 1, 1);
         gp.add(bCompanion, 2, 1);

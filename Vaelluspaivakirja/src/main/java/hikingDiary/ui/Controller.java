@@ -6,6 +6,7 @@ package hikingdiary.ui;
 
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
+import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.util.ArrayList;
@@ -38,6 +39,10 @@ public class Controller {
     
     public void updateHike(Hike hike) {
         hikeDao.updateHike(hike);
+    }
+    
+    public void updateCompanion(Hike hike, Companion comp) {
+        hikeDao.updateCompanion(hike, comp);
     }
 
     public Hike getHike(String name) {
