@@ -12,6 +12,6 @@
 | 6.4.2020 | 6 | Checkstylen käyttöönotto, lisää graafista käyttöliittymää |
 | 7.4.2020 | 5 | DAOjen aloitus, testien muokkaaminen |
 | 16.4.2020 | 4 | Lisää DAOja ja graafista käyttöliittymää |
-| 17.4.2020 | 6 | Lisää toiminnallisuutta: vaellusseuralaiset |
+| 17.4.2020 | 7,5 | Lisää toiminnallisuutta: vaellusseuralaiset |
 
-**Yhteensä** 39 tuntia
+**Yhteensä** 40,5 tuntia
