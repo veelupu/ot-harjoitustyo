@@ -5,6 +5,7 @@
 package hikingdiary.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -102,8 +103,13 @@ public class Hike implements Comparable<Hike> {
         this.companions = companion;
     }
     
-    public void addACompanion(String name) {
-        this.companions.add(name);
+    public boolean addACompanion(String name) {
+        if (!this.companions.contains(name)) {
+            this.companions.add(name);
+            Collections.sort(companions);
+            return true;
+        }
+        return false;
     }
     
     public String formatCompanions() {

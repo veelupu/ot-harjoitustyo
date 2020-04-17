@@ -34,19 +34,27 @@ public class CompanionView {
         Label companion = new Label(hike.formatCompanions());
         Label add = new Label("Add more companions:");
         
-        TextField newComp = new TextField();
+        TextField newComp = new TextField();        
         Button ready = new Button("Ready to add a companion!");
         
         VBox box = new VBox();
         box.getChildren().addAll(title, companion, add, newComp, ready);
         
-        ready.setOnMouseClicked((event) -> {
+        Label done = new Label("Companion added!");
+        ready.setOnAction((event) -> {
                 Companion comp = new Companion(newComp.getText());
-                c.updateCompanion(hike, comp);
+                if (!c.addCompanion(hike, comp)) {
+                    done.setText("This hike has this company already.");
+                }
                 newComp.clear();
-                box.getChildren().add(new Label("Companion added!"));
-                updateView(hike, companion);
+                box.getChildren().add(done);
+                companion.setText(hike.formatCompanions());
             });
+        
+        newComp.setOnMouseClicked((event) -> {
+            box.getChildren().remove(done);
+            companion.setText(hike.formatCompanions());
+        });
         
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
@@ -56,10 +64,5 @@ public class CompanionView {
         gp.add(box, 0, 0);
         
         return gp;
-    }
-    
-    private void updateView(Hike hike, Label l) {
-        l.setText(hike.formatCompanions());
-    }
-    
+    }  
 }

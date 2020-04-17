@@ -40,10 +40,6 @@ public class Controller {
     public void updateHike(Hike hike) {
         hikeDao.updateHike(hike);
     }
-    
-    public void updateCompanion(Hike hike, Companion comp) {
-        hikeDao.updateCompanion(hike, comp);
-    }
 
     public Hike getHike(String name) {
         Hike hike = hikeDao.read(name);
@@ -75,6 +71,19 @@ public class Controller {
 
         Collections.sort(upcomingHikes);
         return upcomingHikes;
+    }
+    
+    //Companion related methods
+    public void updateCompanion(Hike hike, Companion comp) {
+        hikeDao.updateCompanion(hike, comp);
+    }
+    
+    public boolean addCompanion(Hike hike, Companion comp) {
+        if (hike.addACompanion(comp.getName())) {
+            hikeDao.createCompanion(hike, comp);
+            return true;
+        }
+        return false;
     }
     
     //lisää tänne metodit rinkan alku- ja loppupainon lisäämiseksi
