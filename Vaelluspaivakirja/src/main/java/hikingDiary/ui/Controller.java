@@ -28,29 +28,20 @@ public class Controller {
         this.hikeDao = hikeDao;
         this.userDao = userDao;
     }
-
-    public boolean createNewHike(String name, int year, boolean upcoming) {
-        //Siirrä tämä toiminnallisuus Hike-luokkaan?
+    
+    //Hike actions
+    public Hike createNewHike(String name, int year, boolean upcoming) {
         Hike hike = new Hike(name, year, upcoming);
-
-        if (!hikeDao.list().contains(hike)) {
-            hikeDao.create(hike);
-            return true;
-        }
-
-//        if (!hikes.containsKey(name)) {
-//            hikes.put(name, new Hike(name, year, upcoming));
-//            return true;
-//        }
-        return false;
+        hikeDao.create(hike);
+        return hike;
+    }
+    
+    public void updateHike(Hike hike) {
+        hikeDao.update(hike);
     }
 
     public Hike getHike(String name) {
         Hike hike = hikeDao.read(name);
-//        if (hikes.containsKey(name)) {
-//            return hikes.get(name);
-//        }
-//        return null;
         return hike;
     }
 
@@ -62,13 +53,7 @@ public class Controller {
         } catch (Exception e) {
             System.err.println("Something went wrong with listing past hikes.");
         }
-
-//        ArrayList<Hike> pastHikes = new ArrayList<>();
-//        for (String hike: hikes.keySet()) {
-//            if (!hikes.get(hike).isUpcoming()) {
-//                pastHikes.add(hikes.get(hike));
-//            }
-//        }
+        
         Collections.sort(pastHikes);
         Collections.reverse(pastHikes);
         return pastHikes;
@@ -83,15 +68,28 @@ public class Controller {
             System.err.println("Something went wrong with listing upcoming hikes.");
         }
 
-//        for (String hike: hikes.keySet()) {
-//            if (hikes.get(hike).isUpcoming()) {
-//                upcomingHikes.add(hikes.get(hike));
-//            }
-//        }
         Collections.sort(upcomingHikes);
         return upcomingHikes;
     }
-
+    
+    //lisää tänne metodit rinkan alku- ja loppupainon lisäämiseksi
+//    public double getRucksacWeightBeg(String hikeName) {
+//        return hikeDao.getRucksacWeightBeg(hikeName);
+//    }
+//    
+//    public double getRucksacWeightEnd(String hikeName) {
+//        return hikeDao.getRucksacWeightEnd(hikeName);
+//    }
+//    
+//    public void setRucksacWeightBeg(double w, String name) {
+//        hikeDao.addRucksacWeightBeg(w, name);
+//    }
+//    
+//    public void setRucksacWeightEnd(double w, String name) {
+//        hikeDao.addRucksacWeightEnd(w, name);
+//    }
+    
+    //User actions
     public void createUser(String name) {
         userDao.create(new User(name));
     }

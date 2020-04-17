@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Hike;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -52,6 +53,15 @@ public class CreateHikeView {
         bUpcoming.setOnAction((event) -> {
             upcomingTrue();
         });
+        
+        Label rucksacBeg = new Label("How much your rucksac weighted in the beginning?");
+        TextField rucksacWBeg = new TextField();
+        gp.add(rucksacBeg, 0, 8);
+        gp.add(rucksacWBeg, 0, 9);
+        Label rucksacEnd = new Label("How much your rucksac weighted in the end?");
+        TextField rucksacWEnd = new TextField();
+        gp.add(rucksacEnd, 0, 10);
+        gp.add(rucksacWEnd, 0, 11);
 
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);
@@ -59,18 +69,33 @@ public class CreateHikeView {
         gp.setPadding(new Insets(5, 5, 5, 5));
 
         Button bReady = new Button("Ready to create a new hike!");
-        gp.add(bReady, 0, 8);
+        gp.add(bReady, 0, 12);
         bReady.setOnMouseClicked((event) -> {
             //Label lSuccess = new Label("New hike created succesfully!");
             //Label lUnsuccess = new Label("Oops, year should be an integer.\nTry again!");
             try {
                 int year = Integer.parseInt(tfYear.getText());
-                c.createNewHike(tfName.getText(), Integer.valueOf(tfYear.getText()), this.upcoming);
+                String name = tfName.getText();
+                Hike hike = c.createNewHike(name, Integer.valueOf(tfYear.getText()), this.upcoming);
+                
+                if (rucksacWBeg.getLength() != 0) {
+                    hike.setRucksackWeightBeg(Double.parseDouble(rucksacWBeg.getText()));
+                    c.updateHike(hike);
+                }
+                
+                if (rucksacWEnd.getLength() != 0) {
+                    hike.setRucksackWeightEnd(Double.parseDouble(rucksacWEnd.getText()));
+                    c.updateHike(hike);
+                }
+
+                rucksacWBeg.clear();
+                rucksacWEnd.clear();
                 tfName.clear();
                 tfYear.clear();
-                gp.add(new Label("New hike created succesfully!"), 0, 9);
+                gp.add(new Label("New hike created succesfully!"), 0, 13);
             } catch (Exception e) {
-                gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 10);
+                gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 14);
+                System.out.println("Hike creation failed: " + e.getMessage());
             }
         });
 

@@ -15,9 +15,13 @@ import java.util.*;
 public interface HikeDao<T, K> {
     void create(T object);
     Hike read(String name);
-    T update(T object) throws SQLException;
+    void update(Hike hike);
     void delete(K key) throws SQLException;
     List<T> list();
     List<T> listPastHikes() throws SQLException;
     List<T> listUpcomingHikes() throws SQLException;
+//    double getRucksacWeightBeg(String hikeName);
+//    double getRucksacWeightEnd(String hikeName);
+//    boolean addRucksacWeightBeg(double weight, String hikeName);
+//    boolean addRucksacWeightEnd(double weight, String hikeName);
 }

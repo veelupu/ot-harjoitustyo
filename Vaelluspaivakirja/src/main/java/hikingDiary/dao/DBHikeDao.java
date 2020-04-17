@@ -44,12 +44,17 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public void create(Hike hike) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, hike.getName());
             ps.setInt(2, hike.getYear());
             ps.setBoolean(3, hike.isUpcoming());
 
             int executeUpdate = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            int id = rs.getInt(1);
+            hike.setId(id);
+
             System.out.println("Create hike: " + executeUpdate);
             ps.close();
         } catch (SQLException e) {
@@ -62,12 +67,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public Hike read(String name) {
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE name = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE name = ?");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
 
             boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming);
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
 
             ps.close();
             rs.close();
@@ -80,8 +85,24 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public Hike update(Hike object) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(Hike hike) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE Hikes SET name=?, year=?, upcoming=?, rucksacBeg=?, rucksacEnd=? WHERE id=?");
+            ps.setString(1, hike.getName());
+            ps.setInt(2, hike.getYear());
+            ps.setBoolean(3, hike.isUpcoming());
+            ps.setDouble(4, hike.getRucksackWeightBeg());
+            ps.setDouble(5, hike.getRucksackWeightEnd());
+            ps.setInt(6, hike.getId());
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Update hike: " + executeUpdate);
+            ps.close();
+            
+        } catch (SQLException e) {
+            System.err.println("Hike update failed.");
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
@@ -114,14 +135,14 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
     @Override
     public List<Hike> listPastHikes() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 0");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 0");
         ResultSet rs = ps.executeQuery();
 
         ArrayList<Hike> hikes = new ArrayList<>();
 
         while (rs.next()) {
             //boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
             hikes.add(hike);
         }
 
@@ -133,14 +154,14 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
     @Override
     public List<Hike> listUpcomingHikes() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes WHERE upcoming = 1");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 1");
         ResultSet rs = ps.executeQuery();
 
         ArrayList<Hike> hikes = new ArrayList<>();
 
         while (rs.next()) {
             //boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true);
+            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
             hikes.add(hike);
         }
 
@@ -150,37 +171,86 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return hikes;
     }
     
-    public boolean addRucksacWeightBeg(int weight, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacBeg) VALUES (?) WHERE name=?");
-            ps.setInt(1, weight);
-            ps.setString(2, name);
-            
-            int executeUpdate = ps.executeUpdate();
-            System.out.println("Create hike: " + executeUpdate);
-            ps.close();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Adding rucksac weight in the beginning failed.");
-            System.err.println(e.getMessage());
-        }
-        return false;
-    }
+//    @Override
+//    public boolean addRucksacWeightBeg(double weight, String hikeName) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacBeg) VALUES (?) WHERE name=?");
+//            ps.setDouble(1, weight);
+//            ps.setString(2, hikeName);
+//            
+//            int executeUpdate = ps.executeUpdate();
+//            System.out.println("Add rucksac weight hike: " + executeUpdate);
+//            ps.close();
+//            return true;
+//        } catch (SQLException e) {
+//            System.err.println("Adding rucksac weight in the beginning failed.");
+//            System.err.println(e.getMessage());
+//        }
+//        return false;
+//    }
+//    
+//    @Override
+//    public boolean addRucksacWeightEnd(double weight, String hikeName) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacEnd) VALUES (?) WHERE name=?");
+//            ps.setDouble(1, weight);
+//            ps.setString(2, hikeName);
+//            
+//            int executeUpdate = ps.executeUpdate();
+//            System.out.println("Add rucksac weight hike: " + executeUpdate);
+//            ps.close();
+//            return true;
+//        } catch (SQLException e) {
+//            System.err.println("Adding rucksac weight in the end failed.");
+//            System.err.println(e.getMessage());
+//        }
+//        return false;
+//    }
+//    
+//    @Override
+//    public double getRucksacWeightBeg(String hikeName) {
+//        double weight = 0;
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("SELECT rucksacBeg FROM Hikes WHERE name=?");
+//            ps.setString(1, hikeName);
+//            
+//            ResultSet rs = ps.executeQuery();
+//            
+//            while (rs.next()) {
+//                weight = rs.getInt("rucksacBeg");
+//            }
+//            
+//            ps.close();
+//            rs.close();
+//            
+//        } catch (SQLException e) {
+//            System.err.println("Getting rucksac weight in the beginning failed.");
+//            System.err.println(e.getMessage());
+//        }
+//        return weight;
+//    }
+//    
+//    @Override
+//    public double getRucksacWeightEnd(String hikeName) {
+//        double weight = 0;
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("SELECT rucksacEnd FROM Hikes WHERE name=?");
+//            ps.setString(1, hikeName);
+//            
+//            ResultSet rs = ps.executeQuery();
+//            
+//            while (rs.next()) {
+//                weight = rs.getInt("rucksacEnd");
+//            }
+//            
+//            ps.close();
+//            rs.close();
+//            
+//        } catch (SQLException e) {
+//            System.err.println("Getting rucksac weight in the end failed.");
+//            System.err.println(e.getMessage());
+//        }
+//        return weight;
+//    }
     
-    public boolean addRucksacWeightEnd(int weight, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacEnd) VALUES (?) WHERE name=?");
-            ps.setInt(1, weight);
-            ps.setString(2, name);
-            
-            int executeUpdate = ps.executeUpdate();
-            System.out.println("Create hike: " + executeUpdate);
-            ps.close();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Adding rucksac weight in the end failed.");
-            System.err.println(e.getMessage());
-        }
-        return false;
-    }
 }

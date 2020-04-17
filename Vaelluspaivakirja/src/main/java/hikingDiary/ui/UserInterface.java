@@ -105,8 +105,8 @@ public class UserInterface {
         } else {
             System.out.println("That was not a correct answer. Please try again!");
         }
-        boolean s = c.createNewHike(name, year, upcoming);
-        if (s) {
+        Hike s = c.createNewHike(name, year, upcoming);
+        if (s != null) {
             System.out.println("A new hike created succesfully!");
         } else {
             System.out.println("Oops, something went wrong!");

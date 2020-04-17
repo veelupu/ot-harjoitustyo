@@ -14,6 +14,7 @@ import java.util.HashMap;
  */
 public class Hike implements Comparable<Hike> {
     
+    private int id;
     private String name;
     private int year;
     private boolean upcoming;
@@ -26,13 +27,27 @@ public class Hike implements Comparable<Hike> {
     private double rucksackWeightEnd;
     
     public Hike(String name, int year, boolean upcoming) {
+        this(name, year, upcoming, 0, 0);
+    }
+    
+    public Hike(String name, int year, boolean upcoming, double rucksackWeightBeg, double rucksackWeightEnd) {
         this.name = name;
         this.year = year;
         this.upcoming = upcoming;
+        this.rucksackWeightBeg = rucksackWeightBeg;
+        this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
         this.companions = new ArrayList<>();
         this.mealList = new MealList();
         this.equList = new EquipmentList();
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
     }
     
     public String getName() {
@@ -63,11 +78,11 @@ public class Hike implements Comparable<Hike> {
         return this.location;
     }
 
-    public double getRucksackWeightStart() {
+    public double getRucksackWeightBeg() {
         return rucksackWeightBeg;
     }
 
-    public void setRucksackWeightStart(double rucksackWeight) {
+    public void setRucksackWeightBeg(double rucksackWeight) {
         this.rucksackWeightBeg = rucksackWeight;
     }
 
