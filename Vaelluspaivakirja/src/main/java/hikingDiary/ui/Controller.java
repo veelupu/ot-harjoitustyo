@@ -74,12 +74,12 @@ public class Controller {
     }
     
     //Companion related methods
-    public void updateCompanion(Hike hike, Companion comp) {
-        hikeDao.updateCompanion(hike, comp);
-    }
+//    public void updateCompanion(Hike hike, Companion comp) {
+//        hikeDao.updateCompanion(hike, comp);
+//    }
     
     public boolean addCompanion(Hike hike, Companion comp) {
-        if (hike.addACompanion(comp.getName())) {
+        if (hike.addCompanion(comp.getName())) {
             hikeDao.createCompanion(hike, comp);
             return true;
         }

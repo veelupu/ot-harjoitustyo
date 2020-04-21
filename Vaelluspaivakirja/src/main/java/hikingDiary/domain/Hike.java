@@ -95,15 +95,18 @@ public class Hike implements Comparable<Hike> {
         this.rucksackWeightEnd = rucksackWeightEnd;
     }
     
-    public void addADayTrip(Date date) {
-        this.dayTrips.put(date, new DayTrip(date));
+    public DayTrip addADayTrip(Date date) {
+        DayTrip dayTrip = new DayTrip(date);
+        this.dayTrips.put(date, dayTrip);
+        return dayTrip;
     }
     
     public void setCompanions(ArrayList<String> companion) {
         this.companions = companion;
+        Collections.sort(companions);
     }
     
-    public boolean addACompanion(String name) {
+    public boolean addCompanion(String name) {
         if (!this.companions.contains(name)) {
             this.companions.add(name);
             Collections.sort(companions);
@@ -137,12 +140,12 @@ public class Hike implements Comparable<Hike> {
         this.equList.addAnItem(item, weight);
     }
     
-    public String getKilometres() {
+    public int getKilometres() {
         int total = 0;
         for (DayTrip dayTrip: this.dayTrips.values()) {
             total += dayTrip.getWalkDist();
         }
-        return "" + total;
+        return total;
     }
     
     @Override

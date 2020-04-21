@@ -6,6 +6,9 @@ package hikingdiary.dao;
 
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.sql.*;
 
@@ -15,13 +18,13 @@ import java.sql.*;
  */
 public class DBHikeDao implements HikeDao<Hike, Integer> {
 
-    private String homeAddress;
+    private String DBAddress;
     private Connection connection;
 
     public DBHikeDao() {
-        homeAddress = System.getProperty("user.home");
+        DBAddress = System.getProperty("user.home");
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + homeAddress + "/.hikes.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DBAddress + "/.hikes.db");
         } catch (SQLException e) {
             System.err.println("Connection failed.");
             System.err.println(e.getMessage());
@@ -32,6 +35,32 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Table creation failed.");
             System.err.println(e.getMessage());
         }
+    }
+
+    public DBHikeDao(String address) { //for testing;
+        try {
+            Path path = Files.createTempDirectory("hikingDiary-");
+            path.toFile().deleteOnExit();
+            DBAddress = path.toAbsolutePath().toString() + "/" + address;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DBAddress);
+        } catch (SQLException e) {
+            System.err.println("Connection failed.");
+            System.err.println(e.getMessage());
+        }
+        try {
+            createTables();
+        } catch (Exception e) {
+            System.err.println("Table creation failed.");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public String getDBAdress() {
+        return DBAddress;
     }
 
     public void createTables() throws SQLException {
@@ -90,7 +119,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             int executeUpdate2 = ps2.executeUpdate();
             System.out.println("Create companion 2/2: " + executeUpdate2);
             ps2.close();
-            
+
         } catch (SQLException e) {
             System.err.println("Companion creation failed.");
             System.err.println(e.getMessage());
@@ -181,26 +210,25 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
     }
 
-    @Override
-    public void updateCompanion(Hike hike, Companion comp) {
-        try {
-            PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Company (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-            ps1.setString(1, comp.getName());
-
-            PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
-            ps2.setInt(1, hike.getId());
-            ps2.setInt(2, comp.getId());
-
-            int executeUpdate = ps2.executeUpdate();
-            System.out.println("Update hike: " + executeUpdate);
-            ps1.close();
-            ps2.close();
-        } catch (SQLException e) {
-            System.err.println("Companion update failed.");
-            System.err.println(e.getMessage());
-        }
-    }
-
+//    @Override
+//    public void updateCompanion(Hike hike, Companion comp) {
+//        try {
+//            PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+//            ps1.setString(1, comp.getName());
+//
+//            PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
+//            ps2.setInt(1, hike.getId());
+//            ps2.setInt(2, comp.getId());
+//
+//            int executeUpdate = ps2.executeUpdate();
+//            System.out.println("Update hike: " + executeUpdate);
+//            ps1.close();
+//            ps2.close();
+//        } catch (SQLException e) {
+//            System.err.println("Companion update failed.");
+//            System.err.println(e.getMessage());
+//        }
+//    }
     @Override
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -230,122 +258,46 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public List<Hike> listPastHikes() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 0");
-        ResultSet rs = ps.executeQuery();
-
+    public List<Hike> listPastHikes() {
         ArrayList<Hike> hikes = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 0");
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            //boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
-            hikes.add(hike);
+            while (rs.next()) {
+                //boolean upcoming = rs.getBoolean("upcoming");
+                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
+                hikes.add(hike);
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Listing past hikes failed.");
+            System.err.println(e.getMessage());
         }
-
-        ps.close();
-        rs.close();
-
         return hikes;
     }
 
     @Override
-    public List<Hike> listUpcomingHikes() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 1");
-        ResultSet rs = ps.executeQuery();
-
+    public List<Hike> listUpcomingHikes() {
         ArrayList<Hike> hikes = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 1");
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            //boolean upcoming = rs.getBoolean("upcoming");
-            Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
-            hikes.add(hike);
+            while (rs.next()) {
+                //boolean upcoming = rs.getBoolean("upcoming");
+                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
+                hikes.add(hike);
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Listing upcoming hikes failed.");
+            System.err.println(e.getMessage());
         }
-
-        ps.close();
-        rs.close();
-
         return hikes;
     }
-
-//    @Override
-//    public boolean addRucksacWeightBeg(double weight, String hikeName) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacBeg) VALUES (?) WHERE name=?");
-//            ps.setDouble(1, weight);
-//            ps.setString(2, hikeName);
-//            
-//            int executeUpdate = ps.executeUpdate();
-//            System.out.println("Add rucksac weight hike: " + executeUpdate);
-//            ps.close();
-//            return true;
-//        } catch (SQLException e) {
-//            System.err.println("Adding rucksac weight in the beginning failed.");
-//            System.err.println(e.getMessage());
-//        }
-//        return false;
-//    }
-//    
-//    @Override
-//    public boolean addRucksacWeightEnd(double weight, String hikeName) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (rucksacEnd) VALUES (?) WHERE name=?");
-//            ps.setDouble(1, weight);
-//            ps.setString(2, hikeName);
-//            
-//            int executeUpdate = ps.executeUpdate();
-//            System.out.println("Add rucksac weight hike: " + executeUpdate);
-//            ps.close();
-//            return true;
-//        } catch (SQLException e) {
-//            System.err.println("Adding rucksac weight in the end failed.");
-//            System.err.println(e.getMessage());
-//        }
-//        return false;
-//    }
-//    
-//    @Override
-//    public double getRucksacWeightBeg(String hikeName) {
-//        double weight = 0;
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("SELECT rucksacBeg FROM Hikes WHERE name=?");
-//            ps.setString(1, hikeName);
-//            
-//            ResultSet rs = ps.executeQuery();
-//            
-//            while (rs.next()) {
-//                weight = rs.getInt("rucksacBeg");
-//            }
-//            
-//            ps.close();
-//            rs.close();
-//            
-//        } catch (SQLException e) {
-//            System.err.println("Getting rucksac weight in the beginning failed.");
-//            System.err.println(e.getMessage());
-//        }
-//        return weight;
-//    }
-//    
-//    @Override
-//    public double getRucksacWeightEnd(String hikeName) {
-//        double weight = 0;
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("SELECT rucksacEnd FROM Hikes WHERE name=?");
-//            ps.setString(1, hikeName);
-//            
-//            ResultSet rs = ps.executeQuery();
-//            
-//            while (rs.next()) {
-//                weight = rs.getInt("rucksacEnd");
-//            }
-//            
-//            ps.close();
-//            rs.close();
-//            
-//        } catch (SQLException e) {
-//            System.err.println("Getting rucksac weight in the end failed.");
-//            System.err.println(e.getMessage());
-//        }
-//        return weight;
-//    }
 }

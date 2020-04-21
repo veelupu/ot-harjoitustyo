@@ -103,8 +103,4 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void updateCompanion(Hike hike, Companion comp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
