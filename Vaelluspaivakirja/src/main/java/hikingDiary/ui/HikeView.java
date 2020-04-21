@@ -36,7 +36,7 @@ public class HikeView {
         Button bCompanion = new Button(getOrDefault(hike.formatCompanions(), "Add companion"));
         Button bMeals = new Button("Meal\nlist");
         Button bDayTrips = new Button("Day trips");
-        Button bJourney = new Button((String) getOrDefault(hike.getKilometres(), "Add day trips"));
+        Button bJourney = new Button("" + getOrDefault(hike.getKilometres(), "Add day trips"));
         Button bEquipment = new Button("Equipment\nlist");
         Button bRucksacStart = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?"));
         Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
