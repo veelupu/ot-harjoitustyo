@@ -64,7 +64,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public List<Hike> listPastHikes() throws SQLException {
+    public List<Hike> listPastHikes() {
         List<Hike> hikesToReturn = new ArrayList<>();
         for (String hike: hikes.keySet()) {
             if (!hikes.get(hike).isUpcoming()) {
@@ -77,7 +77,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public List<Hike> listUpcomingHikes() throws SQLException {
+    public List<Hike> listUpcomingHikes() {
         List<Hike> hikesToReturn = new ArrayList<>();
         for (String hike: hikes.keySet()) {
             if (hikes.get(hike).isUpcoming()) {

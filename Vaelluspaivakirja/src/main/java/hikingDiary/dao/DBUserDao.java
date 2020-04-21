@@ -17,13 +17,13 @@ import java.sql.Statement;
  * @author veeralupunen
  */
 public class DBUserDao implements UserDao<User> {
-    
+
     private String homeAddress;
     private Connection connection;
-    
+
     public DBUserDao() {
-    
-    homeAddress = System.getProperty("user.home");
+
+        homeAddress = System.getProperty("user.home");
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + homeAddress + "/.hikes.db");
         } catch (SQLException e) {
@@ -37,7 +37,7 @@ public class DBUserDao implements UserDao<User> {
             System.err.println(e.getMessage());
         }
     }
-    
+
     public void createUserTable() throws SQLException {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
@@ -112,5 +112,5 @@ public class DBUserDao implements UserDao<User> {
             return null;
         }
     }
-    
+
 }

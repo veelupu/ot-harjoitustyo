@@ -18,13 +18,13 @@ import java.sql.*;
  */
 public class DBHikeDao implements HikeDao<Hike, Integer> {
 
-    private String DBAddress;
+    private String dbAddress;
     private Connection connection;
 
     public DBHikeDao() {
-        DBAddress = System.getProperty("user.home");
+        dbAddress = System.getProperty("user.home");
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + DBAddress + "/.hikes.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress + "/.hikes.db");
         } catch (SQLException e) {
             System.err.println("Connection failed.");
             System.err.println(e.getMessage());
@@ -41,12 +41,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         try {
             Path path = Files.createTempDirectory("hikingDiary-");
             path.toFile().deleteOnExit();
-            DBAddress = path.toAbsolutePath().toString() + "/" + address;
+            dbAddress = path.toAbsolutePath().toString() + "/" + address;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + DBAddress);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress);
         } catch (SQLException e) {
             System.err.println("Connection failed.");
             System.err.println(e.getMessage());
@@ -60,7 +60,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     public String getDBAdress() {
-        return DBAddress;
+        return dbAddress;
     }
 
     public void createTables() throws SQLException {
@@ -112,17 +112,14 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 System.out.println("Create companion 1/2: " + executeUpdate1);
                 ps1.close();
             }
-
             PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
             ps2.setInt(1, hike.getId());
             ps2.setInt(2, id);
             int executeUpdate2 = ps2.executeUpdate();
             System.out.println("Create companion 2/2: " + executeUpdate2);
             ps2.close();
-
         } catch (SQLException e) {
-            System.err.println("Companion creation failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Companion creation failed." + e.getMessage());
         }
     }
 
