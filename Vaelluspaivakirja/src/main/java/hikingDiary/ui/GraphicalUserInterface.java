@@ -153,5 +153,9 @@ public class GraphicalUserInterface extends Application {
         window.setScene(view);
         window.show();
     }
+    
+    public static void main(String args[]) {
+        launch(args);
+    }
 
 }

@@ -13,7 +13,8 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main(String[] args) {
-        Application.launch(GraphicalUserInterface.class);
+        GraphicalUserInterface.main(args);
+        //Application.launch(GraphicalUserInterface.class);
 //        Scanner reader = new Scanner(System.in);
 //        System.out.println("Hello there! What is your name?");
 //        String name = reader.nextLine();
