@@ -13,5 +13,6 @@
 | 7.4.2020 | 5 | DAOjen aloitus, testien muokkaaminen |
 | 16.4.2020 | 4 | Lisää DAOja ja graafista käyttöliittymää |
 | 17.4.2020 | 7,5 | Lisää toiminnallisuutta: vaellusseuralaiset |
+|21.4.2020| 6,5 | Yksikkötestejä, pom.xml:n hiomista, sekvenssikaavio |
 
-**Yhteensä** 40,5 tuntia
+**Yhteensä** 47 tuntia
