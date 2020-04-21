@@ -18,13 +18,27 @@ _Tähän käyttöohjedokumentti_
 
 [Työajanseuranta](dokumentointi/tyoajanseuranta.md)
 
+## Releaset
+
+[Viikko 5](/releases/tag/viikko5)
+
 ## Komentorivitoiminnot
+
+### Suoritus
+
+Suoritettava jar-tiedosto _Vaelluspaivakirja-1.0.jar_ generoidaan hakemistoon target komennolla
+
+```
+mvn package
+```
 
 Ohjelman suoritetaan komennolla
 
 ```
 mvn compile exec:java -Dexec.mainClass=hikingdiary.ui.Main
 ```
+
+### Testaus
 
 Testit suoritetaan komennolla
 
@@ -39,14 +53,12 @@ mvn jacoco:report
 ```
 Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto target/site/jacoco/index.html
 
+### Checkstyle
+
 Checkstyle-tarkistukset luodaan tiedostoon [checkstyle.xml](Vaelluspaivakirja/checkstyle.xml) komennolla
 
 ```
 mvn jxr:jxr checkstyle:checkstyle
 ```
+Mahdolliset virheilmoitukset selviävät avaamalla selaimella tiedosto target/site/checkstyle.html.
 
-Suoritettava jar-tiedosto _Vaelluspaivakirja-1.0.jar_ generoidaan hakemistoon target komennolla
-
-```
-mvn package
-```
