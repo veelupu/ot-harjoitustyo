@@ -3,7 +3,7 @@
 
 Vaelluspäiväkirja-sovelluksen avulla sovelluksen käyttäjän on helppoa ja kätevää pitää kirjaa menneistä vaelluksistaan sekä suunnitella tulevia vaelluksiaan. Sovellukseen voi tallentaa tiedot vaelluksistaan päivämatkoja, rinkan painoa, seuralaisia, säätä sekä ruoka- ja varustelistoja myöten. Sovelluksessa voi selata ja hakea erikseen menneitä ja tulevia vaelluksiaan sekä käyttää menneiden vaellusten listoja ja päivämatkatietoja uusien vaellusten suunnittelun pohjana.
 
-Tähän mennessä tekstikäyttöliittymälle on toteutettu päävalikko sekä toiminnallisuus uuden vaelluksen lisäämiseksi, menneiden ja tulevien vaellusten listaamiseksi sekä käyttäjänimen vaihtamiseksi. Graafiselle käyttöliittymälle on toteutettu aloitusnäkymä (päävalikko) sekä uuden vaelluksen luominen.
+Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko sekä toiminnallisuus uuden vaelluksen lisäämiseksi, menneiden ja tulevien vaellusten listaamiseksi, valitun vaelluksen näyttämiseksi sekä käyttäjänimen vaihtamiseksi. Vaellukselle on tällä hetkellä mahdollista lisätä seuraavat tiedot: nimi, vuosi, rinkan alku- ja loppupaino, mahdolliset seuralaiset sekä tieto siitä, onko kyseessä mennyt vai tuleva vaellus.
 
 ## Dokumentaatio
 
@@ -45,3 +45,8 @@ Checkstyle-tarkistukset luodaan tiedostoon [checkstyle.xml](Vaelluspaivakirja/ch
 mvn jxr:jxr checkstyle:checkstyle
 ```
 
+Suoritettava jar-tiedosto _Vaelluspaivakirja-1.0.jar_ generoidaan hakemistoon target komennolla
+
+```
+mvn package
+```
