@@ -71,8 +71,6 @@ public class CreateHikeView {
         Button bReady = new Button("Ready to create a new hike!");
         gp.add(bReady, 0, 12);
         bReady.setOnMouseClicked((event) -> {
-            //Label lSuccess = new Label("New hike created succesfully!");
-            //Label lUnsuccess = new Label("Oops, year should be an integer.\nTry again!");
             try {
                 int year = Integer.parseInt(tfYear.getText());
                 String name = tfName.getText();
