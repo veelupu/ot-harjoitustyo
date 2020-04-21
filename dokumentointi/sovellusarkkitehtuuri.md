@@ -23,4 +23,16 @@ _Tähän sanallinen kuvaus sovelluslogiikasta_
 
 ## Tietojen pysyväistalletus
 
-_Tähän kuvaus pysyväistalletuksesta_
+Pakkauksessa hikingdiary.dao olevat luokat UserDao, HikeDao ja DayTripDao vastaavat vaellusten ja käyttäjänimen pysyväistallennuksesta tallettamalla tiedot tietokantaan. Luokat noudattavat Data Access Object -suunnittelumallia.
+
+## Toiminnallisuus
+
+Alla olevassa sekvenssikaaviossa kuvataan yksi sovelluksen päätoiminnallisuuksista: uuden vaelluksen luominen sen toiminnallisuuden osalta, jonka sovellus tällä hetkellä tarjoaa. Vaelluksen luominen alkaa siitä, että käyttäjä on syöttänyt CreateHikeView-näkymässä näkyvälle lomakkeelle vaelluksen tiedot tekstikenttiin ja valinnut vaelluksen kuuluvan "Tulevat vaellukset" -kategoriaan. 
+
+Kun käyttäjä painaa "Ready to create a new hike!"-nappia, tapahtumat etenevät seuraavasti: 
+
+<img src="../dokumentointi/sekvenssikaavio.png" width="80%" alt="Image of sequence diagram: creating new hike"/>
+
+UserInterface-luokan (UI) olio kutsuu tapahtumien käsittelystä vastaava Controller-oliota, joka puolestaan kutsuu Hike-luokkaa saaden paluuarvona uuden Hike-olion. Tällä oliolla Controller kutsuu HikeDao-luokan vaelluksenluomismetodia ja palauttaa lopuksi hetki sitten syntyneen hike-olion UI:lle. Tämä tarkastaa, onko käyttäjä antanut vaellukselle rinkan alku- ja loppupainot, ja mikäli on, ne lisätään tähän uuteen vaellukseen: Ensin UI kutsuu Hike-luokkaa, joka päivittää painot vaelluksen tietoihin. Tämän jälkeen se kutsuu Controlleria, joka puolestaan kutsuu HikeDaoa päivittääkseen rinkanpainot myös tietokantaan.
+
+Lopuksi tyhjennetään lomakkeen tekstikentät ja näytetään käyttäjälle teksti "New hike created succesfully!".
