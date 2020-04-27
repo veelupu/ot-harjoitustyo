@@ -49,6 +49,7 @@ public class EquipmentView {
         box.getChildren().addAll(title, equipmentList, empty, add, lName, tfName, lWeight, tfWeight, lCount, tfCount, ready);
 
         Label done = new Label("Item added!");
+        Label exists = new Label("This hike already has this item.");
         //muuta virhetekstiä kuvaamammaksi
         Label error = new Label("Oops, weight and count should be numbers.\nTry again!");
         
@@ -60,23 +61,26 @@ public class EquipmentView {
                     item.setWeight(Double.valueOf(tfWeight.getText()));
                 }
                 
-                c.addItem(hike, item);
-                //hike.addItem(item);
-                equipmentList.setText(hike.formatEquipment());
-                tfName.clear();
-                tfWeight.clear();
-                tfCount.clear();
-                box.getChildren().add(done);
+                if (c.addItem(hike, item)) {
+                    equipmentList.setText(hike.formatEquipment());
+                    tfName.clear();
+                    tfWeight.clear();
+                    tfCount.clear();
+                    box.getChildren().add(done);
+                } else {
+                    box.getChildren().add(exists);
+                }
+                
             } catch (Exception e) {
                 box.getChildren().add(error);
                 //poista alla oleva ennen lopullista palautusta
                 System.out.println("Adding item failed: " + e.getMessage());
             }
-            
         });
 
         tfName.setOnMouseClicked((event) -> {
             box.getChildren().remove(done);
+            box.getChildren().remove(exists);
             box.getChildren().remove(error);
         });
 

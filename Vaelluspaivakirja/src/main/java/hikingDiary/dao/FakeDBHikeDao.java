@@ -7,6 +7,7 @@ package hikingdiary.dao;
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.Item;
+import hikingdiary.domain.Meal;
 import java.util.*;
 import java.sql.*;
 
@@ -116,6 +117,11 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
 
     @Override
     public Map<String, Item> listItems() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createMeal(Hike hike, Meal meal) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

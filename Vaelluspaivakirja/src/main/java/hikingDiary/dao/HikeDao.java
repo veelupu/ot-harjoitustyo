@@ -7,6 +7,7 @@ package hikingdiary.dao;
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.Item;
+import hikingdiary.domain.Meal;
 import java.sql.*;
 import java.util.*;
 
@@ -18,6 +19,7 @@ public interface HikeDao<T, K> {
     void createHike(T object);
     void createCompanion(Hike hike, Companion comp);
     void createItem(Hike hike, Item item);
+    void createMeal(Hike hike, Meal meal);
     Hike readHike(String name);
 //    Item readItem(String name);
     void updateHike(Hike hike);

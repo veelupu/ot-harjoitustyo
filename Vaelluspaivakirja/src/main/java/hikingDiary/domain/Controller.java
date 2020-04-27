@@ -98,13 +98,21 @@ public class Controller {
 //        return null;
 //    }
     
-    public void addItem(Hike hike, Item item) {
-        int i = hike.addItem(item);
-        if (i == -1) {
+    public boolean addItem(Hike hike, Item item) {
+        if (hike.addItem(item)) {
             hikeDao.createItem(hike, item);
+            return true;
         } else {
-            item.setCount(i);
-            hikeDao.updateHikeItem(hike, item);
+            return false;
+        }
+    }
+    
+    public boolean addMeal(Hike hike, Meal meal) {
+        if (hike.addMeal(meal)) {
+            hikeDao.createMeal(hike, meal);
+            return true;
+        } else {
+            return false;
         }
     }
     

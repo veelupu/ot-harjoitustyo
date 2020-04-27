@@ -22,7 +22,7 @@ public class Hike implements Comparable<Hike> {
     private String location;
     private HashMap<Date, DayTrip> dayTrips;
     private ArrayList<String> companions;
-    private MealList mealList;
+    private HashMap<String, Meal> mealList;
     private HashMap<String, Item> equList;
     private double rucksackWeightBeg;
     private double rucksackWeightEnd;
@@ -39,7 +39,7 @@ public class Hike implements Comparable<Hike> {
         this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
         this.companions = new ArrayList<>();
-        this.mealList = new MealList();
+        this.mealList = new HashMap<>();
         this.equList = new HashMap<>();
     }
 
@@ -123,30 +123,42 @@ public class Hike implements Comparable<Hike> {
         return companion.toString();
     }
 
-    public void addAMeal(Meal meal, DayTrip dayTrip) {
-        this.mealList.addAMeal(meal);
-        dayTrip.setMeal(meal);
-    }
-
-    public void addAMeal(Meal meal) {
-        this.mealList.addAMeal(meal);
-    }
-
-    public int addItem(Item item) {
-        if (this.equList.containsKey(item.getName())) {
-            int newCount = item.getCount() + this.equList.get(item.getName()).getCount();
-            item.setCount(newCount);
-            return newCount;
-        } else {
-            this.equList.put(item.getName(), item);
-            return -1;
+//    public void addAMeal(Meal meal, DayTrip dayTrip) {
+//        this.mealList.addAMeal(meal);
+//        dayTrip.setMeal(meal);
+//    }
+    public boolean addMeal(Meal meal) {
+        if (this.mealList.containsKey(meal.getName())) {
+            return false;
         }
+        this.mealList.put(meal.getName(), meal);
+        return true;
+    }
+
+    public String formatMeals() {
+        StringBuilder items = new StringBuilder();
+        for (Meal meal : this.mealList.values()) {
+            items.append(meal.toString() + "\n");
+        }
+        return items.toString();
     }
     
+    public void setMeals(HashMap<String, Meal> mealList) {
+        this.mealList = mealList;
+    }
+
+    public boolean addItem(Item item) {
+        if (this.equList.containsKey(item.getName())) {
+            return false;
+        }
+        this.equList.put(item.getName(), item);
+        return true;
+    }
+
     public void setEquipment(HashMap<String, Item> equList) {
         this.equList = equList;
     }
-    
+
     public boolean containsItem(String name) {
         return this.equList.containsKey(name);
     }

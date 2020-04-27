@@ -50,6 +50,10 @@ public class HikeView {
             ui.bp.setCenter(new EquipmentView(c).getView(hike));
         });
         
+        bMeals.setOnAction((event) -> {
+            ui.bp.setCenter(new MealListView(c).getView(hike));
+        });
+        
         gp.add(lName, 0, 1);
         gp.add(bLocation, 1, 1);
         gp.add(bCompanion, 2, 1);

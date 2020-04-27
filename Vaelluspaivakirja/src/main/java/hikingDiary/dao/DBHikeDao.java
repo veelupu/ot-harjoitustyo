@@ -7,6 +7,7 @@ package hikingdiary.dao;
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.Item;
+import hikingdiary.domain.Meal;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -72,7 +73,9 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE, PRIMARY KEY (h_id, c_id))");
         s.execute("CREATE TABLE IF NOT EXISTS Item (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, weight INTEGER)");
-        s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, I_id INTEGER REFERENCES Item ON UPDATE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, i_id INTEGER REFERENCES Item ON UPDATE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Meal (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, category INTEGER NOT NULL, ingr TEXT)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_Me (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, m_id INTEGER REFERENCES Meal ON UPDATE CASCADE, PRIMARY KEY (h_id, m_id))");
         s.execute("COMMIT");
     }
 
@@ -153,7 +156,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Item creation failed." + e.getMessage());
         }
     }
-
+    
     private void addHikeItem(Hike hike, Item item) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_It (h_id, i_id, count) VALUES (?, ?, ?)");
@@ -166,6 +169,48 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Hikes_Item add failed." + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void createMeal(Hike hike, Meal meal) {
+        try {
+            int id = fetchItemId(meal.getName());
+            
+            if (id == 0) {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, meal.getName());
+                ps.setInt(2, meal.getCategory());
+                ps.setString(3, meal.getIngredients().toString());
+
+                int executeUpdate = ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                id = rs.getInt(1);
+                meal.setId(id);
+                System.out.println("Create meal: " + executeUpdate);
+                ps.close();
+            }
+            
+            addHikeMeal(hike, meal);
+            
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Item creation failed." + e.getMessage());
+        }
+    }
+
+    private void addHikeMeal(Hike hike, Meal meal) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Me (h_id, m_id) VALUES (?, ?)");
+            ps.setInt(1, hike.getId());
+            ps.setInt(2, meal.getId());
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Add in Hikes_Meal: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Hikes_Meal add failed." + e.getMessage());
         }
     }
     
@@ -201,6 +246,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
             hike.setCompanions(fetchCompanions(hike));
             hike.setEquipment(fetchEquipment(hike));
+            hike.setMeals(fetchMeals(hike));
 
             ps.close();
             rs.close();
@@ -313,6 +359,40 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println(e.getMessage());
         }
         return equipment;
+    }
+    
+    private HashMap<String, Meal> fetchMeals(Hike hike) {
+        HashMap<String, Meal> meals = new HashMap<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT M.id, M.name, category, ingr FROM Hikes H JOIN Hi_Me ON H.id = h_id JOIN Meal M ON m_id = M.id WHERE h_id = ?");
+            ps.setInt(1, hike.getId());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int category = rs.getInt("category");
+                String ingr = rs.getString("ingr");
+                Meal meal = new Meal(name, category);
+                meal.setId(id);
+                
+                
+                if (ingr.length() != 0) {
+                    ArrayList<String> ingredients = new ArrayList<>();
+                    String[] pcs = ingr.split(", ");
+                    for (int i = 0; i < pcs.length; i++) {
+                        ingredients.add(pcs[i]);
+                    }
+                    meal.setIngredients(ingredients);
+                }
+                meals.put(name, meal);
+            }
+        } catch (SQLException e) {
+            //muuta tämä ennen lopullista palautusta
+            System.err.println("Meals get failed.");
+            System.err.println(e.getMessage());
+        }
+        return meals;
     }
 
     //Häääh tarvinko tätä todella?
