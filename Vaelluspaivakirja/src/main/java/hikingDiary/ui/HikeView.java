@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -42,8 +43,11 @@ public class HikeView {
         Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
 
         bCompanion.setOnAction((event) -> {
-            CompanionView cw = new CompanionView(c);
             ui.bp.setCenter(new CompanionView(c).getView(hike));
+        });
+        
+        bEquipment.setOnAction((event) -> {
+            ui.bp.setCenter(new EquipmentView(c).getView(hike));
         });
         
         gp.add(lName, 0, 1);

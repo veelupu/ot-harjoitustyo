@@ -6,6 +6,7 @@ package hikingdiary.dao;
 
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
+import hikingdiary.domain.Item;
 import java.sql.*;
 import java.util.*;
 
@@ -16,11 +17,14 @@ import java.util.*;
 public interface HikeDao<T, K> {
     void createHike(T object);
     void createCompanion(Hike hike, Companion comp);
-    Hike read(String name);
+    void createItem(Hike hike, Item item);
+    Hike readHike(String name);
+//    Item readItem(String name);
     void updateHike(Hike hike);
-//    void updateCompanion(Hike hike, Companion comp);
+    void updateHikeItem(Hike hike, Item item);
     void delete(K key) throws SQLException;
     List<T> list();
     List<T> listPastHikes();
     List<T> listUpcomingHikes();
+    Map<String, Item> listItems();
 }

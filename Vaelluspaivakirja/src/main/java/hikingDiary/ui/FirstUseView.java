@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;

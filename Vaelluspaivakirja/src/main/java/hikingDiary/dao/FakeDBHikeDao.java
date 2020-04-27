@@ -6,6 +6,7 @@ package hikingdiary.dao;
 
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
+import hikingdiary.domain.Item;
 import java.util.*;
 import java.sql.*;
 
@@ -37,7 +38,7 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     @Override
-    public Hike read(String name) {
+    public Hike readHike(String name) {
         if (hikes.containsKey(name)) {
             return hikes.get(name);
         }
@@ -100,6 +101,21 @@ public class FakeDBHikeDao implements HikeDao<Hike, Integer> {
 
     @Override
     public void updateHike(Hike hike) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createItem(Hike hike, Item item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateHikeItem(Hike hike, Item item) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<String, Item> listItems() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

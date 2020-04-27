@@ -41,21 +41,21 @@ public class DBHikeDaoTest {
 
     @Test
     public void createHikeCreatesAHikeAndSavesItToTheDB() {
-        assertEquals(hike, hikeDao.read("Kaldoaivi"));
+        assertEquals(hike, hikeDao.readHike("Kaldoaivi"));
     }
     
     @Test
     public void createCompanionWorksAsWanted() {
         Companion comp = new Companion("Pekko");
         hikeDao.createCompanion(hike, comp);
-        assertTrue(hikeDao.read("Kaldoaivi").formatCompanions().contains("Pekko"));
+        assertTrue(hikeDao.readHike("Kaldoaivi").formatCompanions().contains("Pekko"));
     }
     
     @Test
     public void updatingHikeUpdatesHikeWithGivenUpdates() {
         hike.setUpcoming(true);
         hikeDao.updateHike(hike);
-        assertTrue(hikeDao.read("Kaldoaivi").isUpcoming());
+        assertTrue(hikeDao.readHike("Kaldoaivi").isUpcoming());
     }
     
     @Test

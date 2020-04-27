@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;

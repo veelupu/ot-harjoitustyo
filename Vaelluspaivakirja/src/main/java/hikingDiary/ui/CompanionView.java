@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import javafx.geometry.Insets;
@@ -53,7 +54,6 @@ public class CompanionView {
 
         newComp.setOnMouseClicked((event) -> {
             box.getChildren().remove(done);
-            companion.setText(hike.formatCompanions());
         });
 
         gp.setAlignment(Pos.CENTER);

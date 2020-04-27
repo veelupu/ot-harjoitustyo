@@ -2,7 +2,7 @@
  * /*
  * Copyright (c) Veera Lupunen 2020. All rights reserved.
  */
-package hikingdiary.ui;
+package hikingdiary.domain;
 
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
@@ -42,7 +42,7 @@ public class Controller {
     }
 
     public Hike getHike(String name) {
-        Hike hike = hikeDao.read(name);
+        Hike hike = hikeDao.readHike(name);
         return hike;
     }
 
@@ -84,6 +84,28 @@ public class Controller {
             return true;
         }
         return false;
+    }
+    
+//    public Item fetchOrCreateItem(Hike hike, String itemName, double weight, int count) {
+//        if (hike.containsItem(itemName)) {
+//            //lisää määrää
+//        } else if (hikeDao.listItems().containsKey(itemName)) {
+//            //lisää yhteys
+//        } else {
+//            //luo uusi item
+//            hikeDao.createItem(hike, itemName, weight, count);
+//        }
+//        return null;
+//    }
+    
+    public void addItem(Hike hike, Item item) {
+        int i = hike.addItem(item);
+        if (i == -1) {
+            hikeDao.createItem(hike, item);
+        } else {
+            item.setCount(i);
+            hikeDao.updateHikeItem(hike, item);
+        }
     }
     
     //lisää tänne metodit rinkan alku- ja loppupainon lisäämiseksi

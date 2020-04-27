@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
 import java.util.ArrayList;
 import javafx.geometry.Insets;

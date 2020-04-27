@@ -6,6 +6,7 @@ package hikingdiary.dao;
 
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
+import hikingdiary.domain.Item;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -70,6 +71,8 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
         s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE, PRIMARY KEY (h_id, c_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Item (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, weight INTEGER)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, I_id INTEGER REFERENCES Item ON UPDATE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
         s.execute("COMMIT");
     }
 
@@ -119,12 +122,74 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.out.println("Create companion 2/2: " + executeUpdate2);
             ps2.close();
         } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Companion creation failed." + e.getMessage());
         }
     }
-
+    
     @Override
-    public Hike read(String name) {
+    public void createItem(Hike hike, Item item) {
+        try {
+            int id = fetchItemId(item.getName());
+            
+            if (id == 0) {
+                PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps1.setString(1, item.getName());
+                ps1.setDouble(2, item.getWeight());
+
+                int executeUpdate1 = ps1.executeUpdate();
+                ResultSet rs1 = ps1.getGeneratedKeys();
+                rs1.next();
+                id = rs1.getInt(1);
+                item.setId(id);
+                System.out.println("Create item: " + executeUpdate1);
+                ps1.close();
+            }
+            
+            addHikeItem(hike, item);
+            
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Item creation failed." + e.getMessage());
+        }
+    }
+
+    private void addHikeItem(Hike hike, Item item) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_It (h_id, i_id, count) VALUES (?, ?, ?)");
+            ps.setInt(1, hike.getId());
+            ps.setInt(2, item.getId());
+            ps.setInt(3, item.getCount());
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Add in Hikes_Item: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Hikes_Item add failed." + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void updateHikeItem(Hike hike, Item item) {
+        try {
+            
+            
+            PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count=? WHERE h_id=? AND i_id=?");
+            ps.setInt(1, item.getCount());
+            ps.setInt(2, hike.getId());
+            ps.setInt(3, item.getId());
+            int executeUpdate = ps.executeUpdate();
+            //poista alla oleva ennen lopullista palautusta ja siirrä luvun käsittely eteenpäin
+            System.out.println("Update Hikes_Item: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Hikes_Item update failed." + e.getMessage());
+        }
+    }
+    
+    @Override
+    public Hike readHike(String name) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE name = ?");
             ps.setString(1, name);
@@ -135,6 +200,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             hike.setId(rs.getInt("id"));
 
             hike.setCompanions(fetchCompanions(hike));
+            hike.setEquipment(fetchEquipment(hike));
 
             ps.close();
             rs.close();
@@ -145,6 +211,28 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         return null;
     }
+    
+//    public Item readItem(String name) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Item WHERE name = ?");
+//            ps.setString(1, name);
+//            ResultSet rs = ps.executeQuery();
+//
+//            Item item = new Item(rs.getString("name"), rs.getDouble("weight"));
+//            item.setId(rs.getInt("id"));
+//
+//            hike.setCompanions(fetchCompanions(hike));
+//            hike.setEquipment(fetchEquipment(hike));
+//
+//            ps.close();
+//            rs.close();
+//            return item;
+//        } catch (SQLException e) {
+//            System.err.println("Hike get failed.");
+//            System.err.println(e.getMessage());
+//        }
+//        return null;
+//    }
 
     private int fetchCompanionId(String name) {
         try {
@@ -156,7 +244,24 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 return rs.getInt("id");
             }
         } catch (SQLException e) {
+            //poista tai muuta nämä ennen lopullista palautusta
             System.err.println("Companion get failed.");
+            System.err.println(e.getMessage());
+        }
+        return 0;
+    }
+    
+    private int fetchItemId(String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT id FROM Item WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Item id get failed.");
             System.err.println(e.getMessage());
         }
         return 0;
@@ -176,12 +281,38 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             }
 
         } catch (SQLException e) {
+            //muuta tämä ennen lopullista palautusta
             System.err.println("Companions get failed.");
             System.err.println(e.getMessage());
         }
 
         Collections.sort(companion);
         return companion;
+    }
+    
+    private HashMap<String, Item> fetchEquipment(Hike hike) {
+        HashMap<String, Item> equipment = new HashMap<>();
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT I.id, I.name, weight, count FROM Hikes H JOIN Hi_It ON H.id = h_id JOIN Item I ON i_id = I.id WHERE h_id = ?");
+            ps.setInt(1, hike.getId());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Double weight = rs.getDouble("weight");
+                int count = rs.getInt("count");
+                Item item = new Item(name, weight, count);
+                item.setId(id);
+                equipment.put(name, item);
+            }
+        } catch (SQLException e) {
+            //muuta tämä ennen lopullista palautusta
+            System.err.println("Equipment get failed.");
+            System.err.println(e.getMessage());
+        }
+        return equipment;
     }
 
     //Häääh tarvinko tätä todella?
@@ -297,4 +428,29 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         return hikes;
     }
+    
+    @Override
+    public Map<String, Item> listItems() {
+        Map<String, Item> items = new HashMap<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT id, name, weight, count FROM Items JOIN Hi_It ON i_id = id");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                Item item = new Item(name, rs.getDouble("weight"), rs.getInt("count"));
+                item.setId(rs.getInt("id"));
+                items.put(name, item);
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Listing items failed.");
+            System.err.println(e.getMessage());
+        }
+        return items;
+    }
+
+
 }

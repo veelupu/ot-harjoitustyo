@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import hikingdiary.dao.DBHikeDao;
 import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.HikeDao;

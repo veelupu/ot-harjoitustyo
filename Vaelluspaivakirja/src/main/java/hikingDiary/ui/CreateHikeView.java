@@ -4,6 +4,7 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -93,6 +94,7 @@ public class CreateHikeView {
                 gp.add(new Label("New hike created succesfully!"), 0, 13);
             } catch (Exception e) {
                 gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 14);
+                //poista alla oleva ennen lopullista palautusta
                 System.out.println("Hike creation failed: " + e.getMessage());
             }
         });

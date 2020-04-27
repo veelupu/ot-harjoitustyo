@@ -7,7 +7,7 @@ package hikingdiary.ui;
 
 import hikingdiary.domain.User;
 import hikingdiary.ui.UserInterface;
-import hikingdiary.ui.Controller;
+import hikingdiary.domain.Controller;
 import java.io.InputStream;
 import java.util.Scanner;
 import org.apache.commons.io.IOUtils;
