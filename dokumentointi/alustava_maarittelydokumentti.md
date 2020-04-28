@@ -24,10 +24,10 @@ Vaelluspäiväkirjan perusversiossa käyttäjä voi luoda, muokata ja selata vae
 Vaellus koostuu
 * päivämatkoista, joita on vähintään yksi vaellusta kohti (päivämatka on järjestetty päivämäärän mukaan) _(ei vielä käytettävissä)_
 * kohteesta (paikannimi, toimii myös vaelluksen nimenä) _(toteutettu)_
-* varustelistasta _(ei vielä käytettävissä)_
-* ruokalistasta _(ei vielä käytettävissä)_
-* seuralaisista (kanssavaeltajien nimiä) _(toteutettu)_ sekä
-* rinkan alku- ja loppupainosta. _(toteutettu osittain)_
+* varustelistasta _(toteutettu osittain)_
+* ruokalistasta _(toteutettu osittain)_
+* seuralaisista (kanssavaeltajien nimiä) _(toteutettu pääosin)_ sekä
+* rinkan alku- ja loppupainosta. _(toteutettu pääosin)_
 * Käyttäjä voi valita, mitkä tiedot hän tallentaa.
 
 ### Päivämatka
@@ -42,10 +42,11 @@ Päivämatkalla on
 * Käyttäjä voi valita, mitkä tiedot hän tallentaa.
 
 ### Varuste- ja ruokalistat
-_(ei vielä käytettävissä)_
+_(toteutettu osittain)_
 Käyttäjä voi luoda varustelistoja, jotka tallentavat listan vaellukselle mukaan otettavista varusteista. Samaan tapaan käyttäjä voi luoda myös ruokalistoja, jotka tallentavat vaellukselle suunnitellut ruokalajit. Ruokalajien kohdalle voi merkitä vaelluspäivän, jolle se on suunniteltu. Saman varuste- tai ruokalistan voi liittää useampaan vaellukseen, ja listoja voi myös muokata.
 
 ### Asetukset
+_(toteutettu)_
 Aloittaessaan sovelluksen käytön käyttäjä luo itselleen käyttäjänimen, joka voi olla käyttäjän oma nimi tai itse keksitty nimimerkki. Nimen voi vaihtaa asetuksissa.
 
 ## Jatkokehitysideoita
