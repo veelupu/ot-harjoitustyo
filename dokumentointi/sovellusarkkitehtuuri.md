@@ -16,7 +16,7 @@ Käyttöliittymässä on useita eri näkymiä. Kun sovellus käynnistetään ens
 
 ## Sovelluslogiikka
 
-_Tähän sanallinen kuvaus sovelluslogiikasta_
+Sovelluslogiikan ytimessä on Controller-luokka, joka vastaa kommunikoinnista eri pakkausten välillä. Luokat User, Hike ja DayTrip muodostavat pohjan varsinaiselle toiminnallisuudelle. Hike-luokan apuna on lisäksi kolme muuta luokkaa: Companion, Item ja Meal, jotka kukin vastaavat yhdestä vaelluksen osasta.
 
 ![Imgae of class structure](../dokumentointi/vaelluspaivakirja_luokka-pakkauskaavio.jpg)
 
