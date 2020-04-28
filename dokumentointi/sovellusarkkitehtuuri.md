@@ -3,23 +3,22 @@
 ## Rakenne
 Ohjelman rakenne noudattaa kolmitasoista kerrosarkkitehtuuria. Lähdekoodin pakkausrakenne on niin ikään kolmiosainen:
 
-![Image of package structure (sketch)](../dokumentointi/vaelluspaivakirja_pakkauskaavio_1.jpg)
+![Image of package structure (sketch)](../dokumentointi/vaelluspaivakirja_pakkauskaavio.jpg)
 
-Pakkauksessa hikingDiary.ui on sekä tekstikäyttöliittymän että JavaFX:llä toteutettu graafisen käyttöliittymän lähdekoodi. Pakkauksessa hikingDiary.domain sisältää ohjelman sovelluslogiikan. Pakkauksessa hikingDiary.dao oleva lähdekoodi taas hoitaa ohjelmaan liittyvän pysyväistalletuksen.
+Pakkauksessa hikingdiary.ui on sekä tekstikäyttöliittymän että JavaFX:llä toteutettu graafisen käyttöliittymän lähdekoodi. Pakkauksessa hikingdiary.domain sisältää ohjelman sovelluslogiikan. Pakkauksessa hikingdiary.dao oleva lähdekoodi taas hoitaa ohjelmaan liittyvän pysyväistalletuksen.
 
 ## Käyttöliittymä
-Käyttöliittymässä on useita eri näkymiä. Kun sovellus käynnistetään, avautuu aloitusnäkymä, josta pääsee navigoimaan viiteen eri suuntaan:
+Käyttöliittymässä on useita eri näkymiä. Kun sovellus käynnistetään ensimmäisen kerran, avautuu aloitusnäkymä, jossa käyttäjää pyydetään valitsemaan käyttäjänimi. Tämän jälkeen – sekä jatkossa aina sovellusta avattaessa – avautuu päävalikkonäkymä, josta pääsee navigoimaan neljään eri suuntaan:
 
 * Mikäli käyttäjä valitsee uuden vaelluksen luomisen, pyydetään käyttäjältä luotavan vaelluksen perustietoja (nimi, ajankohta, kuuluuko vaellus tuleviin vai menneisiin vaelluksiin)
-* Mikäli käyttäjä valitsee menneiden tai tulevien vaellusten listauksen, näytetään käyttäjälle lista tämän tallentamista menneistä tai tulevista vaelluksista. Jonkin tietyn vaelluksen valitsemalla aukeaa näkymä vaellukseen tallennetuista tiedoista. 
+* Mikäli käyttäjä valitsee menneiden tai tulevien vaellusten listauksen, näytetään käyttäjälle lista tämän tallentamista menneistä tai tulevista vaelluksista. Jonkin tietyn vaelluksen valitsemalla aukeaa näkymä vaellukseen tallennetuista tiedoista. Yhden vaelluksen tiedot näyttävästä näkymästä taas pääsee eteenpäin tarkastelemaan ja muokkaamaan kyseisen vaelluksen varuste- ja ruokalistoja sekä seuralaisia.
 * Mikäli käyttäjä valitsee Asetukset, hän pääsee muuttamaan käyttäjänimeään.
-* Mikäil käyttäjä valitsee poistumisen, kysytään varmistusta ja lopulta suljetaan sovellus.
 
 ## Sovelluslogiikka
 
 _Tähän sanallinen kuvaus sovelluslogiikasta_
 
-![Imgae of class structure (sketch)](../dokumentointi/vaelluspaivakirja_luokkakaavio_1.jpg)
+![Imgae of class structure](../dokumentointi/vaelluspaivakirja_luokka-pakkauskaavio.jpg)
 
 ## Tietojen pysyväistalletus
 
