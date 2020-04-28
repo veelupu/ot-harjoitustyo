@@ -23,7 +23,7 @@ public interface HikeDao<T, K> {
     Hike readHike(String name);
 //    Item readItem(String name);
     void updateHike(Hike hike);
-    void updateHikeItem(Hike hike, Item item);
+//    void updateHikeItem(Hike hike, Item item);
     void delete(K key) throws SQLException;
     List<T> list();
     List<T> listPastHikes();

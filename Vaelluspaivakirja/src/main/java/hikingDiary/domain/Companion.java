@@ -4,7 +4,8 @@
 package hikingdiary.domain;
 
 /**
- *
+ * Class representing a single companion
+ * 
  * @author veeralupunen
  */
 public class Companion {

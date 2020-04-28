@@ -17,5 +17,5 @@ public interface UserDao<T> {
     User read();
     boolean update(T user, String newName);
     boolean delete(T user);
-    //List<T> list() throws SQLException;
+
 }

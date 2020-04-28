@@ -5,7 +5,8 @@
 package hikingdiary.domain;
 
 /**
- *
+ * Class representing a single item
+ * 
  * @author veeralupunen
  */
 public class Item implements Comparable<Item> {
@@ -79,7 +80,4 @@ public class Item implements Comparable<Item> {
             return 0;
         }
     }
-    
-    
-    
 }

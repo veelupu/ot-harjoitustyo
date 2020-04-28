@@ -7,11 +7,12 @@ package hikingdiary.domain;
 import java.util.ArrayList;
 
 /**
+ * Class representing a single meal
  *
  * @author veeralupunen
  */
 public class Meal implements Comparable<Meal> {
-    
+
     private int id;
     private String name;
     private int category;
@@ -24,7 +25,7 @@ public class Meal implements Comparable<Meal> {
         this.categoryName = getCategoryName();
         this.ingredients = new ArrayList<>();
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
@@ -52,7 +53,7 @@ public class Meal implements Comparable<Meal> {
     public ArrayList<String> getIngredients() {
         return ingredients;
     }
-    
+
     public void addIngredient(String i) {
         this.ingredients.add(i);
     }
@@ -60,12 +61,7 @@ public class Meal implements Comparable<Meal> {
     public void setIngredients(ArrayList<String> ingrediens) {
         this.ingredients = ingrediens;
     }
-    
-    @Override
-    public String toString() {
-        return this.name + " (" + this.categoryName + ")";
-    }
-    
+
     public String getCategoryName() {
         if (category == 0) {
             return "Snack";
@@ -83,6 +79,11 @@ public class Meal implements Comparable<Meal> {
     }
 
     @Override
+    public String toString() {
+        return this.name + " (" + this.categoryName + ")";
+    }
+
+    @Override
     public int compareTo(Meal m) {
         if (this.category == m.getCategory()) {
             if (this.name.compareTo(m.getName()) > 0) {
@@ -97,5 +98,5 @@ public class Meal implements Comparable<Meal> {
         }
         return 0;
     }
- 
+
 }

@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- *
+ * Class representing a single hike
+ * 
  * @author veeralupunen
  */
 public class Hike implements Comparable<Hike> {
@@ -95,12 +96,25 @@ public class Hike implements Comparable<Hike> {
         this.rucksackWeightEnd = rucksackWeightEnd;
     }
 
+    /**
+     * Method creates a new day trip and adds it to this hike's day trips.
+     * 
+     * @param date the date of the new day trip
+     * @return a new day trip
+     */
     public DayTrip addADayTrip(Date date) {
         DayTrip dayTrip = new DayTrip(date);
         this.dayTrips.put(date, dayTrip);
         return dayTrip;
     }
 
+    /**
+     * Method checks if this hike already has a companion with that name.
+     * If not, it adds the new companion and returns true.
+     * 
+     * @param name Name of the new companion
+     * @return whether did the method add the companion or not
+     */
     public boolean addCompanion(String name) {
         if (!this.companions.contains(name)) {
             this.companions.add(name);
@@ -110,11 +124,21 @@ public class Hike implements Comparable<Hike> {
         return false;
     }
 
+    /**
+     * Method sets the given arraylist of companions to this hike and sorts it.
+     * 
+     * @param companion the arraylist to be given for the hike
+     */
     public void setCompanions(ArrayList<String> companion) {
         this.companions = companion;
         Collections.sort(companions);
     }
 
+    /**
+     * Method returns name's of the companions of this hike in specified form.
+     * 
+     * @return formated list of names
+     */
     public String formatCompanions() {
         StringBuilder companion = new StringBuilder();
         for (String name : this.companions) {
@@ -123,10 +147,13 @@ public class Hike implements Comparable<Hike> {
         return companion.toString();
     }
 
-//    public void addAMeal(Meal meal, DayTrip dayTrip) {
-//        this.mealList.addAMeal(meal);
-//        dayTrip.setMeal(meal);
-//    }
+    /**
+     * Method checks if this hike already has a meal with that name.
+     * If not, it adds the new meal and returns true.
+     * 
+     * @param meal meal to add
+     * @return whether did the method add the meal or not
+     */
     public boolean addMeal(Meal meal) {
         if (this.mealList.containsKey(meal.getName())) {
             return false;
@@ -135,6 +162,12 @@ public class Hike implements Comparable<Hike> {
         return true;
     }
 
+    /**
+     * Method builds a string containing names and categories of the meals 
+     * of this hike in specified form.
+     * 
+     * @return formatted list of meals
+     */
     public String formatMeals() {
         StringBuilder items = new StringBuilder();
         for (Meal meal : this.mealList.values()) {
@@ -143,6 +176,11 @@ public class Hike implements Comparable<Hike> {
         return items.toString();
     }
     
+    /**
+     * Method makes a sorted arraylist containing meals of this hike.
+     * 
+     * @return a sorted arraylist containing meals of this hike
+     */
     public ArrayList<Meal> getMeals() {
         ArrayList<Meal> meals = new ArrayList<>();
         for (Meal meal : this.mealList.values()) {
@@ -156,8 +194,15 @@ public class Hike implements Comparable<Hike> {
         this.mealList = mealList;
     }
 
+    /**
+     * Method checks if this hike already has a item with that name.
+     * If not, it adds the new item and returns true.
+     * 
+     * @param item the item to be added
+     * @return whether the item was added for the hike or not
+     */
     public boolean addItem(Item item) {
-        if (this.equList.containsKey(item.getName())) {
+        if (containsItem(item.getName())) {
             return false;
         }
         this.equList.put(item.getName(), item);
@@ -168,10 +213,22 @@ public class Hike implements Comparable<Hike> {
         this.equList = equList;
     }
 
+    /**
+     * Method checks if this hike has an item with given name.
+     * 
+     * @param name the name of the item
+     * @return whether this hike has the item or not
+     */
     public boolean containsItem(String name) {
         return this.equList.containsKey(name);
     }
 
+    /**
+     * Method builds a string containing names, count and combined weight 
+     * of the items of this hike in specified form.
+     * 
+     * @return items of the hike in specified form
+     */
     public String formatEquipment() {
         StringBuilder items = new StringBuilder();
         for (Item item : this.equList.values()) {
@@ -180,6 +237,11 @@ public class Hike implements Comparable<Hike> {
         return items.toString();
     }
 
+    /**
+     * Method counts the total kilometres of this hike out of the hike's day trips.
+     * 
+     * @return total kilometres of the hike
+     */
     public int getKilometres() {
         int total = 0;
         for (DayTrip dayTrip : this.dayTrips.values()) {

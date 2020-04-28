@@ -7,7 +7,8 @@ package hikingdiary.domain;
 import hikingdiary.dao.UserDao;
 
 /**
- *
+ * Class representing a single user
+ * 
  * @author veeralupunen
  */
 public class User {

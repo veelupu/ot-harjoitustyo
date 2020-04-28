@@ -16,7 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
+ * Class responsible for database connection for the user related data
+ * 
  * @author veeralupunen
  */
 public class DBUserDao implements UserDao<User> {
@@ -41,7 +42,12 @@ public class DBUserDao implements UserDao<User> {
         }
     }
 
-    public DBUserDao(String address) { //for testing
+    /**
+     * Constructor for the test classes
+     * 
+     * @param address address where to temporarily place a test database
+     */
+    public DBUserDao(String address) {
         try {
             Path path = Files.createTempDirectory("hikingDiary-");
             path.toFile().deleteOnExit();
@@ -75,6 +81,11 @@ public class DBUserDao implements UserDao<User> {
         s.execute("COMMIT");
     }
 
+    /**
+     * Method adds a new user into the User table in the database.
+     * 
+     * @param user user to be added
+     */
     @Override
     public void create(User user) {
         try {
@@ -90,6 +101,13 @@ public class DBUserDao implements UserDao<User> {
         }
     }
 
+    /**
+     * Method replaces the given user's username with the given new username.
+     * 
+     * @param user user to have a new name
+     * @param newName new name to give to the user
+     * @return whether the adding succeeded or not
+     */
     @Override
     public boolean update(User user, String newName) {
         try {
@@ -108,6 +126,12 @@ public class DBUserDao implements UserDao<User> {
         }
     }
 
+    /**
+     * Method removes all the user related data from the database.
+     * 
+     * @param user user to be deleted
+     * @return whether the removing succeeded or not
+     */
     @Override
     public boolean delete(User user) {
         try {
@@ -125,6 +149,11 @@ public class DBUserDao implements UserDao<User> {
         }
     }
 
+    /**
+     * Method gets the user from the database.
+     * 
+     * @return user 
+     */
     @Override
     public User read() {
         try {
@@ -141,5 +170,4 @@ public class DBUserDao implements UserDao<User> {
             return null;
         }
     }
-
 }

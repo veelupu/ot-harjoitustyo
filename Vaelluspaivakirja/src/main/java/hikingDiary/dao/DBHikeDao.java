@@ -15,7 +15,8 @@ import java.util.*;
 import java.sql.*;
 
 /**
- *
+ * Class responsible for database connection for the hike related data
+ * 
  * @author veeralupunen
  */
 public class DBHikeDao implements HikeDao<Hike, Integer> {
@@ -37,7 +38,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
     }
 
-    public DBHikeDao(String address) { //for testing;
+    /**
+     * Constructor for the test classes
+     * 
+     * @param address address where to temporarily place a test database
+     */
+    public DBHikeDao(String address) {
         try {
             Path path = Files.createTempDirectory("hikingDiary-");
             path.toFile().deleteOnExit();
@@ -75,6 +81,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         s.execute("COMMIT");
     }
 
+    /**
+     * Method adds a new hike into the Hike table in the database.
+     * 
+     * @param hike hike to be created
+     */
     @Override
     public void createHike(Hike hike) {
         try {
@@ -97,6 +108,15 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         //connection.close(); //tee tälle oma metodi ja kutsu sitä kun lopetetaan
     }
 
+    /**
+     * Method checks if the given companion already exists in the database. 
+     * If not, it adds the companion into the Companion table.
+     * Finally method adds a connection between the given hike and companion 
+     * into the Hi_Co table.
+     * 
+     * @param hike hike to add the companion for
+     * @param comp companion to be added in the database and/or for the hike
+     */
     @Override
     public void createCompanion(Hike hike, Companion comp) {
         try {
@@ -135,7 +155,16 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Adding Hike_Companion failed." + e.getMessage());
         }
     }
-
+    
+    /**
+     * Method checks if the given item already exists in the database. 
+     * If not, it adds the item into the Item table.
+     * Finally method adds a connection between the given hike and item 
+     * into the Hi_It table.
+     * 
+     * @param hike hike to add the item for
+     * @param item item to be added in the database and/or for the hike
+     */
     @Override
     public void createItem(Hike hike, Item item) {
         try {
@@ -178,6 +207,15 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
     }
 
+    /**
+     * Method checks if the given meal already exists in the database.
+     * If not, it adds the meal into the Meal table.
+     * Finally method adds a connection between the given hike and meal 
+     * into the Hi_Co table.
+     * 
+     * @param hike hike to add the meal for
+     * @param meal meal to be added in the database and/or for the hike
+     */
     @Override
     public void createMeal(Hike hike, Meal meal) {
         try {
@@ -220,24 +258,13 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
     }
 
-    @Override
-    public void updateHikeItem(Hike hike, Item item) {
-        try {
-
-            PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count=? WHERE h_id=? AND i_id=?");
-            ps.setInt(1, item.getCount());
-            ps.setInt(2, hike.getId());
-            ps.setInt(3, item.getId());
-            int executeUpdate = ps.executeUpdate();
-            //poista alla oleva ennen lopullista palautusta ja siirrä luvun käsittely eteenpäin
-            System.out.println("Update Hikes_Item: " + executeUpdate);
-            ps.close();
-        } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Hikes_Item update failed." + e.getMessage());
-        }
-    }
-
+    /**
+     * Method gets hike with given name and all its companions, items and meals
+     * from the database.
+     * 
+     * @param name name of the hike
+     * @return hike with its companion, items and meals
+     */
     @Override
     public Hike readHike(String name) {
         try {
@@ -382,6 +409,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return ingredients;
     }
 
+    /**
+     * Method updates the given hikes data into the database.
+     * 
+     * @param hike hike to update
+     */
     @Override
     public void updateHike(Hike hike) {
         try {
@@ -403,21 +435,33 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
     }
 
+    /**
+     * Method removes the given hike from the database.
+     * 
+     * @param key the id for the hike to be removed
+     * @throws SQLException insert description here
+     */
     @Override
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Method lists all the hikes in the database with their basic data.
+     * 
+     * @return list of hikes
+     */
     @Override
     public List<Hike> list() {
         ArrayList<Hike> hikes = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT name, year, upcoming FROM Hikes");
+            PreparedStatement ps = connection.prepareStatement("SELECT id, name, year, upcoming FROM Hikes");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+                hike.setId(rs.getInt("id"));
                 hikes.add(hike);
             }
 
@@ -429,6 +473,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return hikes;
     }
 
+    /**
+     * Method lists all the past hikes in the database with their basic data.
+     * 
+     * @return list of past hikes
+     */
     @Override
     public List<Hike> listPastHikes() {
         ArrayList<Hike> hikes = new ArrayList<>();
@@ -438,6 +487,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
             while (rs.next()) {
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
+                hike.setId(rs.getInt("id"));
                 hikes.add(hike);
             }
 
@@ -449,6 +499,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return hikes;
     }
 
+    /**
+     * Method lists all the upcoming hikes in the database with their basic data.
+     * 
+     * @return list of upcoming hikes
+     */
     @Override
     public List<Hike> listUpcomingHikes() {
         ArrayList<Hike> hikes = new ArrayList<>();
@@ -458,6 +513,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
             while (rs.next()) {
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
+                hike.setId(rs.getInt("id"));
                 hikes.add(hike);
             }
 
@@ -469,6 +525,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return hikes;
     }
 
+    /**
+     * Method lists all the items in the database with their data.
+     * 
+     * @return a map of items
+     */
     @Override
     public Map<String, Item> listItems() {
         Map<String, Item> items = new HashMap<>();
