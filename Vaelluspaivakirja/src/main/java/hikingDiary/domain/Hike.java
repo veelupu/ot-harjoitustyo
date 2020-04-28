@@ -143,6 +143,15 @@ public class Hike implements Comparable<Hike> {
         return items.toString();
     }
     
+    public ArrayList<Meal> getMeals() {
+        ArrayList<Meal> meals = new ArrayList<>();
+        for (Meal meal : this.mealList.values()) {
+            meals.add(meal);
+        }
+        Collections.sort(meals);
+        return meals;
+    }
+    
     public void setMeals(HashMap<String, Meal> mealList) {
         this.mealList = mealList;
     }

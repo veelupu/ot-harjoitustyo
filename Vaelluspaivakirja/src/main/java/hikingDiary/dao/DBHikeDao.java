@@ -65,7 +65,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return dbAddress;
     }
 
-    public void createTables() throws SQLException {
+    private void createTables() throws SQLException {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");

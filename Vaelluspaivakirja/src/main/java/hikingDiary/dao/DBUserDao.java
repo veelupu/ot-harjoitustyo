@@ -5,6 +5,9 @@
 package hikingdiary.dao;
 
 import hikingdiary.domain.User;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,14 +21,14 @@ import java.sql.Statement;
  */
 public class DBUserDao implements UserDao<User> {
 
-    private String homeAddress;
+    private String dbAddress;
     private Connection connection;
 
     public DBUserDao() {
 
-        homeAddress = System.getProperty("user.home");
+        dbAddress = System.getProperty("user.home");
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + homeAddress + "/.hikes.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress + "/.hikes.db");
         } catch (SQLException e) {
             System.err.println("Connection failed.");
             System.err.println(e.getMessage());
@@ -38,7 +41,33 @@ public class DBUserDao implements UserDao<User> {
         }
     }
 
-    public void createUserTable() throws SQLException {
+    public DBUserDao(String address) { //for testing
+        try {
+            Path path = Files.createTempDirectory("hikingDiary-");
+            path.toFile().deleteOnExit();
+            dbAddress = path.toAbsolutePath().toString() + "/" + address;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress);
+        } catch (SQLException e) {
+            System.err.println("Connection failed.");
+            System.err.println(e.getMessage());
+        }
+        try {
+            createUserTable();
+        } catch (Exception e) {
+            System.err.println("Table creation failed.");
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public String getDBAdress() {
+        return dbAddress;
+    }
+
+    private void createUserTable() throws SQLException {
         Statement s = connection.createStatement();
         s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");

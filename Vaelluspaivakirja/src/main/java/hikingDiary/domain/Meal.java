@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author veeralupunen
  */
-public class Meal {
+public class Meal implements Comparable<Meal> {
     
     private int id;
     private String name;
@@ -21,7 +21,8 @@ public class Meal {
     public Meal(String name, int category) {
         this.name = name;
         this.category = category;
-        this.categoryName = getCategoryName(category);
+        this.categoryName = getCategoryName();
+        this.ingredients = new ArrayList<>();
     }
     
     public void setId(int id) {
@@ -60,24 +61,41 @@ public class Meal {
         this.ingredients = ingrediens;
     }
     
+    @Override
     public String toString() {
         return this.name + " (" + this.categoryName + ")";
     }
     
-    private String getCategoryName(int c) {
-        if (c == 0) {
+    public String getCategoryName() {
+        if (category == 0) {
             return "Snack";
-        } else if (c == 1) {
+        } else if (category == 1) {
             return "Breakfast";
-        } else if (c == 2) {
+        } else if (category == 2) {
             return "Lunch";
-        } else if (c == 3) {
+        } else if (category == 3) {
             return "Dinner";
-        } else if (c == 4) {
+        } else if (category == 4) {
             return "Dessert";
         } else {
             return "Outside of all categories";
         }
+    }
+
+    @Override
+    public int compareTo(Meal m) {
+        if (this.category == m.getCategory()) {
+            if (this.name.compareTo(m.getName()) > 0) {
+                return 1;
+            } else if (this.name.compareTo(m.getName()) < 0) {
+                return -1;
+            }
+        } else if (this.category > m.getCategory()) {
+            return 1;
+        } else if (this.category < m.getCategory()) {
+            return -1;
+        }
+        return 0;
     }
  
 }

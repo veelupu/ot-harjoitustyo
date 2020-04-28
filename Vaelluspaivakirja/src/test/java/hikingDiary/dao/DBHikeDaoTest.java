@@ -6,6 +6,8 @@ package hikingdiary.dao;
 
 import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
+import hikingdiary.domain.Item;
+import hikingdiary.domain.Meal;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,6 +44,21 @@ public class DBHikeDaoTest {
     @Test
     public void createHikeCreatesAHikeAndSavesItToTheDB() {
         assertEquals(hike, hikeDao.readHike("Kaldoaivi"));
+    }
+    
+    @Test
+    public void readHikeReturnsAHikeWithAllItsElements() {
+        Companion comp = new Companion("Antti");
+        Item item = new Item("trangia", 1);
+        Meal meal = new Meal("chili con papu", 3);
+        hikeDao.createCompanion(hike, comp);
+        hikeDao.createItem(hike, item);
+        hikeDao.createMeal(hike, meal);
+        Hike h = hikeDao.readHike("Kaldoaivi");
+        assertTrue(h.formatCompanions().contains("Antti"));
+        assertTrue(h.formatEquipment().contains("trangia"));
+        assertTrue(h.formatMeals().contains("chili"));
+        assertEquals(1, h.getMeals().size());
     }
     
     @Test

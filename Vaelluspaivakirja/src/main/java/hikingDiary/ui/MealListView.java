@@ -25,11 +25,15 @@ import javafx.scene.layout.VBox;
 public class MealListView {
     
     Controller c;
+    GraphicalUserInterface ui;
     Hike hike;
+    VBox mealList;
     int category;
     
-    public MealListView(Controller c) {
+    public MealListView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
+        this.ui = ui;
+        this.mealList = new VBox();
         this.category = 5;
     }
     
@@ -37,7 +41,17 @@ public class MealListView {
         GridPane gp = new GridPane();
 
         Label title = new Label("Your meals during this hike:");
-        Label mealList = new Label(hike.formatMeals());
+        
+        //Label mealList = new Label(hike.formatMeals());
+
+        for (Meal meal : hike.getMeals()) {
+            Button b = new Button(meal.toString());
+            b.setOnAction((event) -> {
+                ui.bp.setCenter(new MealView(c, meal).getView());
+            });
+            mealList.getChildren().add(b);
+        }
+        
         Label empty = new Label("");
         Label add = new Label("Add more meals to the meal list!");
         
@@ -60,8 +74,6 @@ public class MealListView {
         buttons.add(b4);
         Button b5 = new Button("Outside of all categories");
         buttons.add(b5);
-        
-        
         
         for (int i = 0; i < buttons.size(); i++) {
             final int a = i;
@@ -102,7 +114,7 @@ public class MealListView {
                 meal.setIngredients(ingredients);
                 
                 if (c.addMeal(hike, meal)) {
-                    mealList.setText(hike.formatMeals());
+                    updateMealsBox(meal);
                     tfName.clear();
                     tfIngr.clear();
                     box.getChildren().add(done);
@@ -134,5 +146,15 @@ public class MealListView {
     
     private void setCategory(int i) {
         this.category = i;
+    }
+    
+    private void updateMealsBox(Meal meal) {
+        Button b = new Button(meal.toString());
+            
+            b.setOnAction((event) -> {
+                ui.bp.setCenter(new MealView(c, meal).getView());
+            });
+            
+            mealList.getChildren().add(b);
     }
 }

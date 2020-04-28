@@ -51,7 +51,7 @@ public class HikeView {
         });
         
         bMeals.setOnAction((event) -> {
-            ui.bp.setCenter(new MealListView(c).getView(hike));
+            ui.bp.setCenter(new MealListView(c, ui).getView(hike));
         });
         
         gp.add(lName, 0, 1);
