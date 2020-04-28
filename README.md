@@ -7,8 +7,7 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 
 ## Dokumentaatio
 
-[Käyttöohje]
-_Tähän käyttöohjedokumentti_
+[Käyttöohje](dokumentointi/kayttoohje.md)
 
 [Alustava määrittelydokumentti](dokumentointi/alustava_maarittelydokumentti.md)
 
@@ -60,5 +59,13 @@ Checkstyle-tarkistukset luodaan tiedostoon [checkstyle.xml](Vaelluspaivakirja/ch
 ```
 mvn jxr:jxr checkstyle:checkstyle
 ```
-Mahdolliset virheilmoitukset selviävät avaamalla selaimella tiedosto target/site/checkstyle.html.
+Mikäli koodin tyylissä mahdollisesti olevia virheitä voi tarkastella avaamalla tiedosto target/site/checkstyle.html selaimella.
 
+### JavaDoc
+
+Komennolla
+
+```
+mvn javadoc:javadoc
+```
+generoitua JavaDocia pääsee tarkastelemaan avamaalla tiedosto _target/site/apidocs/index.html_ selaimella.
