@@ -27,13 +27,13 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 
 ### Suoritus
 
-Suoritettava jar-tiedosto _Vaelluspaivakirja-1.0.jar_ generoidaan hakemistoon target komennolla
+Suoritettava jar-tiedosto generoidaan hakemistoon target komennolla
 
 ```
 mvn package
 ```
 
-Ohjelman suoritetaan komennolla
+Ohjelma suoritetaan komennolla
 
 ```
 mvn compile exec:java -Dexec.mainClass=hikingdiary.ui.Main
