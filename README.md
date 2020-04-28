@@ -21,6 +21,8 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 
 [Viikko 5](/releases/tag/viikko5)
 
+[Viikko 6](/releases/tag/viikko6)
+
 ## Komentorivitoiminnot
 
 ### Suoritus
