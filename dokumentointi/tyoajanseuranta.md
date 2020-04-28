@@ -15,5 +15,6 @@
 | 17.4.2020 | 7,5 | Lisää toiminnallisuutta: vaellusseuralaiset |
 | 21.4.2020 | 6,5 | Yksikkötestejä, pom.xml:n hiomista, sekvenssikaavio |
 | 27.4.2020 | 8 | Varuste- ja aterialistat osaksi toiminnallisuutta |
+| 28.4.2020 | 8 | Yksittäisen aterian näkymä, yksikkötestejä, JavaDocin aloittaminen, käyttöohjeen aloittaminen |
 
-**Yhteensä** 55 tuntia
+**Yhteensä** 63 tuntia
