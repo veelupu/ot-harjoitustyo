@@ -28,14 +28,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress + "/.hikes.db");
         } catch (SQLException e) {
-            System.err.println("Connection failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Connection failed." + e.getMessage());
         }
         try {
             createTables();
         } catch (Exception e) {
-            System.err.println("Table creation failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Table creation failed." + e.getMessage());
         }
     }
 
@@ -50,14 +48,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbAddress);
         } catch (SQLException e) {
-            System.err.println("Connection failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Connection failed." + e.getMessage());
         }
         try {
             createTables();
         } catch (Exception e) {
-            System.err.println("Table creation failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Table creation failed." + e.getMessage());
         }
     }
 
@@ -96,8 +92,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.out.println("Create hike: " + executeUpdate);
             ps.close();
         } catch (SQLException e) {
-            System.err.println("Hike creation failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Hike creation failed." + e.getMessage());
         }
         //connection.close(); //tee tälle oma metodi ja kutsu sitä kun lopetetaan
     }
@@ -107,34 +102,45 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         try {
             int id = fetchCompanionId(comp.getName());
             if (id == 0) {
-                PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-                ps1.setString(1, comp.getName());
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, comp.getName());
 
-                int executeUpdate1 = ps1.executeUpdate();
-                ResultSet rs1 = ps1.getGeneratedKeys();
+                int executeUpdate1 = ps.executeUpdate();
+                ResultSet rs1 = ps.getGeneratedKeys();
                 rs1.next();
                 id = rs1.getInt(1);
                 comp.setId(id);
                 System.out.println("Create companion 1/2: " + executeUpdate1);
-                ps1.close();
+                ps.close();
             }
-            PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
-            ps2.setInt(1, hike.getId());
-            ps2.setInt(2, id);
-            int executeUpdate2 = ps2.executeUpdate();
-            System.out.println("Create companion 2/2: " + executeUpdate2);
-            ps2.close();
+
+            addHikeCompanion(hike, comp);
+
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Companion creation failed." + e.getMessage());
         }
     }
-    
+
+    private void addHikeCompanion(Hike hike, Companion comp) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
+            ps.setInt(1, hike.getId());
+            ps.setInt(2, comp.getId());
+            int executeUpdate2 = ps.executeUpdate();
+            System.out.println("Adding Hike_Companion: " + executeUpdate2);
+            ps.close();
+        } catch (SQLException e) {
+            //poista tämä ennen lopullista palautusta / muuta muuksi
+            System.err.println("Adding Hike_Companion failed." + e.getMessage());
+        }
+    }
+
     @Override
     public void createItem(Hike hike, Item item) {
         try {
             int id = fetchItemId(item.getName());
-            
+
             if (id == 0) {
                 PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps1.setString(1, item.getName());
@@ -148,15 +154,15 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 System.out.println("Create item: " + executeUpdate1);
                 ps1.close();
             }
-            
+
             addHikeItem(hike, item);
-            
+
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Item creation failed." + e.getMessage());
         }
     }
-    
+
     private void addHikeItem(Hike hike, Item item) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_It (h_id, i_id, count) VALUES (?, ?, ?)");
@@ -171,12 +177,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Hikes_Item add failed." + e.getMessage());
         }
     }
-    
+
     @Override
     public void createMeal(Hike hike, Meal meal) {
         try {
             int id = fetchItemId(meal.getName());
-            
+
             if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, meal.getName());
@@ -191,9 +197,9 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 System.out.println("Create meal: " + executeUpdate);
                 ps.close();
             }
-            
+
             addHikeMeal(hike, meal);
-            
+
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Item creation failed." + e.getMessage());
@@ -213,12 +219,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Hikes_Meal add failed." + e.getMessage());
         }
     }
-    
+
     @Override
     public void updateHikeItem(Hike hike, Item item) {
         try {
-            
-            
+
             PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count=? WHERE h_id=? AND i_id=?");
             ps.setInt(1, item.getCount());
             ps.setInt(2, hike.getId());
@@ -232,7 +237,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             System.err.println("Hikes_Item update failed." + e.getMessage());
         }
     }
-    
+
     @Override
     public Hike readHike(String name) {
         try {
@@ -257,28 +262,6 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         return null;
     }
-    
-//    public Item readItem(String name) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Item WHERE name = ?");
-//            ps.setString(1, name);
-//            ResultSet rs = ps.executeQuery();
-//
-//            Item item = new Item(rs.getString("name"), rs.getDouble("weight"));
-//            item.setId(rs.getInt("id"));
-//
-//            hike.setCompanions(fetchCompanions(hike));
-//            hike.setEquipment(fetchEquipment(hike));
-//
-//            ps.close();
-//            rs.close();
-//            return item;
-//        } catch (SQLException e) {
-//            System.err.println("Hike get failed.");
-//            System.err.println(e.getMessage());
-//        }
-//        return null;
-//    }
 
     private int fetchCompanionId(String name) {
         try {
@@ -291,12 +274,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             }
         } catch (SQLException e) {
             //poista tai muuta nämä ennen lopullista palautusta
-            System.err.println("Companion get failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Companion get failed." + e.getMessage());
         }
         return 0;
     }
-    
+
     private int fetchItemId(String name) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT id FROM Item WHERE name = ?");
@@ -307,8 +289,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 return rs.getInt("id");
             }
         } catch (SQLException e) {
-            System.err.println("Item id get failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Item id get failed." + e.getMessage());
         }
         return 0;
     }
@@ -328,17 +309,16 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
-            System.err.println("Companions get failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Companions get failed." + e.getMessage());
         }
 
         Collections.sort(companion);
         return companion;
     }
-    
+
     private HashMap<String, Item> fetchEquipment(Hike hike) {
         HashMap<String, Item> equipment = new HashMap<>();
-        
+
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT I.id, I.name, weight, count FROM Hikes H JOIN Hi_It ON H.id = h_id JOIN Item I ON i_id = I.id WHERE h_id = ?");
             ps.setInt(1, hike.getId());
@@ -355,12 +335,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             }
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
-            System.err.println("Equipment get failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Equipment get failed." + e.getMessage());
         }
         return equipment;
     }
-    
+
     private HashMap<String, Meal> fetchMeals(Hike hike) {
         HashMap<String, Meal> meals = new HashMap<>();
         try {
@@ -369,33 +348,40 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int category = rs.getInt("category");
-                String ingr = rs.getString("ingr");
-                Meal meal = new Meal(name, category);
-                meal.setId(id);
-                
-                
-                if (ingr.length() != 0) {
-                    ArrayList<String> ingredients = new ArrayList<>();
-                    String[] pcs = ingr.split(", ");
-                    for (int i = 0; i < pcs.length; i++) {
-                        ingredients.add(pcs[i]);
-                    }
-                    meal.setIngredients(ingredients);
-                }
-                meals.put(name, meal);
+                Meal meal = formatMeal(rs);
+                meals.put(meal.getName(), meal);
             }
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
-            System.err.println("Meals get failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Meals get failed." + e.getMessage());
         }
         return meals;
     }
+    
+    private Meal formatMeal(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        int category = rs.getInt("category");
+        String ingr = rs.getString("ingr");
+              
+        Meal meal = new Meal(name, category);
+        meal.setId(id);
+        meal.setIngredients(formatIngredients(ingr));
+        return meal;
+    }
 
-    //Häääh tarvinko tätä todella?
+    private ArrayList<String> formatIngredients(String ingr) {
+        ArrayList<String> ingredients = new ArrayList<>();
+        if (ingr.length() != 0) {
+
+            String[] pcs = ingr.split(", ");
+            for (int i = 0; i < pcs.length; i++) {
+                ingredients.add(pcs[i]);
+            }
+        }
+        return ingredients;
+    }
+
     @Override
     public void updateHike(Hike hike) {
         try {
@@ -413,30 +399,10 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
 
         } catch (SQLException e) {
-            System.err.println("Hike update failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Hike update failed." + e.getMessage());
         }
     }
 
-//    @Override
-//    public void updateCompanion(Hike hike, Companion comp) {
-//        try {
-//            PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-//            ps1.setString(1, comp.getName());
-//
-//            PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
-//            ps2.setInt(1, hike.getId());
-//            ps2.setInt(2, comp.getId());
-//
-//            int executeUpdate = ps2.executeUpdate();
-//            System.out.println("Update hike: " + executeUpdate);
-//            ps1.close();
-//            ps2.close();
-//        } catch (SQLException e) {
-//            System.err.println("Companion update failed.");
-//            System.err.println(e.getMessage());
-//        }
-//    }
     @Override
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -451,7 +417,6 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                //boolean upcoming = rs.getBoolean("upcoming");
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
                 hikes.add(hike);
             }
@@ -459,8 +424,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Listing all hikes failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Listing all hikes failed." + e.getMessage());
         }
         return hikes;
     }
@@ -473,7 +437,6 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                //boolean upcoming = rs.getBoolean("upcoming");
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
                 hikes.add(hike);
             }
@@ -481,8 +444,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Listing past hikes failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Listing past hikes failed." + e.getMessage());
         }
         return hikes;
     }
@@ -495,7 +457,6 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                //boolean upcoming = rs.getBoolean("upcoming");
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
                 hikes.add(hike);
             }
@@ -503,12 +464,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Listing upcoming hikes failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Listing upcoming hikes failed." + e.getMessage());
         }
         return hikes;
     }
-    
+
     @Override
     public Map<String, Item> listItems() {
         Map<String, Item> items = new HashMap<>();
@@ -526,11 +486,8 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Listing items failed.");
-            System.err.println(e.getMessage());
+            System.err.println("Listing items failed." + e.getMessage());
         }
         return items;
     }
-
-
 }
