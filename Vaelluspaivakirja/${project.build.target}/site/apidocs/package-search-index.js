@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"hikingdiary.dao"},{"l":"hikingdiary.domain"},{"l":"hikingdiary.ui"}]
