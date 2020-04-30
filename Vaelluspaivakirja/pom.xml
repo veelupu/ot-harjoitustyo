@@ -146,6 +146,7 @@
                 <configuration>
                     <outputDirectory></outputDirectory>
                     <reportOutputDirectory></reportOutputDirectory>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                 </configuration>
             </plugin>
             
