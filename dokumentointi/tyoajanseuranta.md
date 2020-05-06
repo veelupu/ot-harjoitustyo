@@ -17,5 +17,6 @@
 | 27.4.2020 | 8 | Varuste- ja aterialistat osaksi toiminnallisuutta |
 | 28.4.2020 | 4 | Yksittäisen aterian näkymä, yksikkötestejä
 |  | 5 | JavaDocin aloittaminen, käyttöohjeen aloittaminen, sovellusarkkitehtuurin päivittäminen |
+| 6.5.2020 | 4,5 | Lisää toiminnallisuutta: poistamis- ja muokkaamismahdollisuuksia |
 
-**Yhteensä** 64 tuntia
+**Yhteensä** 68,5 tuntia
