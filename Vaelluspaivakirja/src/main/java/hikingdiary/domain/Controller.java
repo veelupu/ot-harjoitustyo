@@ -141,6 +141,14 @@ public class Controller {
         return false;
     }
     
+    public boolean removeMeal(Hike hike, String name) {
+        if (hike.removeMeal(name)) {
+            hikeDao.deleteMeal(hike, name);
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Method checks if the given hike has already the given item.
      * If not, it adds the item for the hike into the database.
@@ -159,6 +167,14 @@ public class Controller {
         } else {
             return false;
         }
+    }
+    
+    public boolean removeItem(Hike hike, String name) {
+        if (hike.removeItem(name)) {
+            hikeDao.deleteItem(hike, name);
+            return true;
+        }
+        return false;
     }
     
     /**

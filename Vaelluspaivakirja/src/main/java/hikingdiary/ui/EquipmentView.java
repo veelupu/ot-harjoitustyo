@@ -32,7 +32,7 @@ public class EquipmentView {
     public Parent getView(Hike hike) {
         GridPane gp = new GridPane();
 
-        Label title = new Label("Your equipment during this hike:");
+        Label title = new Label("Your equipment during " + hike.toString() + ":");
         Label equipmentList = new Label(hike.formatEquipment());
         Label empty = new Label("");
         Label add = new Label("Add more items to the equipment list!");
@@ -82,6 +82,33 @@ public class EquipmentView {
             box.getChildren().remove(done);
             box.getChildren().remove(exists);
             box.getChildren().remove(error);
+        });
+        
+        //poistaminen
+        Button delete = new Button("Remove item");
+        box.getChildren().add(delete);
+        VBox boxRm = new VBox();
+        Label lItemToRm = new Label("Which item do you want to remove from this hike?");
+        TextField itemToRm = new TextField();
+        Button remove = new Button("Delete");
+        boxRm.getChildren().addAll(lItemToRm, itemToRm, remove);
+        
+        delete.setOnAction((event) -> {
+            gp.add(boxRm, 0, 1);
+        });
+        
+        Label succ = new Label("Item removed succesfully!");
+        Label unsucc = new Label("Couldn't remove item. Make sure you wrote the name correctly.");
+        
+        remove.setOnAction((event) -> {
+            String name = itemToRm.getText();
+            if (c.removeItem(hike, name)) {
+                boxRm.getChildren().add(succ);
+                itemToRm.clear();
+                equipmentList.setText(hike.formatEquipment());
+            } else {
+                boxRm.getChildren().add(unsucc);
+            }
         });
 
         gp.setAlignment(Pos.CENTER);

@@ -328,6 +328,24 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         }
         return 0;
     }
+    
+    private int fetchMealId(String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT id FROM Meal WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Meal id get failed." + e.getMessage());
+        }
+        return 0;
+    }
 
     private ArrayList<String> fetchCompanions(Hike hike) {
         ArrayList<String> companion = new ArrayList<>();
@@ -462,6 +480,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
     public void deleteCompanion(Hike hike, String name) {
         try {
             int idC = fetchCompanionId(name);
@@ -475,6 +494,40 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             ps.close();
         } catch (SQLException e) {
             System.err.println("Deleting companion failed." + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void deleteMeal(Hike hike, String name) {
+        try {
+            int idM = fetchMealId(name);
+
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_Me WHERE m_id = ? AND h_id = ?");
+            ps.setInt(1, idM);
+            ps.setInt(2, hike.getId());
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Delete meal: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Deleting meal failed." + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void deleteItem(Hike hike, String name) {
+        try {
+            int idI = fetchItemId(name);
+
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_It WHERE i_id = ? AND h_id = ?");
+            ps.setInt(1, idI);
+            ps.setInt(2, hike.getId());
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Delete item: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Deleting item failed." + e.getMessage());
         }
     }
 

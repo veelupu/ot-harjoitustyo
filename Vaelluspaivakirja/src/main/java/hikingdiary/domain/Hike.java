@@ -23,8 +23,8 @@ public class Hike implements Comparable<Hike> {
     private String location;
     private HashMap<Date, DayTrip> dayTrips;
     private ArrayList<String> companions;
-    private HashMap<String, Meal> mealList;
-    private HashMap<String, Item> equList;
+    private HashMap<String, Meal> meals;
+    private HashMap<String, Item> equipments;
     private double rucksackWeightBeg;
     private double rucksackWeightEnd;
 
@@ -40,8 +40,8 @@ public class Hike implements Comparable<Hike> {
         this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
         this.companions = new ArrayList<>();
-        this.mealList = new HashMap<>();
-        this.equList = new HashMap<>();
+        this.meals = new HashMap<>();
+        this.equipments = new HashMap<>();
     }
 
     public void setId(int id) {
@@ -163,10 +163,10 @@ public class Hike implements Comparable<Hike> {
      * @return whether did the method add the meal or not
      */
     public boolean addMeal(Meal meal) {
-        if (this.mealList.containsKey(meal.getName())) {
+        if (this.meals.containsKey(meal.getName())) {
             return false;
         }
-        this.mealList.put(meal.getName(), meal);
+        this.meals.put(meal.getName(), meal);
         return true;
     }
 
@@ -178,7 +178,7 @@ public class Hike implements Comparable<Hike> {
      */
     public String formatMeals() {
         StringBuilder items = new StringBuilder();
-        for (Meal meal : this.mealList.values()) {
+        for (Meal meal : this.meals.values()) {
             items.append(meal.toString() + "\n");
         }
         return items.toString();
@@ -191,7 +191,7 @@ public class Hike implements Comparable<Hike> {
      */
     public ArrayList<Meal> getMeals() {
         ArrayList<Meal> meals = new ArrayList<>();
-        for (Meal meal : this.mealList.values()) {
+        for (Meal meal : this.meals.values()) {
             meals.add(meal);
         }
         Collections.sort(meals);
@@ -199,7 +199,15 @@ public class Hike implements Comparable<Hike> {
     }
     
     public void setMeals(HashMap<String, Meal> mealList) {
-        this.mealList = mealList;
+        this.meals = mealList;
+    }
+    
+    public boolean removeMeal(String name) {
+        if (this.meals.containsKey(name)) {
+            this.meals.remove(name);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -213,12 +221,12 @@ public class Hike implements Comparable<Hike> {
         if (containsItem(item.getName())) {
             return false;
         }
-        this.equList.put(item.getName(), item);
+        this.equipments.put(item.getName(), item);
         return true;
     }
 
     public void setEquipment(HashMap<String, Item> equList) {
-        this.equList = equList;
+        this.equipments = equList;
     }
 
     /**
@@ -228,7 +236,7 @@ public class Hike implements Comparable<Hike> {
      * @return whether this hike has the item or not
      */
     public boolean containsItem(String name) {
-        return this.equList.containsKey(name);
+        return this.equipments.containsKey(name);
     }
 
     /**
@@ -239,10 +247,18 @@ public class Hike implements Comparable<Hike> {
      */
     public String formatEquipment() {
         StringBuilder items = new StringBuilder();
-        for (Item item : this.equList.values()) {
+        for (Item item : this.equipments.values()) {
             items.append(item.toString() + "\n");
         }
         return items.toString();
+    }
+    
+    public boolean removeItem(String name) {
+        if (containsItem(name)) {
+            this.equipments.remove(name);
+            return true;
+        }
+        return false;
     }
 
     /**

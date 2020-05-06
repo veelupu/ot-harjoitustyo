@@ -26,7 +26,6 @@ public class MealListView {
     
     Controller c;
     GraphicalUserInterface ui;
-    Hike hike;
     VBox mealList;
     int category;
     
@@ -40,17 +39,9 @@ public class MealListView {
     public Parent getView(Hike hike) {
         GridPane gp = new GridPane();
 
-        Label title = new Label("Your meals during this hike:");
-        
-        //Label mealList = new Label(hike.formatMeals());
+        Label title = new Label("Your meals during " + hike.toString() + ":");
 
-        for (Meal meal : hike.getMeals()) {
-            Button b = new Button(meal.toString());
-            b.setOnAction((event) -> {
-                ui.bp.setCenter(new MealView(c, meal).getView());
-            });
-            mealList.getChildren().add(b);
-        }
+        formatMealButtons(hike);
         
         Label empty = new Label("");
         Label add = new Label("Add more meals to the meal list!");
@@ -89,7 +80,7 @@ public class MealListView {
         
         Label lIngr = new Label("Ingredients needed for this meal\n(Separate ingredients with comma and whitespace))");
         TextField tfIngr = new TextField();
-        Button ready = new Button("Ready to add an item to the equipment list!");
+        Button ready = new Button("Ready to add an item to the meal list!");
         
         VBox box = new VBox();
         box.getChildren().addAll(title, mealList, empty, add, lName, tfName, lCateg, buttons1, buttons2, lIngr, tfIngr, ready);
@@ -98,6 +89,7 @@ public class MealListView {
         Label exists = new Label("This hike already has this meal.");
         Label error = new Label("Oops, something went wrong.\nTry again!");
         
+        //Painetaan nappia ja ruoan luominen alkaa
         ready.setOnAction((event) -> {
             try {
                 Meal meal = new Meal(tfName.getText(), this.category);
@@ -114,7 +106,7 @@ public class MealListView {
                 meal.setIngredients(ingredients);
                 
                 if (c.addMeal(hike, meal)) {
-                    updateMealsBox(meal);
+                    formatMealButtons(hike);
                     tfName.clear();
                     tfIngr.clear();
                     box.getChildren().add(done);
@@ -148,13 +140,24 @@ public class MealListView {
         this.category = i;
     }
     
-    private void updateMealsBox(Meal meal) {
-        Button b = new Button(meal.toString());
-            
+//    private void updateMealsBox(Meal meal) {
+//        Button b = new Button(meal.toString());
+//            
+//            b.setOnAction((event) -> {
+//                ui.bp.setCenter(new MealView(c, meal, hike).getView());
+//            });
+//            
+//            mealList.getChildren().add(b);
+//    }
+    
+    private void formatMealButtons(Hike hike) {
+        mealList.getChildren().clear();
+        for (Meal meal : hike.getMeals()) {
+            Button b = new Button(meal.toString());
             b.setOnAction((event) -> {
-                ui.bp.setCenter(new MealView(c, meal).getView());
+                ui.bp.setCenter(new MealView(c, meal, hike).getView());
             });
-            
             mealList.getChildren().add(b);
+        }
     }
 }
