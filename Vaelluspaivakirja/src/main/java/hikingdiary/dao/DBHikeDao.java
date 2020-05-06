@@ -461,6 +461,22 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     public void delete(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public void deleteCompanion(Hike hike, String name) {
+        try {
+            int idC = fetchCompanionId(name);
+
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_Co WHERE c_id = ? AND h_id = ?");
+            ps.setInt(1, idC);
+            ps.setInt(2, hike.getId());
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Delete companion: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Deleting companion failed." + e.getMessage());
+        }
+    }
 
     /**
      * Method lists all the hikes in the database with their basic data.

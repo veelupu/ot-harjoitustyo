@@ -133,6 +133,14 @@ public class Controller {
         return false;
     }
     
+    public boolean removeCompanion(Hike hike, String name) {
+        if (hike.removeCompanion(name)) {
+            hikeDao.deleteCompanion(hike, name);
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Method checks if the given hike has already the given item.
      * If not, it adds the item for the hike into the database.

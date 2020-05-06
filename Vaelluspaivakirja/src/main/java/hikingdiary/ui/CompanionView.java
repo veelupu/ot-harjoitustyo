@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -39,8 +40,33 @@ public class CompanionView {
         TextField newComp = new TextField();
         Button ready = new Button("Ready to add a companion!");
 
+        Button delete = new Button("Remove companion");
+        VBox boxRm = new VBox();
+        Label lCompToRm = new Label("Who you want to remove from this hike?");
+        TextField compToRm = new TextField();
+        Button remove = new Button("Delete");
+        boxRm.getChildren().addAll(lCompToRm, compToRm, remove);
+        
+        delete.setOnAction((event) -> {
+            gp.add(boxRm, 0, 1);
+        });
+        
+        Label succ = new Label("Companion removed succesfully!");
+        Label unsucc = new Label("Couldn't remove companion. Make sure you wrote the name correctly.");
+        
+        remove.setOnAction((event) -> {
+            String name = compToRm.getText();
+            if (c.removeCompanion(hike, name)) {
+                boxRm.getChildren().add(succ);
+                compToRm.clear();
+                companion.setText(hike.formatCompanions());
+            } else {
+                boxRm.getChildren().add(unsucc);
+            }
+        });
+        
         VBox box = new VBox();
-        box.getChildren().addAll(title, companion, empty, add, newComp, ready);
+        box.getChildren().addAll(title, companion, empty, add, newComp, ready, delete);
 
         Label done = new Label("Companion added!");
         ready.setOnAction((event) -> {
@@ -66,4 +92,5 @@ public class CompanionView {
 
         return gp;
     }
+    
 }

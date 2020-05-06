@@ -146,6 +146,14 @@ public class Hike implements Comparable<Hike> {
         }
         return companion.toString();
     }
+    
+    public boolean removeCompanion(String name) {
+        if (this.companions.contains(name)) {
+            this.companions.remove(name);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Method checks if this hike already has a meal with that name.
