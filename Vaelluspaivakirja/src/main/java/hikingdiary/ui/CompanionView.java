@@ -31,15 +31,16 @@ public class CompanionView {
     public GridPane getView(Hike hike) {
         GridPane gp = new GridPane();
 
-        Label title = new Label("Your company during this hike:");
+        Label title = new Label("Your company during " + hike.toString() + ":");
         Label companion = new Label(hike.formatCompanions());
+        Label empty = new Label();
         Label add = new Label("Add more companions:");
 
         TextField newComp = new TextField();
         Button ready = new Button("Ready to add a companion!");
 
         VBox box = new VBox();
-        box.getChildren().addAll(title, companion, add, newComp, ready);
+        box.getChildren().addAll(title, companion, empty, add, newComp, ready);
 
         Label done = new Label("Companion added!");
         ready.setOnAction((event) -> {

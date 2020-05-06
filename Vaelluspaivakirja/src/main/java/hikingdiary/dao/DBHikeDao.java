@@ -69,8 +69,8 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
     private void createTables() throws SQLException {
         Statement s = connection.createStatement();
-        s.execute("BEGIN TRANSACTION");
         s.execute("PRAGMA foreign_keys = ON");
+        s.execute("BEGIN TRANSACTION");
         s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
         s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE, PRIMARY KEY (h_id, c_id))");
@@ -102,6 +102,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
 
             System.out.println("Create hike: " + executeUpdate);
             ps.close();
+            rs.close();
         } catch (SQLException e) {
             System.err.println("Hike creation failed." + e.getMessage());
         }
@@ -125,30 +126,29 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, comp.getName());
 
-                int executeUpdate1 = ps.executeUpdate();
-                ResultSet rs1 = ps.getGeneratedKeys();
-                rs1.next();
-                id = rs1.getInt(1);
+                int executeUpdate = ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                id = rs.getInt(1);
                 comp.setId(id);
-                System.out.println("Create companion 1/2: " + executeUpdate1);
+                System.out.println("Create companion: " + executeUpdate);
                 ps.close();
+                rs.close();
             }
-
-            addHikeCompanion(hike, comp);
-
+            addHikeCompanion(hike, id);
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Companion creation failed." + e.getMessage());
         }
     }
 
-    private void addHikeCompanion(Hike hike, Companion comp) {
+    private void addHikeCompanion(Hike hike, int id) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
             ps.setInt(1, hike.getId());
-            ps.setInt(2, comp.getId());
-            int executeUpdate2 = ps.executeUpdate();
-            System.out.println("Adding Hike_Companion: " + executeUpdate2);
+            ps.setInt(2, id);
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Adding Hike_Companion: " + executeUpdate);
             ps.close();
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
@@ -171,17 +171,18 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             int id = fetchItemId(item.getName());
 
             if (id == 0) {
-                PreparedStatement ps1 = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps1.setString(1, item.getName());
-                ps1.setDouble(2, item.getWeight());
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, item.getName());
+                ps.setDouble(2, item.getWeight());
 
-                int executeUpdate1 = ps1.executeUpdate();
-                ResultSet rs1 = ps1.getGeneratedKeys();
-                rs1.next();
-                id = rs1.getInt(1);
+                int executeUpdate1 = ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                id = rs.getInt(1);
                 item.setId(id);
                 System.out.println("Create item: " + executeUpdate1);
-                ps1.close();
+                ps.close();
+                rs.close();
             }
 
             addHikeItem(hike, item);
@@ -234,6 +235,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 meal.setId(id);
                 System.out.println("Create meal: " + executeUpdate);
                 ps.close();
+                rs.close();
             }
 
             addHikeMeal(hike, meal);
@@ -299,9 +301,12 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             if (rs.next()) {
                 return rs.getInt("id");
             }
+            
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             //poista tai muuta nämä ennen lopullista palautusta
-            System.err.println("Companion get failed." + e.getMessage());
+            System.err.println("Companion id get failed." + e.getMessage());
         }
         return 0;
     }
@@ -315,6 +320,9 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             if (rs.next()) {
                 return rs.getInt("id");
             }
+            
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             System.err.println("Item id get failed." + e.getMessage());
         }
@@ -334,6 +342,8 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 companion.add(comp);
             }
 
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
             System.err.println("Companions get failed." + e.getMessage());
@@ -360,6 +370,9 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 item.setId(id);
                 equipment.put(name, item);
             }
+            
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
             System.err.println("Equipment get failed." + e.getMessage());
@@ -378,6 +391,9 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 Meal meal = formatMeal(rs);
                 meals.put(meal.getName(), meal);
             }
+            
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             //muuta tämä ennen lopullista palautusta
             System.err.println("Meals get failed." + e.getMessage());
