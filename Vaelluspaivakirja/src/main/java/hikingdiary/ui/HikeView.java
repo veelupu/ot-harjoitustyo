@@ -39,7 +39,7 @@ public class HikeView {
         Button bDayTrips = new Button("Day trips");
         Button bJourney = new Button("" + getOrDefault(hike.getKilometres(), "Add day trips"));
         Button bEquipment = new Button("Equipment\nlist");
-        Button bRucksacStart = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?"));
+        Button bRucksacBeg = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?"));
         Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
 
         bCompanion.setOnAction((event) -> {
@@ -54,6 +54,14 @@ public class HikeView {
             ui.bp.setCenter(new MealListView(c, ui).getView(hike));
         });
         
+        bRucksacBeg.setOnAction((event) -> {
+            ui.bp.setCenter(new RucksacWView(c, hike, true).getView());
+        });
+        
+        bRucksacEnd.setOnAction((event) -> {
+            ui.bp.setCenter(new RucksacWView(c, hike, false).getView());
+        });
+        
         gp.add(lName, 0, 1);
         gp.add(bLocation, 1, 1);
         gp.add(bCompanion, 2, 1);
@@ -61,10 +69,10 @@ public class HikeView {
         gp.add(bDayTrips, 1, 2);
         gp.add(bJourney, 2, 2);
         gp.add(bEquipment, 0, 3);
-        gp.add(bRucksacStart, 1, 3);
+        gp.add(bRucksacBeg, 1, 3);
         gp.add(bRucksacEnd, 2, 3);
 
-        Button[] buttons = new Button[]{bLocation, bMeals, bDayTrips, bJourney, bEquipment, bRucksacStart, bRucksacEnd};
+        Button[] buttons = new Button[]{bLocation, bMeals, bDayTrips, bJourney, bEquipment, bRucksacBeg, bRucksacEnd};
         for (Button b : buttons) {
             b.setStyle(
                     "-fx-text-alignment: center;"

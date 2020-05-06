@@ -71,6 +71,14 @@ public class Controller {
         Hike hike = hikeDao.readHike(name);
         return hike;
     }
+    
+    public boolean removeHike(Hike h) {
+        if (hikeDao.list().contains(h)) {
+            hikeDao.deleteHike(h.getName());
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Method gets all the past-marked hikes from the database and sorts it.

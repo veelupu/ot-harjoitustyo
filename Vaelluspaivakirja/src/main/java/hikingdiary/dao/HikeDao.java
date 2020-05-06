@@ -24,7 +24,7 @@ public interface HikeDao<T, K> {
 //    Item readItem(String name);
     void updateHike(Hike hike);
 //    void updateHikeItem(Hike hike, Item item);
-    void delete(K key) throws SQLException;
+    void deleteHike(String name);
     void deleteCompanion(Hike hike, String name);
     void deleteMeal(Hike hike, String name);
     void deleteItem(Hike hike, String name);

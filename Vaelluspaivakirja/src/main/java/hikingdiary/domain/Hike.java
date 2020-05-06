@@ -28,6 +28,10 @@ public class Hike implements Comparable<Hike> {
     private double rucksackWeightBeg;
     private double rucksackWeightEnd;
 
+    public Hike(String name) {
+        this.name = name;
+    }
+    
     public Hike(String name, int year, boolean upcoming) {
         this(name, year, upcoming, 0, 0);
     }
@@ -299,6 +303,6 @@ public class Hike implements Comparable<Hike> {
             return false;
         }
         Hike oHike = (Hike) o;
-        return (this.name.equals(oHike.name) && this.year == oHike.year && this.upcoming == oHike.upcoming);
+        return (this.name.equals(oHike.name)); // && this.year == oHike.year && this.upcoming == oHike.upcoming
     }
 }

@@ -73,11 +73,11 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         s.execute("BEGIN TRANSACTION");
         s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
         s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
-        s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE, PRIMARY KEY (h_id, c_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (h_id, c_id))");
         s.execute("CREATE TABLE IF NOT EXISTS Item (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, weight INTEGER)");
-        s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, i_id INTEGER REFERENCES Item ON UPDATE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, i_id INTEGER REFERENCES Item ON UPDATE CASCADE ON DELETE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
         s.execute("CREATE TABLE IF NOT EXISTS Meal (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, category INTEGER NOT NULL, ingr TEXT)");
-        s.execute("CREATE TABLE IF NOT EXISTS Hi_Me (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE, m_id INTEGER REFERENCES Meal ON UPDATE CASCADE, PRIMARY KEY (h_id, m_id))");
+        s.execute("CREATE TABLE IF NOT EXISTS Hi_Me (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, m_id INTEGER REFERENCES Meal ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (h_id, m_id))");
         s.execute("COMMIT");
     }
 
@@ -292,6 +292,25 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         return null;
     }
 
+    private int fetchHikeId(String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT id FROM Hikes WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            //poista tai muuta nämä ennen lopullista palautusta
+            System.err.println("Hike id get failed." + e.getMessage());
+        }
+        return 0;
+    }
+    
     private int fetchCompanionId(String name) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT id FROM Companion WHERE name = ?");
@@ -472,12 +491,23 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     /**
      * Method removes the given hike from the database.
      * 
-     * @param key the id for the hike to be removed
+     * @param name the name for the hike to be removed
      * @throws SQLException insert description here
      */
     @Override
-    public void delete(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteHike(String name) {
+        try {
+            int id = fetchHikeId(name);
+
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM Hikes WHERE id = ?");
+            ps.setInt(1, id);
+            
+            int executeUpdate = ps.executeUpdate();
+            System.out.println("Delete hike: " + executeUpdate);
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("Deleting hike failed." + e.getMessage());
+        }
     }
     
     @Override
