@@ -48,15 +48,11 @@ public class HikeTest {
     @Test
     public void equalsWorksAsWanted() {
         Hike r = new Hike("Kaldoaivi", 2019, false);
-        Hike w1 = new Hike("Lofootit", 2019, false);
-        Hike w2 = new Hike("Kaldoaivi", 2020, false);
-        Hike w3 = new Hike("Kaldoaivi", 2019, true);
+        Hike w = new Hike("Lofootit", 2019, false);
         User u = new User("Antti");
         assertTrue(hike.equals(hike));
         assertTrue(hike.equals(r));
-        assertFalse(hike.equals(w1));
-        assertFalse(hike.equals(w2));
-        assertFalse(hike.equals(w3));
+        assertFalse(hike.equals(w));
         assertFalse(hike.equals(u));
     }
     

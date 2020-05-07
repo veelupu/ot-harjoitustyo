@@ -73,7 +73,7 @@ public class Controller {
     }
     
     public boolean removeHike(Hike h) {
-        if (hikeDao.list().contains(h)) {
+        if (hikeDao.list(h.isUpcoming()).contains(h)) {
             hikeDao.deleteHike(h.getName());
             return true;
         }
@@ -91,7 +91,7 @@ public class Controller {
         List<Hike> pastHikes = new ArrayList<>();
 
         try {
-            pastHikes = hikeDao.listPastHikes();
+            pastHikes = hikeDao.list(false);
         } catch (Exception e) {
             //poista tulostus lopullisesta versiosta – käsittele muutoin
             System.err.println("Something went wrong with listing past hikes.");
@@ -113,7 +113,7 @@ public class Controller {
         List<Hike> upcomingHikes = new ArrayList<>();
 
         try {
-            upcomingHikes = hikeDao.listUpcomingHikes();
+            upcomingHikes = hikeDao.list(true);
         } catch (Exception e) {
             System.err.println("Something went wrong with listing upcoming hikes.");
         }
@@ -168,21 +168,19 @@ public class Controller {
      * 
      * @return whether the item was added to the hike or not
      */
-    public boolean addItem(Hike hike, Item item) {
-        if (hike.addItem(item)) {
-            hikeDao.createItem(hike, item);
-            return true;
-        } else {
-            return false;
+    public void addItem(Hike hike, Item item) {
+        if (!hike.addItem(item)) {
+            hike.updateItem(item.getName(), item.getCount());
         }
+        hikeDao.createItem(hike, item);
     }
     
-    public boolean removeItem(Hike hike, String name) {
-        if (hike.removeItem(name)) {
+    public void removeItem(Hike hike, String name) {
+//        if (hike.removeItem(name)) {
             hikeDao.deleteItem(hike, name);
-            return true;
-        }
-        return false;
+//            return true;
+//        }
+//        return false;
     }
     
     /**

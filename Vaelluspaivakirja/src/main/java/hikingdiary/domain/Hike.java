@@ -228,6 +228,15 @@ public class Hike implements Comparable<Hike> {
         this.equipment.put(item.getName(), item);
         return true;
     }
+    
+    public boolean updateItem(String name, int count) {
+        if (containsItem(name)) {
+            Item i = this.equipment.get(name);
+            i.setCount(count);
+            return true;
+        }
+        return false;
+    }
 
     public void setEquipment(HashMap<String, Item> equList) {
         this.equipment = equList;
@@ -274,10 +283,10 @@ public class Hike implements Comparable<Hike> {
         return false;
     }
     
-    public void updateItem(String name, int count) {
-        Item i = this.equipment.get(name);
-        i.setCount(count);
-    }
+//    public void updateItem(String name, int count) {
+//        Item i = this.equipment.get(name);
+//        i.setCount(count);
+//    }
 
     /**
      * Method counts the total kilometres of this hike out of the hike's day trips.

@@ -68,16 +68,17 @@ public class EquipmentView {
                     item.setWeight(Double.valueOf(tfWeight.getText()));
                 }
                 
-                if (c.addItem(hike, item)) {
-                    formatItemsBox();
-                    //equipmentList.setText(hike.formatEquipment());
-                    tfName.clear();
-                    tfWeight.clear();
-                    tfCount.clear();
-                    box.getChildren().add(done);
-                } else {
-                    box.getChildren().add(exists);
-                }
+//                if (c.addItem(hike, item)) {
+                c.addItem(hike, item);
+                formatItemsBox();
+                //equipmentList.setText(hike.formatEquipment());
+                tfName.clear();
+                tfWeight.clear();
+                tfCount.clear();
+                box.getChildren().add(done);
+//                } else {
+//                    box.getChildren().add(exists);
+//                }
                 
             } catch (Exception e) {
                 box.getChildren().add(error);
@@ -149,10 +150,13 @@ public class EquipmentView {
             int count = i.getCount() - 1;
             if (count < 1) {
                 hike.removeItem(i.getName());
+                c.removeItem(hike, i.getName());
             } else {
-                hike.updateItem(i.getName(), count);
+                //hike.updateItem(i.getName(), count);
+                i.setCount(count);
+                c.addItem(hike, i);
             }
-            c.updateHike(hike);
+            
             formatItemsBox();
         });
         
@@ -165,8 +169,9 @@ public class EquipmentView {
         style(b);
         b.setOnAction((event) -> {
             int count = i.getCount() + 1;
-            hike.updateItem(i.getName(), count);
-            c.updateHike(hike);
+            //hike.updateItem(i.getName(), count);
+            i.setCount(count);
+            c.addItem(hike, i);
             formatItemsBox();
         });
         

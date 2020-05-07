@@ -28,8 +28,8 @@ public interface HikeDao<T, K> {
     void deleteCompanion(Hike hike, String name);
     void deleteMeal(Hike hike, String name);
     void deleteItem(Hike hike, String name);
-    List<T> list();
-    List<T> listPastHikes();
-    List<T> listUpcomingHikes();
-    Map<String, Item> listItems();
+    List<T> list(boolean upcoming);
+//    List<T> listPastHikes();
+//    List<T> listUpcomingHikes();
+//    Map<String, Item> listItems();
 }

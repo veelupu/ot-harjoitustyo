@@ -79,8 +79,8 @@ public class DBHikeDaoTest {
     public void listReturnsListOfHikes() {
         Hike hike2 = new Hike("Kevo", 2013, false);
         hikeDao.createHike(hike2);
-        assertTrue(hikeDao.list().contains(hike));
-        assertTrue(hikeDao.list().contains(hike2));
+        assertTrue(hikeDao.list(false).contains(hike));
+        assertTrue(hikeDao.list(false).contains(hike2));
     }
     
     @Test
@@ -89,9 +89,9 @@ public class DBHikeDaoTest {
         hikeDao.createHike(hike2);
         Hike hike3 = new Hike("Lofootit", 2020, true);
         hikeDao.createHike(hike3);
-        assertTrue(hikeDao.listPastHikes().contains(hike));
-        assertTrue(hikeDao.listPastHikes().contains(hike2));
-        assertFalse(hikeDao.listPastHikes().contains(hike3));
+        assertTrue(hikeDao.list(false).contains(hike));
+        assertTrue(hikeDao.list(false).contains(hike2));
+        assertFalse(hikeDao.list(false).contains(hike3));
     }
     
     @Test
@@ -100,9 +100,9 @@ public class DBHikeDaoTest {
         hikeDao.createHike(hike2);
         Hike hike3 = new Hike("Lofootit", 2020, true);
         hikeDao.createHike(hike3);
-        assertFalse(hikeDao.listUpcomingHikes().contains(hike));
-        assertTrue(hikeDao.listUpcomingHikes().contains(hike2));
-        assertTrue(hikeDao.listUpcomingHikes().contains(hike3));
+        assertFalse(hikeDao.list(true).contains(hike));
+        assertTrue(hikeDao.list(true).contains(hike2));
+        assertTrue(hikeDao.list(true).contains(hike3));
     }
 
     @Test

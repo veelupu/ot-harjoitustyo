@@ -194,6 +194,10 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     private void addHikeItem(Hike hike, Item item) {
+        if (fetchEquipment(hike).containsKey(item.getName())) {
+            addCountHikeItem(hike, item);
+            return;
+        }
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_It (h_id, i_id, count) VALUES (?, ?, ?)");
             ps.setInt(1, hike.getId());
@@ -206,6 +210,21 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Hikes_Item add failed." + e.getMessage());
         }
+    }
+    
+    private void addCountHikeItem(Hike hike, Item item) {
+        try {
+                PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count = ? WHERE h_id = ? AND i_id = ?");
+                ps.setInt(1, item.getCount());
+                ps.setInt(2, hike.getId());
+                ps.setInt(3, item.getId());
+                int executeUpdate = ps.executeUpdate();
+                System.out.println("Update in Hikes_Item: " + executeUpdate);
+                ps.close();
+            } catch (SQLException e) {
+                //poista tämä ennen lopullista palautusta / muuta muuksi
+                System.err.println("Hikes_Item update failed." + e.getMessage());
+            }
     }
 
     /**
@@ -562,108 +581,38 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     }
 
     /**
-     * Method lists all the hikes in the database with their basic data.
+     * Method lists past or upcoming hikes in the database with their basic data.
      * 
+     * @param upcoming whether past or upcoming hikes are to be listed
      * @return list of hikes
      */
     @Override
-    public List<Hike> list() {
+    public List<Hike> list(boolean upcoming) {
         ArrayList<Hike> hikes = new ArrayList<>();
+        
+        int upc = 0;
+        if (upcoming) {
+            upc = 1;
+        }
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT id, name, year, upcoming FROM Hikes");
+            PreparedStatement ps = connection.prepareStatement("SELECT id, name, year FROM Hikes WHERE upcoming = ?");
+            ps.setInt(1, upc);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
+                if (upc == 1) {
+                    hike.setUpcoming(true);
+                }
                 hike.setId(rs.getInt("id"));
                 hikes.add(hike);
             }
-
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Listing all hikes failed." + e.getMessage());
+            System.err.println("Listing hikes failed." + e.getMessage());
         }
         return hikes;
-    }
-
-    /**
-     * Method lists all the past hikes in the database with their basic data.
-     * 
-     * @return list of past hikes
-     */
-    @Override
-    public List<Hike> listPastHikes() {
-        ArrayList<Hike> hikes = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 0");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
-                hike.setId(rs.getInt("id"));
-                hikes.add(hike);
-            }
-
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.err.println("Listing past hikes failed." + e.getMessage());
-        }
-        return hikes;
-    }
-
-    /**
-     * Method lists all the upcoming hikes in the database with their basic data.
-     * 
-     * @return list of upcoming hikes
-     */
-    @Override
-    public List<Hike> listUpcomingHikes() {
-        ArrayList<Hike> hikes = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hikes WHERE upcoming = 1");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), true, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
-                hike.setId(rs.getInt("id"));
-                hikes.add(hike);
-            }
-
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.err.println("Listing upcoming hikes failed." + e.getMessage());
-        }
-        return hikes;
-    }
-
-    /**
-     * Method lists all the items in the database with their data.
-     * 
-     * @return a map of items
-     */
-    @Override
-    public Map<String, Item> listItems() {
-        Map<String, Item> items = new HashMap<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT id, name, weight, count FROM Items JOIN Hi_It ON i_id = id");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-                Item item = new Item(name, rs.getDouble("weight"), rs.getInt("count"));
-                item.setId(rs.getInt("id"));
-                items.put(name, item);
-            }
-
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.err.println("Listing items failed." + e.getMessage());
-        }
-        return items;
     }
 }
