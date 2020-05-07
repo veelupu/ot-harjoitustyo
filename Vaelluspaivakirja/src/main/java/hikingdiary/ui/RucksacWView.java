@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
  * @author veeralupunen
  */
 public class RucksacWView {
-    
+
     Controller c;
     Hike hike;
     boolean beginning;
@@ -30,13 +30,13 @@ public class RucksacWView {
         this.hike = hike;
         this.beginning = beginning;
     }
-    
+
     public Parent getView() {
         GridPane gp = new GridPane();
-        
+
         Label error = new Label("Oops, that does not seem to be a number!");
         Label done = new Label("Weight changed succesfully!");
-        
+
         VBox box = new VBox();
         gp.add(box, 0, 0);
 
@@ -46,7 +46,7 @@ public class RucksacWView {
             Button ready = new Button("Change!");
             style(ready);
             box.getChildren().addAll(lHike, weight, ready);
-            
+
             ready.setOnAction((event) -> {
                 try {
                     double w = Double.valueOf(weight.getText());
@@ -56,16 +56,21 @@ public class RucksacWView {
                 } catch (Exception e) {
                     gp.add(error, 0, 1);
                 }
-                
+
             });
             
+            weight.setOnMouseClicked((event) -> {
+                weight.clear();
+                gp.getChildren().removeAll(done, error);
+            });
+
         } else {
             Label lHike = new Label("In the end of\nthe hike " + hike.toString() + "\nmy rucksac weighted:");
             TextField weight = new TextField("" + hike.getRucksackWeightEnd());
             Button ready = new Button("Change!");
             style(ready);
             box.getChildren().addAll(lHike, weight, ready);
-            
+
             ready.setOnAction((event) -> {
                 try {
                     double w = Double.valueOf(weight.getText());
@@ -75,26 +80,31 @@ public class RucksacWView {
                 } catch (Exception e) {
                     gp.add(error, 0, 1);
                 }
-                
+
+            });
+            
+            weight.setOnMouseClicked((event) -> {
+                weight.clear();
+                gp.getChildren().removeAll(done, error);
             });
         }
-        
+
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
-        
+
         return gp;
     }
-    
+
     private void style(Button b) {
         b.setStyle(
-                    "-fx-text-alignment: center;"
-                    + "-fx-background-radius: 5em; "
-                    + "-fx-min-width: 70px; "
-                    + "-fx-min-height: 70px; "
-                    + "-fx-max-width: 70px; "
-                    + "-fx-max-height: 70px;"
-            );
+                "-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;"
+        );
     }
 }
