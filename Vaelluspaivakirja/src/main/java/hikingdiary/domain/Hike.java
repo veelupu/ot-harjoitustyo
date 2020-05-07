@@ -24,7 +24,7 @@ public class Hike implements Comparable<Hike> {
     private HashMap<Date, DayTrip> dayTrips;
     private ArrayList<String> companions;
     private HashMap<String, Meal> meals;
-    private HashMap<String, Item> equipments;
+    private HashMap<String, Item> equipment;
     private double rucksackWeightBeg;
     private double rucksackWeightEnd;
 
@@ -45,7 +45,7 @@ public class Hike implements Comparable<Hike> {
         this.dayTrips = new HashMap<>();
         this.companions = new ArrayList<>();
         this.meals = new HashMap<>();
-        this.equipments = new HashMap<>();
+        this.equipment = new HashMap<>();
     }
 
     public void setId(int id) {
@@ -225,12 +225,21 @@ public class Hike implements Comparable<Hike> {
         if (containsItem(item.getName())) {
             return false;
         }
-        this.equipments.put(item.getName(), item);
+        this.equipment.put(item.getName(), item);
         return true;
     }
 
     public void setEquipment(HashMap<String, Item> equList) {
-        this.equipments = equList;
+        this.equipment = equList;
+    }
+    
+    public ArrayList<Item> getItems() {
+        ArrayList<Item> items = new ArrayList<>();
+        for (Item item : this.equipment.values()) {
+            items.add(item);
+        }
+        Collections.sort(items);
+        return items;
     }
 
     /**
@@ -240,7 +249,7 @@ public class Hike implements Comparable<Hike> {
      * @return whether this hike has the item or not
      */
     public boolean containsItem(String name) {
-        return this.equipments.containsKey(name);
+        return this.equipment.containsKey(name);
     }
 
     /**
@@ -251,7 +260,7 @@ public class Hike implements Comparable<Hike> {
      */
     public String formatEquipment() {
         StringBuilder items = new StringBuilder();
-        for (Item item : this.equipments.values()) {
+        for (Item item : this.equipment.values()) {
             items.append(item.toString() + "\n");
         }
         return items.toString();
@@ -259,10 +268,15 @@ public class Hike implements Comparable<Hike> {
     
     public boolean removeItem(String name) {
         if (containsItem(name)) {
-            this.equipments.remove(name);
+            this.equipment.remove(name);
             return true;
         }
         return false;
+    }
+    
+    public void updateItem(String name, int count) {
+        Item i = this.equipment.get(name);
+        i.setCount(count);
     }
 
     /**

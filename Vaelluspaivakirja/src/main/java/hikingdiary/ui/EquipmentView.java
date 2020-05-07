@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -24,17 +25,23 @@ public class EquipmentView {
 
     Controller c;
     Hike hike;
+    GridPane gp;
+    VBox equipmentList;
 
     public EquipmentView(Controller c) {
         this.c = c;
     }
 
     public Parent getView(Hike hike) {
-        GridPane gp = new GridPane();
-
+        gp = new GridPane();
+        this.hike = hike;
+        
         Label title = new Label("Your equipment during " + hike.toString() + ":");
-        Label equipmentList = new Label(hike.formatEquipment());
-        Label empty = new Label("");
+        gp.add(title, 0, 0);
+
+        formatItemsBox();
+        //Label equipmentList = new Label(hike.formatEquipment());
+        //Label empty = new Label("");
         Label add = new Label("Add more items to the equipment list!");
 
         Label lName = new Label("Item name:");
@@ -46,7 +53,7 @@ public class EquipmentView {
         Button ready = new Button("Ready to add an item to the equipment list!");
 
         VBox box = new VBox();
-        box.getChildren().addAll(title, equipmentList, empty, add, lName, tfName, lWeight, tfWeight, lCount, tfCount, ready);
+        box.getChildren().addAll(add, lName, tfName, lWeight, tfWeight, lCount, tfCount, ready);
 
         Label done = new Label("Item added!");
         Label exists = new Label("This hike already has this item.");
@@ -62,7 +69,8 @@ public class EquipmentView {
                 }
                 
                 if (c.addItem(hike, item)) {
-                    equipmentList.setText(hike.formatEquipment());
+                    formatItemsBox();
+                    //equipmentList.setText(hike.formatEquipment());
                     tfName.clear();
                     tfWeight.clear();
                     tfCount.clear();
@@ -85,40 +93,94 @@ public class EquipmentView {
         });
         
         //poistaminen
-        Button delete = new Button("Remove item");
-        box.getChildren().add(delete);
-        VBox boxRm = new VBox();
-        Label lItemToRm = new Label("Which item do you want to remove from this hike?");
-        TextField itemToRm = new TextField();
-        Button remove = new Button("Delete");
-        boxRm.getChildren().addAll(lItemToRm, itemToRm, remove);
-        
-        delete.setOnAction((event) -> {
-            gp.add(boxRm, 0, 1);
-        });
-        
-        Label succ = new Label("Item removed succesfully!");
-        Label unsucc = new Label("Couldn't remove item. Make sure you wrote the name correctly.");
-        
-        remove.setOnAction((event) -> {
-            String name = itemToRm.getText();
-            if (c.removeItem(hike, name)) {
-                boxRm.getChildren().add(succ);
-                itemToRm.clear();
-                equipmentList.setText(hike.formatEquipment());
-            } else {
-                boxRm.getChildren().add(unsucc);
-            }
-        });
+//        Button delete = new Button("Remove item");
+//        box.getChildren().add(delete);
+//        VBox boxRm = new VBox();
+//        Label lItemToRm = new Label("Which item do you want to remove from this hike?");
+//        TextField itemToRm = new TextField();
+//        Button remove = new Button("Delete");
+//        boxRm.getChildren().addAll(lItemToRm, itemToRm, remove);
+//        
+//        delete.setOnAction((event) -> {
+//            gp.add(boxRm, 0, 2);
+//        });
+//        
+//        Label succ = new Label("Item removed succesfully!");
+//        Label unsucc = new Label("Couldn't remove item. Make sure you wrote the name correctly.");
+//        
+//        remove.setOnAction((event) -> {
+//            String name = itemToRm.getText();
+//            if (c.removeItem(hike, name)) {
+//                boxRm.getChildren().add(succ);
+//                itemToRm.clear();
+//                equipmentList.setText(hike.formatEquipment());
+//            } else {
+//                boxRm.getChildren().add(unsucc);
+//            }
+//        });
 
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
 
-        gp.add(box, 0, 0);
+        gp.add(box, 0, 2);
 
         return gp;
     }
+    
+    private void formatItemsBox() {
+        gp.getChildren().remove(equipmentList);
+        equipmentList = new VBox();
+        
+        for (Item i : hike.getItems()) {
+            HBox boxH = new HBox();
+            boxH.getChildren().addAll(new Label(i.toString()), minusButton(i), plusButton(i));
+            equipmentList.getChildren().addAll(boxH);
+        }
+        gp.add(equipmentList, 0, 1);
+    }
 
+    private Button minusButton(Item i) {
+        Button b = new Button("-");
+        
+        style(b);
+        b.setOnAction((event) -> {
+            int count = i.getCount() - 1;
+            if (count < 1) {
+                hike.removeItem(i.getName());
+            } else {
+                hike.updateItem(i.getName(), count);
+            }
+            c.updateHike(hike);
+            formatItemsBox();
+        });
+        
+        return b;
+    }
+    
+    private Button plusButton(Item i) {
+        Button b = new Button("+");
+        
+        style(b);
+        b.setOnAction((event) -> {
+            int count = i.getCount() + 1;
+            hike.updateItem(i.getName(), count);
+            c.updateHike(hike);
+            formatItemsBox();
+        });
+        
+        return b;
+    }
+    
+    private void style(Button b) {
+        b.setStyle(
+                    "-fx-text-alignment: center;"
+                    + "-fx-background-radius: 5em; "
+                    + "-fx-min-width: 27px; "
+                    + "-fx-min-height: 27px; "
+                    + "-fx-max-width: 27px; "
+                    + "-fx-max-height: 27px;"
+            );
+    }
 }
