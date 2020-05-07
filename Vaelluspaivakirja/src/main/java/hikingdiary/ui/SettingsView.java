@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -32,18 +33,35 @@ public class SettingsView {
     public Parent getView() {
         GridPane gp = new GridPane();
         
-        Label lNewName = new Label("To change your username,\nplease type your new username here.");
+        Label lNewName = new Label("To change your username,\nplease type new username here.");
         TextField newName = new TextField();
-        Button bReady = new Button("Ready to change my username!");
+        Button bReady = new Button("Change\nmy\nusername!");
         
-        gp.add(lNewName, 0, 1);
-        gp.add(newName, 0, 2);
-        gp.add(bReady, 0, 3);
+        lNewName.setPadding(new Insets(5, 5, 5, 5));
+        newName.setPadding(new Insets(5, 5, 5, 5));
+        bReady.setPadding(new Insets(15, 15, 15, 15));
+        
+        VBox box = new VBox();
+        box.getChildren().addAll(bReady);
+        
+        box.setAlignment(Pos.CENTER);
+        
+        bReady.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 100px; "
+                + "-fx-min-height: 100px; "
+                + "-fx-max-width: 100px; "
+                + "-fx-max-height: 100px;");
+        
+        gp.add(lNewName, 0, 0);
+        gp.add(newName, 0, 1);
+//        gp.add(bReady, 0, 2);
+        
+        gp.add(box, 0, 2);
         
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);
         gp.setHgap(10);
-        gp.setPadding(new Insets(5, 5, 5, 5));
         
         bReady.setOnMouseClicked((event) -> {
             try {

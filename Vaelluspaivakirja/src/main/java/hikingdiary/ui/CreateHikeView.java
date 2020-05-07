@@ -13,7 +13,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -30,23 +35,47 @@ public class CreateHikeView {
 
     public Parent getView() {
         GridPane gp = new GridPane();
+        VBox boxV = new VBox();
 
         Label lName = new Label("Name of the hike:");
         TextField tfName = new TextField();
-        gp.add(lName, 0, 1);
-        gp.add(tfName, 0, 2);
+//        gp.add(lName, 0, 0);
+//        gp.add(tfName, 0, 1);
 
         Label lYear = new Label("Year of the hike:");
         TextField tfYear = new TextField();
-        gp.add(lYear, 0, 3);
-        gp.add(tfYear, 0, 4);
+//        gp.add(lYear, 0, 2);
+//        gp.add(tfYear, 0, 3);
 
-        Label lUpcoming = new Label("Past or upcoming hike?");
+        Label lUpcoming = new Label("Past or\nupcoming\nhike?");
+        lUpcoming.setPadding(new Insets(0, 5, 0, 0));
+        
+        HBox twoButtons = new HBox();
         Button bPast = new Button("Past");
         Button bUpcoming = new Button("Upcoming");
-        gp.add(lUpcoming, 0, 5);
-        gp.add(bPast, 0, 6);
-        gp.add(bUpcoming, 0, 7);
+        
+        bPast.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 81px; "
+                + "-fx-min-height: 81px; "
+                + "-fx-max-width: 81px; "
+                + "-fx-max-height: 81px;");
+        
+        bUpcoming.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 81px; "
+                + "-fx-min-height: 81px; "
+                + "-fx-max-width: 81px; "
+                + "-fx-max-height: 81px;");
+        
+        twoButtons.getChildren().addAll(lUpcoming, bPast, bUpcoming);
+        twoButtons.setPadding(new Insets(5, 5, 5, 5));
+        twoButtons.setAlignment(Pos.CENTER);
+        //gp.add(lUpcoming, 0, 4);
+//        gp.add(twoButtons, 0, 4);
+        
+//        gp.add(bPast, 0, 5);
+//        gp.add(bUpcoming, 0, 5);
 
         bPast.setOnAction((event) -> {
             upcomingFalse();
@@ -57,20 +86,32 @@ public class CreateHikeView {
         
         Label rucksacBeg = new Label("How much your rucksac weighted in the beginning?");
         TextField rucksacWBeg = new TextField();
-        gp.add(rucksacBeg, 0, 8);
-        gp.add(rucksacWBeg, 0, 9);
+//        gp.add(rucksacBeg, 0, 7);
+//        gp.add(rucksacWBeg, 0, 8);
         Label rucksacEnd = new Label("How much your rucksac weighted in the end?");
         TextField rucksacWEnd = new TextField();
-        gp.add(rucksacEnd, 0, 10);
-        gp.add(rucksacWEnd, 0, 11);
+//        gp.add(rucksacEnd, 0, 9);
+//        gp.add(rucksacWEnd, 0, 10);
 
         gp.setAlignment(Pos.CENTER);
-        gp.setVgap(10);
-        gp.setHgap(10);
-        gp.setPadding(new Insets(5, 5, 5, 5));
+        gp.setVgap(1);
+        gp.setHgap(1);
+        //gp.setPadding(new Insets(5, 5, 5, 5));
 
-        Button bReady = new Button("Ready to create a new hike!");
-        gp.add(bReady, 0, 12);
+        HBox boxR = new HBox();
+        Button bReady = new Button("Create\nnew\nhike!");
+        boxR.getChildren().add(bReady);
+        boxR.setPadding(new Insets(5, 5, 5, 5));
+        boxR.setAlignment(Pos.CENTER);
+        
+        bReady.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 85px; "
+                + "-fx-min-height: 85px; "
+                + "-fx-max-width: 85px; "
+                + "-fx-max-height: 85px;");
+        
+//        gp.add(bReady, 0, 11);
         bReady.setOnMouseClicked((event) -> {
             try {
                 int year = Integer.parseInt(tfYear.getText());
@@ -91,14 +132,17 @@ public class CreateHikeView {
                 rucksacWEnd.clear();
                 tfName.clear();
                 tfYear.clear();
-                gp.add(new Label("New hike created succesfully!"), 0, 13);
+                gp.add(new Label("New hike created succesfully!"), 0, 12);
             } catch (Exception e) {
-                gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 14);
+                gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 13);
                 //poista alla oleva ennen lopullista palautusta
                 System.out.println("Hike creation failed: " + e.getMessage());
             }
         });
 
+        boxV.getChildren().addAll(lName, tfName, lYear, tfYear, twoButtons, rucksacBeg, rucksacWBeg, rucksacEnd, rucksacWEnd, boxR);
+        gp.add(boxV, 0, 0);
+        
         return gp;
     }
 

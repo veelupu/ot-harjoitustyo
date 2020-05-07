@@ -31,6 +31,7 @@ public class HikeView {
 
     public Parent getView() {
         GridPane gp = new GridPane();
+//        gp.setGridLinesVisible(true);
 
         Label lName = new Label(hike.toString());
         Button bLocation = new Button(getOrDefault(hike.getLocation(), "Add location"));
@@ -62,15 +63,15 @@ public class HikeView {
             ui.bp.setCenter(new RucksacWView(c, hike, false).getView());
         });
         
-        gp.add(lName, 0, 1);
-        gp.add(bLocation, 1, 1);
-        gp.add(bCompanion, 2, 1);
-        gp.add(bMeals, 0, 2);
-        gp.add(bDayTrips, 1, 2);
-        gp.add(bJourney, 2, 2);
-        gp.add(bEquipment, 0, 3);
-        gp.add(bRucksacBeg, 1, 3);
-        gp.add(bRucksacEnd, 2, 3);
+        gp.add(lName, 0, 0);
+        gp.add(bLocation, 1, 0);
+        gp.add(bCompanion, 2, 0);
+        gp.add(bMeals, 0, 1);
+        gp.add(bDayTrips, 1, 1);
+        gp.add(bJourney, 2, 1);
+        gp.add(bEquipment, 0, 2);
+        gp.add(bRucksacBeg, 1, 2);
+        gp.add(bRucksacEnd, 2, 2);
 
         Button[] buttons = new Button[]{bLocation, bMeals, bDayTrips, bJourney, bEquipment, bRucksacBeg, bRucksacEnd};
         for (Button b : buttons) {

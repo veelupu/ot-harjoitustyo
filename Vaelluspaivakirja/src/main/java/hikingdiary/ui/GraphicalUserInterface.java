@@ -19,10 +19,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -142,9 +150,24 @@ public class GraphicalUserInterface extends Application {
                 + "-fx-max-width: 80px; "
                 + "-fx-max-height: 80px;");
         }
+        
+        Image image = new Image("file:backgroudImage.png", 780, 780, false, true);
+        BackgroundImage bgImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+          BackgroundSize.DEFAULT);
+        
+        bp.setBackground(new Background(bgImage));
+        
+        //ImageView image = new ImageView(bgImage);
+        
+//        image.setScaleX(0.5);
+//        image.setScaleY(0.5);
+//        
+//        Pane p = new Pane();
+//        p.getChildren().add(image);
+//        bp.setCenter(p);
 
         bp.setTop(box);
-        bp.setPrefSize(300, 500);
+        bp.setPrefSize(800, 900);
         
         //Alla olevan sijaan joku kuva tms.?
         //bp.setCenter(new MainMenuView(this, c).getView());

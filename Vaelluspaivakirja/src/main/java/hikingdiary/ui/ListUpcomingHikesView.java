@@ -7,11 +7,14 @@ package hikingdiary.ui;
 import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -21,56 +24,74 @@ import javafx.scene.layout.VBox;
  * @author veeralupunen
  */
 public class ListUpcomingHikesView {
-    
+
     Controller c;
     GraphicalUserInterface ui;
     GridPane gp;
     ArrayList<Button> buttons;
-    VBox hikeButtons;
-    
+    ListView hikeButtons;
+
     public ListUpcomingHikesView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
         this.ui = ui;
         this.buttons = new ArrayList<>();
     }
-    
+
     public Parent getView() {
         gp = new GridPane();
-        
+
         Label lName = new Label("Upcoming Hikes");
-        gp.add(lName, 0, 1);
-        
-        gp.add(formatHikeButtons(), 0, 2);
-        
+        gp.add(lName, 0, 0);
+
+        gp.add(formatHikeButtons(), 0, 1);
+
         //poistaminen
-        Button deleteButton = new Button("Remove hike");
-        VBox boxRm = new VBox();
+        Button deleteButton = new Button("Remove\nhike");
         
+        deleteButton.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;");
+        
+        VBox boxRm = new VBox();
+        boxRm.getChildren().add(deleteButton);
+        boxRm.setAlignment(Pos.CENTER);
+
         deleteButton.setOnAction((event) -> {
-            gp.getChildren().remove(deleteButton);
-            gp.add(boxRm, 0, 3);
+            boxRm.getChildren().remove(deleteButton);
+            //gp.add(boxRm, 0, 2);
             delete(boxRm);
         });
-        
-        gp.add(deleteButton, 0, 3);
-        
+
+        gp.add(boxRm, 0, 2);
+
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);
         gp.setHgap(10);
         gp.setPadding(new Insets(5, 5, 5, 5));
-        
+
         return gp;
     }
-    
+
     private void delete(VBox boxRm) {
-        Label lHikeToRm = new Label("Which hike do you want to remove from this hike?");
+        Label lHikeToRm = new Label("Which hike do you want to remove?");
         TextField hikeToRm = new TextField();
-        Button remove = new Button("Remove this hike permanently");
-        boxRm.getChildren().addAll(lHikeToRm, hikeToRm, remove);       
+        Button remove = new Button("Remove\nthis hike\npermanently");
         
+        remove.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 100px; "
+                + "-fx-min-height: 100px; "
+                + "-fx-max-width: 100px; "
+                + "-fx-max-height: 100px;");
+        
+        boxRm.getChildren().addAll(lHikeToRm, hikeToRm, remove);
+
         Label succ = new Label("Hike removed succesfully!");
         Label unsucc = new Label("Couldn't remove hike. Make sure you wrote the name correctly.");
-        
+
         remove.setOnAction((event) -> {
             String name = hikeToRm.getText();
             Hike h = new Hike(name);
@@ -83,27 +104,70 @@ public class ListUpcomingHikesView {
             }
         });
     }
-    
-    private VBox formatHikeButtons() {
-        buttons.clear();
+
+    private ListView formatHikeButtons() {
         gp.getChildren().remove(hikeButtons);
-        hikeButtons = new VBox();
-        
-        ArrayList<Button> buttons = new ArrayList<>();
+        hikeButtons = new ListView<>();
+
+//        int i = 1;
+//        int j = 0;
+//        int max = c.listPastHikes().size() / 2;
+        ObservableList<Button> buttons = FXCollections.observableArrayList();
+
         for (Hike hike : c.listUpcomingHikes()) {
-            Button b = new Button(hike.toString());
+//            if (i > max) {
+//                i = 0;
+//                j++;
+//            }
+
+            Button b = new Button(hike.getName() + "\n" + hike.getYear());
             b.setUserData(hike.getName());
-            
+
             b.setOnMouseClicked((event) -> {
                 String hikeName = (String) b.getUserData();
                 ui.bp.setCenter(new HikeView(c.getHike(hikeName), c, ui).getView());
             });
-            
+
+            style(b);
+//            buttons.add(b);
             buttons.add(b);
-            hikeButtons.getChildren().add(b);
         }
+        hikeButtons.setItems(buttons);
+        hikeButtons.setPrefWidth(200);
+        hikeButtons.setPrefHeight(290);
+        hikeButtons.setFixedCellSize(110);
+        hikeButtons.setStyle("-fx-background-color: transparent;");
+        hikeButtons.setPadding(Insets.EMPTY);
         
         return hikeButtons;
+//            i++;
+//        buttons.clear();
+//        gp.getChildren().remove(hikeButtons);
+//        hikeButtons = new VBox();
+//        
+//        ArrayList<Button> buttons = new ArrayList<>();
+//        for (Hike hike : c.listUpcomingHikes()) {
+//            Button b = new Button(hike.toString());
+//            b.setUserData(hike.getName());
+//            
+//            b.setOnMouseClicked((event) -> {
+//                String hikeName = (String) b.getUserData();
+//                ui.bp.setCenter(new HikeView(c.getHike(hikeName), c, ui).getView());
+//            });
+//            style(b);
+//            buttons.add(b);
+//            hikeButtons.getChildren().add(b);
+//        }
+//        
+//        return hikeButtons;
     }
-    
+
+    private void style(Button b) {
+        b.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 110px; "
+                + "-fx-min-height: 110px; "
+                + "-fx-max-width: 110px; "
+                + "-fx-max-height: 110px;");
+    }
 }
