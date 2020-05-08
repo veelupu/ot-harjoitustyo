@@ -41,7 +41,7 @@ public class RucksacWView {
         gp.add(box, 0, 0);
 
         if (this.beginning) {
-            Label lHike = new Label("In the beginning of\nthe hike " + hike.toString() + "\nmy rucksac weighted:");
+            Label lHike = new Label("In the beginning of  " + hike.toString() + " my rucksac weighted:");
             TextField weight = new TextField("" + hike.getRucksackWeightBeg());
             Button ready = new Button("Change!");
             style(ready);
@@ -66,7 +66,7 @@ public class RucksacWView {
             });
 
         } else {
-            Label lHike = new Label("In the end of\nthe hike " + hike.toString() + "\nmy rucksac weighted:");
+            Label lHike = new Label("In the end of " + hike.toString() + " my rucksac weighted:");
             TextField weight = new TextField("" + hike.getRucksackWeightEnd());
             Button ready = new Button("Change!");
             style(ready);

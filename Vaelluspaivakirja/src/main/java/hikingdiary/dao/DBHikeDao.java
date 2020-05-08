@@ -19,7 +19,7 @@ import java.sql.*;
  * 
  * @author veeralupunen
  */
-public class DBHikeDao implements HikeDao<Hike, Integer> {
+public class DBHikeDao implements HikeDao {
 
     private String dbAddress;
     private Connection connection;
@@ -71,7 +71,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
         Statement s = connection.createStatement();
         s.execute("PRAGMA foreign_keys = ON");
         s.execute("BEGIN TRANSACTION");
-        s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER)");
+        s.execute("CREATE TABLE IF NOT EXISTS Hikes (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, year INTEGER NOT NULL, upcoming INTEGER NOT NULL, rucksacBeg INTEGER, rucksacEnd INTEGER, locationStart TEXT, locationEnd TEXT)");
         s.execute("CREATE TABLE IF NOT EXISTS Companion (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (h_id, c_id))");
         s.execute("CREATE TABLE IF NOT EXISTS Item (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, weight INTEGER)");
@@ -295,6 +295,8 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
             boolean upcoming = rs.getBoolean("upcoming");
             Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming, rs.getDouble("rucksacBeg"), rs.getDouble("rucksacEnd"));
             hike.setId(rs.getInt("id"));
+            hike.setLocationStart(rs.getString("locationStart"));
+            hike.setLocationEnd(rs.getString("locationEnd"));
 
             hike.setCompanions(fetchCompanions(hike));
             hike.setEquipment(fetchEquipment(hike));
@@ -488,13 +490,15 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public void updateHike(Hike hike) {
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE Hikes SET name=?, year=?, upcoming=?, rucksacBeg=?, rucksacEnd=? WHERE id=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Hikes SET name=?, year=?, upcoming=?, rucksacBeg=?, rucksacEnd=?, locationStart=?, locationEnd=? WHERE id=?");
             ps.setString(1, hike.getName());
             ps.setInt(2, hike.getYear());
             ps.setBoolean(3, hike.isUpcoming());
             ps.setDouble(4, hike.getRucksackWeightBeg());
             ps.setDouble(5, hike.getRucksackWeightEnd());
-            ps.setInt(6, hike.getId());
+            ps.setString(6, hike.getLocationStart());
+            ps.setString(7, hike.getLocationEnd());
+            ps.setInt(8, hike.getId());
 
             int executeUpdate = ps.executeUpdate();
 

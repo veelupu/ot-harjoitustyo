@@ -84,6 +84,24 @@ public class Controller {
         }
         return false;
     }
+    
+    public List<Hike> listHikes() {
+        List<Hike> hikes = new ArrayList<>();
+
+        try {
+            hikes = hikeDao.list(false);
+            for (Hike h : hikeDao.list(true)) {
+                hikes.add(h);
+            }
+        } catch (Exception e) {
+            //poista tulostus lopullisesta versiosta – käsittele muutoin
+            System.err.println("Something went wrong with listing past hikes.");
+        }
+        
+        Collections.sort(hikes);
+        Collections.reverse(hikes);
+        return hikes;
+    }
 
     /**
      * Method gets all the past-marked hikes from the database and sorts it.

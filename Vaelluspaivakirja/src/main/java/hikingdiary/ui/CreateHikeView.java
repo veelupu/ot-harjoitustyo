@@ -98,7 +98,7 @@ public class CreateHikeView {
         gp.setHgap(1);
         //gp.setPadding(new Insets(5, 5, 5, 5));
 
-        HBox boxR = new HBox();
+        VBox boxR = new VBox();
         Button bReady = new Button("Create\nnew\nhike!");
         boxR.getChildren().add(bReady);
         boxR.setPadding(new Insets(5, 5, 5, 5));
@@ -111,6 +111,8 @@ public class CreateHikeView {
                 + "-fx-max-width: 85px; "
                 + "-fx-max-height: 85px;");
         
+        Label done = new Label("New hike created succesfully!");
+        Label error = new Label("Oops, year should be an integer.\nTry again!");
 //        gp.add(bReady, 0, 11);
         bReady.setOnMouseClicked((event) -> {
             try {
@@ -132,12 +134,18 @@ public class CreateHikeView {
                 rucksacWEnd.clear();
                 tfName.clear();
                 tfYear.clear();
-                gp.add(new Label("New hike created succesfully!"), 0, 12);
+                
             } catch (Exception e) {
-                gp.add(new Label("Oops, year should be an integer.\nTry again!"), 0, 13);
+                boxR.getChildren().add(error);
                 //poista alla oleva ennen lopullista palautusta
                 System.out.println("Hike creation failed: " + e.getMessage());
             }
+            boxR.getChildren().add(done);
+        });
+        
+        tfName.setOnAction((event) -> {
+            boxR.getChildren().remove(done);
+            boxR.getChildren().remove(error);
         });
 
         boxV.getChildren().addAll(lName, tfName, lYear, tfYear, twoButtons, rucksacBeg, rucksacWBeg, rucksacEnd, rucksacWEnd, boxR);

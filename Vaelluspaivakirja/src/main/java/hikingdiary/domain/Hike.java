@@ -22,7 +22,8 @@ public class Hike implements Comparable<Hike> {
     private String name;
     private int year;
     private boolean upcoming;
-    private String location;
+    private String locationStart;
+    private String locationEnd;
     private HashMap<LocalDate, DayTrip> dayTrips;
     private ArrayList<String> companions;
     private HashMap<String, Meal> meals;
@@ -42,6 +43,8 @@ public class Hike implements Comparable<Hike> {
         this.name = name;
         this.year = year;
         this.upcoming = upcoming;
+        this.locationStart = "";
+        this.locationEnd = "";
         this.rucksackWeightBeg = rucksackWeightBeg;
         this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
@@ -74,17 +77,23 @@ public class Hike implements Comparable<Hike> {
         this.upcoming = upcoming;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocationStart(String start) {
+        this.locationStart = start;
+    }
+    
+    public void setLocationEnd(String end) {
+        this.locationEnd = end;
     }
 
-    public String getLocation() {
-//        if (this.location.contains(",")) {
-//            String[] pieces = this.location.split(",");
-//            return pieces[0] + "\n" + pieces[1];
-//        }
-        return this.location;
+    public String getLocationStart() {
+        return locationStart;
     }
+
+    public String getLocationEnd() {
+        return locationEnd;
+    }
+
+    
 
     public double getRucksackWeightBeg() {
         return rucksackWeightBeg;
@@ -105,8 +114,8 @@ public class Hike implements Comparable<Hike> {
     /**
      * Method creates a new day trip and adds it to this hike's day trips.
      * 
-     * @param date the date of the new day trip
-     * @return a new day trip
+     * @param DayTrip the new day trip
+     * @return if there already was not a day trip with that date and the adding succeeded
      */
     public boolean addDayTrip(DayTrip dt) {
         if (this.dayTrips.containsKey(dt.getDate())) {

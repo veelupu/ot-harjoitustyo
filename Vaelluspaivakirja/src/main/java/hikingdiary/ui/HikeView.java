@@ -34,15 +34,19 @@ public class HikeView {
 //        gp.setGridLinesVisible(true);
 
         Label lName = new Label(hike.toString());
-        Button bLocation = new Button(getOrDefault(hike.getLocation(), "Add location"));
+        Button bLocation = new Button(getOrDefault("From\n" + hike.getLocationStart() + "\nto\n" + hike.getLocationEnd(), "Add location"));
         Button bCompanion = new Button(("Companion"));
         Button bMeals = new Button("Meal\nlist");
         Button bDayTrips = new Button("Day trips");
-        Button bJourney = new Button("" + getOrDefault(hike.getKilometres(), "Add day trips"));
+        Button bJourney = new Button("" + getOrDefault(hike.getKilometres() + " km", "Add ay trips"));
         Button bEquipment = new Button("Equipment\nlist");
-        Button bRucksacBeg = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?"));
-        Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?"));
+        Button bRucksacBeg = new Button("Rucksac\nin the\nbeginning\n" + getOrDefault(hike.getRucksackWeightBeg(), "?") + " kg");
+        Button bRucksacEnd = new Button("Rucksac\nin the end\n" + getOrDefault(hike.getRucksackWeightEnd(), "?") + " kg");
 
+        bLocation.setOnAction((event) -> {
+            ui.bp.setCenter(new LocationView(c).getView(hike));
+        });
+        
         bCompanion.setOnAction((event) -> {
             ui.bp.setCenter(new CompanionView(c).getView(hike));
         });

@@ -11,15 +11,19 @@ import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
+import hikingdiary.domain.Hike;
 import hikingdiary.domain.User;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -80,8 +84,18 @@ public class GraphicalUserInterface extends Application {
         Label intro = new Label("Hello there, new user!\nStart by entering a username of your choice.");
         TextField username = new TextField();
         Button ready = new Button("Ready!");
+        
+        ready.setStyle(
+                "-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;"
+        );
 
         VBox v = new VBox();
+        v.setAlignment(Pos.CENTER);
         v.getChildren().addAll(intro, username, ready);
 
         gp.setPrefSize(300, 180);
@@ -104,7 +118,8 @@ public class GraphicalUserInterface extends Application {
     }
 
     private void openMainMenuView(Stage window) {
-        window.setTitle(userDao.read().getName() + "’s Hiking Diary");
+        String username = userDao.read().getName();
+        window.setTitle(username + "’s Hiking Diary");
 
         ArrayList<Button> buttons = new ArrayList<>();
         
@@ -172,6 +187,13 @@ public class GraphicalUserInterface extends Application {
 
         bp.setTop(box);
         bp.setPrefSize(800, 900);
+        
+        Label welcome = new Label("Welcome, " + username + "!\nGreat to see you!");
+        
+        VBox bBox = new VBox();
+        bBox.getChildren().addAll(welcome);
+        bBox.setAlignment(Pos.CENTER);
+        bp.setCenter(bBox);
         
         //Alla olevan sijaan joku kuva tms.?
         //bp.setCenter(new MainMenuView(this, c).getView());
