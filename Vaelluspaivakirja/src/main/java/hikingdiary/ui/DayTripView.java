@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -30,8 +31,9 @@ public class DayTripView {
 
     Controller c;
     GraphicalUserInterface ui;
-    ListView<Button> dayLabels;
+    ListView<Button> dayButtons;
     VBox upperBox;
+    DayTrip dtToModify;
 //    VBox lowerBox;
 
     public DayTripView(Controller c, GraphicalUserInterface ui) {
@@ -53,13 +55,22 @@ public class DayTripView {
         formatDayButtons(hike);
         
         Button add = new Button("Add\nmore day\ntrips!");
+        Button modify = new Button("Modify\nthe day\ntrip");
         style(add);
+        style(modify);
         
         add.setOnAction((event) -> {
-            ui.bp.setCenter(new CreateDayTripView(c).getView(hike));
+            ui.bp.setCenter(new CreateDayTripView(c).getCreationView(hike));
         });
         
-        upperBox.getChildren().add(add);
+        modify.setOnAction((event) -> {
+            ui.bp.setCenter(new CreateDayTripView(c).getModifyView(hike, dtToModify));
+        });
+        
+        HBox boxB = new HBox();
+        boxB.getChildren().addAll(add, modify);
+        boxB.setAlignment(Pos.CENTER);
+        upperBox.getChildren().add(boxB);
         
         gp.add(upperBox, 0, 0);
 //        gp.add(lowerBox, 0, 0);
@@ -72,8 +83,8 @@ public class DayTripView {
     }
     
     private void formatDayButtons(Hike hike) {
-        upperBox.getChildren().remove(dayLabels);
-        dayLabels = new ListView<>();
+        upperBox.getChildren().remove(dayButtons);
+        dayButtons = new ListView<>();
 
         ObservableList<Button> buttons = FXCollections.observableArrayList();
         
@@ -81,20 +92,20 @@ public class DayTripView {
             Button b = new Button(dt.toString());
             
             b.setOnAction((event) -> {
-                ui.bp.setCenter(new UpdateDayTripView(c).getView(hike, dt));
+                dtToModify = dt;
             });
             
             buttons.add(b);
         }
         
-        dayLabels.setItems(buttons);
-        dayLabels.setPrefWidth(250);
-        dayLabels.setPrefHeight(290);
-        dayLabels.setFixedCellSize(30);
-        dayLabels.setStyle("-fx-background-color: transparent;");
-        dayLabels.setPadding(Insets.EMPTY);
+        dayButtons.setItems(buttons);
+        dayButtons.setPrefWidth(250);
+        dayButtons.setPrefHeight(290);
+        dayButtons.setFixedCellSize(30);
+        dayButtons.setStyle("-fx-background-color: transparent;");
+        dayButtons.setPadding(Insets.EMPTY);
 
-        upperBox.getChildren().add(dayLabels);
+        upperBox.getChildren().add(dayButtons);
     }
     
     private void style(Button b) {

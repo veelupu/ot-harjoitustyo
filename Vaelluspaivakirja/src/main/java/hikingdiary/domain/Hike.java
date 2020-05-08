@@ -138,6 +138,7 @@ public class Hike implements Comparable<Hike> {
             days.add(day);
         }
         Collections.sort(days);
+        Collections.reverse(days);
         return days;
     }
     

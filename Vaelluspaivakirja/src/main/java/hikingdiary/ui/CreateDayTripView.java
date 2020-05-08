@@ -23,39 +23,48 @@ import javafx.scene.layout.VBox;
  * @author veeralupunen
  */
 public class CreateDayTripView {
-    
+
     Controller c;
-    
+
     public CreateDayTripView(Controller c) {
         this.c = c;
     }
+
+    public Parent getCreationView(Hike hike) {
+        return formatContent(hike, null, false, "", "", 0, 0, "");
+    }
     
-    public Parent getView(Hike hike) {
+    public Parent getModifyView(Hike hike, DayTrip td) {
+        return formatContent(hike, td.getDate(), true, td.getStartingPoint(), td.getEndingPoint(), td.getWalkDist(), td.getWalkTime(), td.getWeather());
+    }
+    
+    private GridPane formatContent(Hike hike, LocalDate date, boolean disable, String start, String end, double dist, double hours, String weather) {
         GridPane gp = new GridPane();
-        
+
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
-        
-        Label lDate = new Label("Add a new day trip!");
-        DatePicker date = new DatePicker();
-        
+
+        Label lDate = new Label("Add a new day trip for " + hike.toString() + ":");
+        DatePicker dateP = new DatePicker(date);
+        dateP.setDisable(disable);
+
         Label lStart = new Label("My day trip starts here:");
-        TextField tfStart = new TextField();
-        
+        TextField tfStart = new TextField(start);
+
         Label lEnd = new Label("My day trip ends here:");
-        TextField tfEnd = new TextField();
-        
+        TextField tfEnd = new TextField(end);
+
         Label lDist = new Label("Kilometres of the day:");
-        TextField tfDist = new TextField();
-        
+        TextField tfDist = new TextField("" + dist);
+
         Label lTime = new Label("Walking hours of the day:");
-        TextField tfHours = new TextField();
-        
+        TextField tfHours = new TextField("" + hours);
+
         Label lWeather = new Label("The weather was like:");
-        TextField tfWeather = new TextField();
-        
+        TextField tfWeather = new TextField(weather);
+
         Button ready = new Button("Ready\nto add!");
-        
+
         ready.setStyle(
                 "-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
@@ -64,51 +73,67 @@ public class CreateDayTripView {
                 + "-fx-max-width: 70px; "
                 + "-fx-max-height: 70px;"
         );
-        
-        box.getChildren().addAll(lDate, date, lStart, tfStart, lEnd, tfEnd, lDist, tfDist, lTime, tfHours, lWeather, tfWeather, ready);
-        
+
+        box.getChildren().addAll(lDate, dateP, lStart, tfStart, lEnd, tfEnd, lDist, tfDist, lTime, tfHours, lWeather, tfWeather, ready);
+
         Label done = new Label("Day trip added!");
         Label exists = new Label("This hike has this day trip already.");
         Label error = new Label("Oops, something went wrong. Did you fill all the textfields correctly?");
-        
+
         ready.setOnAction((event) -> {
             try {
-                LocalDate d = date.getValue();
-                String start = tfStart.getText();
-                String end = tfEnd.getText();
-                double dist = Double.valueOf(tfDist.getText());
-                double hours = Double.valueOf(tfHours.getText()); 
-                String weather = tfWeather.getText();
-                
-                DayTrip dt = new DayTrip(d, start, end, dist, hours, weather);
-                
+                LocalDate d = dateP.getValue();
+                String startV = tfStart.getText();
+                String endV = tfEnd.getText();
+                double distV = Double.valueOf(tfDist.getText());
+                double hoursV = Double.valueOf(tfHours.getText());
+                String weatherV = tfWeather.getText();
+
+                DayTrip dt = new DayTrip(d, startV, endV, distV, hoursV, weatherV);
+
                 if (c.addDayTrip(hike, dt)) {
                     box.getChildren().add(done);
+                    tfStart.clear();
+                    tfEnd.clear();
+                    tfDist.clear();
+                    tfHours.clear();
+                    tfWeather.clear();
                 } else {
                     box.getChildren().add(exists);
                 }
-                
-                tfStart.clear();
-                tfEnd.clear();
-                tfDist.clear();
-                tfHours.clear();
-                tfWeather.clear();
+
             } catch (Exception e) {
                 box.getChildren().add(error);
             }
         });
         
-        tfStart.setOnAction((event) -> {
+        tfStart.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        tfEnd.setOnMouseClicked((event) -> {
             box.getChildren().removeAll(done, exists, error);
         });
         
-        gp.add(box, 0, 0);
+        tfDist.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
         
+        tfHours.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+        
+        tfWeather.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        gp.add(box, 0, 0);
+
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
-        
+
         return gp;
     }
 }

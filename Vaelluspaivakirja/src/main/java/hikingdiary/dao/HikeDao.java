@@ -24,7 +24,7 @@ public interface HikeDao {
     int updateHike(Hike hike);
     int deleteHike(String name);
     int deleteCompanion(Hike hike, String name);
-    void deleteMeal(Hike hike, String name);
-    void deleteItem(Hike hike, String name);
+    int deleteMeal(Hike hike, String name);
+    int deleteItem(Hike hike, String name);
     List<Hike> list(boolean upcoming);
 }

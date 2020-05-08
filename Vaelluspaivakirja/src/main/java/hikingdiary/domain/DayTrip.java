@@ -125,9 +125,9 @@ public class DayTrip implements Comparable<DayTrip> {
 
     @Override
     public int compareTo(DayTrip d) {
-        if (this.date.compareTo(date) > 0) {
+        if (this.date.compareTo(d.getDate()) > 0) {
             return -1;
-        } else if (this.date.compareTo(date) < 0) {
+        } else if (this.date.compareTo(d.getDate()) < 0) {
             return 1;
         } else {
             return 0;
