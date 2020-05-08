@@ -30,7 +30,7 @@ public class DayTripView {
 
     Controller c;
     GraphicalUserInterface ui;
-    ListView<Label> dayLabels;
+    ListView<Button> dayLabels;
     VBox upperBox;
 //    VBox lowerBox;
 
@@ -45,13 +45,16 @@ public class DayTripView {
         GridPane gp = new GridPane();
         
         Label title = new Label("Day trips during " + hike.toString());
+        title.setPadding(new Insets(10, 10, 10, 10));
         
         upperBox.setAlignment(Pos.CENTER);
         upperBox.getChildren().addAll(title);
 //        lowerBox.setAlignment(Pos.CENTER);
-        formatDayLabels(hike);
+        formatDayButtons(hike);
         
-        Button add = new Button("Add more day trips!");
+        Button add = new Button("Add\nmore day\ntrips!");
+        style(add);
+        
         add.setOnAction((event) -> {
             ui.bp.setCenter(new CreateDayTripView(c).getView(hike));
         });
@@ -68,21 +71,26 @@ public class DayTripView {
         return gp;
     }
     
-    private void formatDayLabels(Hike hike) {
+    private void formatDayButtons(Hike hike) {
         upperBox.getChildren().remove(dayLabels);
         dayLabels = new ListView<>();
 
-        ObservableList<Label> labels = FXCollections.observableArrayList();
+        ObservableList<Button> buttons = FXCollections.observableArrayList();
         
         for (DayTrip dt : hike.getDayTrips()) {            
-            Label l = new Label(dt.toString());
-            labels.add(l);
+            Button b = new Button(dt.toString());
+            
+            b.setOnAction((event) -> {
+                ui.bp.setCenter(new UpdateDayTripView(c).getView(hike, dt));
+            });
+            
+            buttons.add(b);
         }
         
-        dayLabels.setItems(labels);
-        dayLabels.setPrefWidth(200);
+        dayLabels.setItems(buttons);
+        dayLabels.setPrefWidth(250);
         dayLabels.setPrefHeight(290);
-        dayLabels.setFixedCellSize(110);
+        dayLabels.setFixedCellSize(30);
         dayLabels.setStyle("-fx-background-color: transparent;");
         dayLabels.setPadding(Insets.EMPTY);
 
@@ -93,10 +101,10 @@ public class DayTripView {
         b.setStyle(
                 "-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 70px; "
-                + "-fx-min-height: 70px; "
-                + "-fx-max-width: 70px; "
-                + "-fx-max-height: 70px;"
+                + "-fx-min-width: 80px; "
+                + "-fx-min-height: 80px; "
+                + "-fx-max-width: 80px; "
+                + "-fx-max-height: 80px;"
         );
     }
 }

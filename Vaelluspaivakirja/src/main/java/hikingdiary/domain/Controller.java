@@ -72,6 +72,8 @@ public class Controller {
      */
     public Hike getHike(String name) {
         Hike hike = hikeDao.readHike(name);
+        List<DayTrip> dayTrips = dtDao.list(hike.getId());
+        hike.setDayTrips(dayTrips);
         return hike;
     }
     
@@ -160,6 +162,11 @@ public class Controller {
             return true;
         }
         return false;
+    }
+    
+    public void updateDayTrip(Hike hike, DayTrip dt) {
+        hike.updateDayTrip(dt);
+        dtDao.update(hike.getId(), dt);
     }
     
     public boolean removeMeal(Hike hike, String name) {

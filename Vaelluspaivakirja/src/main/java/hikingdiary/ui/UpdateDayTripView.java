@@ -22,52 +22,53 @@ import javafx.scene.layout.VBox;
  *
  * @author veeralupunen
  */
-public class CreateDayTripView {
+public class UpdateDayTripView {
     
     Controller c;
     
-    public CreateDayTripView(Controller c) {
+    public UpdateDayTripView(Controller c) {
         this.c = c;
     }
     
-    public Parent getView(Hike hike) {
+    public Parent getView(Hike hike, DayTrip dt) {
         GridPane gp = new GridPane();
         
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
         
-        Label lDate = new Label("Add a new day trip!");
-        DatePicker date = new DatePicker();
+        Label lDate = new Label("Modify your day trip!");
+        DatePicker date = new DatePicker(dt.getDate());
+        date.setEditable(false);
         
         Label lStart = new Label("My day trip starts here:");
-        TextField tfStart = new TextField();
+        TextField tfStart = new TextField(dt.getStartingPoint());
         
         Label lEnd = new Label("My day trip ends here:");
-        TextField tfEnd = new TextField();
+        TextField tfEnd = new TextField(dt.getEndingPoint());
         
         Label lDist = new Label("Kilometres of the day:");
-        TextField tfDist = new TextField();
+        TextField tfDist = new TextField("" + dt.getWalkDist());
         
         Label lTime = new Label("Walking hours of the day:");
-        TextField tfHours = new TextField();
+        TextField tfHours = new TextField("" + dt.getWalkTime());
         
         Label lWeather = new Label("The weather was like:");
-        TextField tfWeather = new TextField();
+        TextField tfWeather = new TextField(dt.getWeather());
         
-        Button ready = new Button("Ready\nto add!");
+        Button ready = new Button("Ready\nto\nmodify!");
         
         ready.setStyle(
                 "-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 70px; "
-                + "-fx-min-height: 70px; "
-                + "-fx-max-width: 70px; "
-                + "-fx-max-height: 70px;"
+                + "-fx-min-width: 80px; "
+                + "-fx-min-height: 80px; "
+                + "-fx-max-width: 80px; "
+                + "-fx-max-height: 80px;"
         );
         
         box.getChildren().addAll(lDate, date, lStart, tfStart, lEnd, tfEnd, lDist, tfDist, lTime, tfHours, lWeather, tfWeather, ready);
         
-        Label done = new Label("Day trip added!");
+        Label done = new Label("Day trip modified!");
         Label exists = new Label("This hike has this day trip already.");
         Label error = new Label("Oops, something went wrong. Did you fill all the textfields correctly?");
         
@@ -80,13 +81,10 @@ public class CreateDayTripView {
                 double hours = Double.valueOf(tfHours.getText()); 
                 String weather = tfWeather.getText();
                 
-                DayTrip dt = new DayTrip(d, start, end, dist, hours, weather);
+                DayTrip newDT = new DayTrip(d, start, end, dist, hours, weather);
                 
-                if (c.addDayTrip(hike, dt)) {
-                    box.getChildren().add(done);
-                } else {
-                    box.getChildren().add(exists);
-                }
+                c.updateDayTrip(hike, newDT);
+                box.getChildren().add(done);
                 
                 tfStart.clear();
                 tfEnd.clear();

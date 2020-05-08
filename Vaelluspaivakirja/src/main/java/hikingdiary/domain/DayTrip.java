@@ -54,15 +54,29 @@ public class DayTrip implements Comparable<DayTrip> {
         this.date = date;
     }
 
-    public int getWeekday() {
-        return weekday;
+    public String getWeekday() {
+        if (weekday == 1) {
+            return "Monday";
+        } else if (weekday == 2) {
+            return "Tuesday";
+        } else if (weekday == 3) {
+            return "Wednesday";
+        } else if (weekday == 4) {
+            return "Thursday";
+        } else if (weekday == 5) {
+            return "Friday";
+        } else if (weekday == 6) {
+            return "Saturday";
+        } else if (weekday == 7) {
+            return "Sunday";
+        } else {
+            return "A special day";
+        }
     }
 
     public void setWeekday(int weekday) {
         this.weekday = weekday;
     }
-    
-    
 
     public String getStartingPoint() {
         return startingPoint;
@@ -106,21 +120,18 @@ public class DayTrip implements Comparable<DayTrip> {
 
     @Override
     public String toString() {
-        return "" + weekday + " " + date + " " + walkDist + " km";
+        return getWeekday() + " " + date.getDayOfMonth() + "." + date.getMonthValue() + "." + date.getYear() + " " + walkDist + " km";
     }
 
     @Override
     public int compareTo(DayTrip d) {
         if (this.date.compareTo(date) > 0) {
-            return 1;
-        } else if (this.date.compareTo(date) < 0) {
             return -1;
+        } else if (this.date.compareTo(date) < 0) {
+            return 1;
         } else {
             return 0;
         }
     }
-    
-    
-    
-    
+ 
 }

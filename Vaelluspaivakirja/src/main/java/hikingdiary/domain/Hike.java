@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class representing a single hike
@@ -115,6 +116,13 @@ public class Hike implements Comparable<Hike> {
         return true;
     }
     
+    public void setDayTrips(List<DayTrip> dayTrips) {
+        this.dayTrips.clear();
+        for (DayTrip dt : dayTrips) {
+            this.dayTrips.put(dt.getDate(), dt);
+        }
+    }
+    
     public ArrayList<DayTrip> getDayTrips() {
         ArrayList<DayTrip> days = new ArrayList<>();
         for (DayTrip day : this.dayTrips.values()) {
@@ -122,6 +130,10 @@ public class Hike implements Comparable<Hike> {
         }
         Collections.sort(days);
         return days;
+    }
+    
+    public void updateDayTrip(DayTrip dt) {
+        this.dayTrips.put(dt.getDate(), dt);
     }
 
     /**
