@@ -15,6 +15,7 @@ import java.util.Date;
  */
 public class DayTrip implements Comparable<DayTrip> {
     
+    private int id;
     private LocalDate date;
     private int weekday;
     private String startingPoint;
@@ -23,8 +24,8 @@ public class DayTrip implements Comparable<DayTrip> {
     private double walkTime;
     private String weather;
     
-    public DayTrip(LocalDate date) {
-        this.date = date;
+    public DayTrip(LocalDate date, String startingPoint, String endingPoint) {
+        this(date, startingPoint, endingPoint, 0, 0, "");
     }
 
     public DayTrip(LocalDate date, String startingPoint, String endingPoint, double walkDist, double walkTime, String weather) {
@@ -37,6 +38,14 @@ public class DayTrip implements Comparable<DayTrip> {
         this.weather = weather;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public LocalDate getDate() {
         return date;
     }
