@@ -6,16 +6,12 @@ package hikingdiary.ui;
 
 import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,19 +50,22 @@ public class CreateHikeView {
         Button bPast = new Button("Past");
         Button bUpcoming = new Button("Upcoming");
         
-        bPast.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 81px; "
-                + "-fx-min-height: 81px; "
-                + "-fx-max-width: 81px; "
-                + "-fx-max-height: 81px;");
+        style(bPast);
+        style(bUpcoming);
         
-        bUpcoming.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 81px; "
-                + "-fx-min-height: 81px; "
-                + "-fx-max-width: 81px; "
-                + "-fx-max-height: 81px;");
+//        bPast.setStyle("-fx-text-alignment: center;"
+//                + "-fx-background-radius: 5em; "
+//                + "-fx-min-width: 81px; "
+//                + "-fx-min-height: 81px; "
+//                + "-fx-max-width: 81px; "
+//                + "-fx-max-height: 81px;");
+//        
+//        bUpcoming.setStyle("-fx-text-alignment: center;"
+//                + "-fx-background-radius: 5em; "
+//                + "-fx-min-width: 81px; "
+//                + "-fx-min-height: 81px; "
+//                + "-fx-max-width: 81px; "
+//                + "-fx-max-height: 81px;");
         
         twoButtons.getChildren().addAll(lUpcoming, bPast, bUpcoming);
         twoButtons.setPadding(new Insets(5, 5, 5, 5));
@@ -104,16 +103,15 @@ public class CreateHikeView {
         boxR.setPadding(new Insets(5, 5, 5, 5));
         boxR.setAlignment(Pos.CENTER);
         
-        bReady.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 85px; "
-                + "-fx-min-height: 85px; "
-                + "-fx-max-width: 85px; "
-                + "-fx-max-height: 85px;");
+        style(bReady);
         
         Label done = new Label("New hike created succesfully!");
-        Label error = new Label("Oops, year should be an integer.\nTry again!");
+        Label error = new Label("Oops, something went wrong.\nDid you fill all the tecxtfields correctly?");
 //        gp.add(bReady, 0, 11);
+
+        //Jos samanniminen vaellus on jo olemassa, pitäisi tulla virheilmoitus. Nyt ei tule.
+        //Lisäksi aina tulee onnistumisilmoitus --> ei pitäisi
+        //Ja vielä: kun klikkaa mitä tahansa kenttää, ilmoitusten pitäisi mennä pois. Nyt ei.
         bReady.setOnMouseClicked((event) -> {
             try {
                 int year = Integer.parseInt(tfYear.getText());
@@ -162,4 +160,12 @@ public class CreateHikeView {
         this.upcoming = true;
     }
 
+    private void style(Button b) {
+        b.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 85px; "
+                + "-fx-min-height: 85px; "
+                + "-fx-max-width: 85px; "
+                + "-fx-max-height: 85px;");
+    }
 }
