@@ -4,6 +4,7 @@
  */
 package hikingdiary.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class Hike implements Comparable<Hike> {
     private int year;
     private boolean upcoming;
     private String location;
-    private HashMap<Date, DayTrip> dayTrips;
+    private HashMap<LocalDate, DayTrip> dayTrips;
     private ArrayList<String> companions;
     private HashMap<String, Meal> meals;
     private HashMap<String, Item> equipment;
@@ -106,10 +107,21 @@ public class Hike implements Comparable<Hike> {
      * @param date the date of the new day trip
      * @return a new day trip
      */
-    public DayTrip addADayTrip(Date date) {
-        DayTrip dayTrip = new DayTrip(date);
-        this.dayTrips.put(date, dayTrip);
-        return dayTrip;
+    public boolean addDayTrip(DayTrip dt) {
+        if (this.dayTrips.containsKey(dt.getDate())) {
+            return false;
+        }
+        this.dayTrips.put(dt.getDate(), dt);
+        return true;
+    }
+    
+    public ArrayList<DayTrip> getDayTrips() {
+        ArrayList<DayTrip> days = new ArrayList<>();
+        for (DayTrip day : this.dayTrips.values()) {
+            days.add(day);
+        }
+        Collections.sort(days);
+        return days;
     }
 
     /**

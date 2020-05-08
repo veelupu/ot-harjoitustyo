@@ -4,6 +4,7 @@
  */
 package hikingdiary.domain;
 
+import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
 import hikingdiary.domain.Companion;
@@ -23,10 +24,12 @@ public class Controller {
 
     private HikeDao hikeDao;
     private UserDao userDao;
+    private DayTripDao dtDao; 
 
-    public Controller(HikeDao hikeDao, UserDao userDao) {
+    public Controller(HikeDao hikeDao, UserDao userDao, DayTripDao dtDao) {
         this.hikeDao = hikeDao;
         this.userDao = userDao;
+        this.dtDao = dtDao;
     }
     
     /**
@@ -144,6 +147,16 @@ public class Controller {
     public boolean removeCompanion(Hike hike, String name) {
         if (hike.removeCompanion(name)) {
             hikeDao.deleteCompanion(hike, name);
+            return true;
+        }
+        return false;
+    }
+    
+    //tehdään tämä näin: dayTripDaossa on taulu ja liitostaulu hikeen
+    //kun daytripit haetaan jollekin hikelle, c lukee ne erikseen ja liittää hikeen tms.
+    public boolean addDayTrip(Hike hike, DayTrip dt) {
+        if (hike.addDayTrip(dt)) {
+            dtDao.create(hike.getId(), dt);
             return true;
         }
         return false;

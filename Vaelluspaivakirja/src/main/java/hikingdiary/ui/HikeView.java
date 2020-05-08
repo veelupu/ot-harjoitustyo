@@ -63,6 +63,10 @@ public class HikeView {
             ui.bp.setCenter(new RucksacWView(c, hike, false).getView());
         });
         
+        bDayTrips.setOnAction((event) -> {
+            ui.bp.setCenter(new DayTripView(c, ui).getView(hike));
+        });
+        
         gp.add(lName, 0, 0);
         gp.add(bLocation, 1, 0);
         gp.add(bCompanion, 2, 0);

@@ -4,9 +4,11 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.dao.DBDayTripDao;
 import hikingdiary.domain.Controller;
 import hikingdiary.dao.DBHikeDao;
 import hikingdiary.dao.DBUserDao;
+import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
 import hikingdiary.domain.User;
@@ -46,13 +48,15 @@ public class GraphicalUserInterface extends Application {
     BorderPane bp;
     HikeDao hikeDao;
     UserDao userDao;
+    DayTripDao dtDao;
 
     public GraphicalUserInterface() {
         //this.user = new User("Veera");
         this.hikeDao = new DBHikeDao();
         this.userDao = new DBUserDao();
+        this.dtDao = new DBDayTripDao();
         //this.userDao.create(user);
-        this.c = new Controller(hikeDao, userDao);
+        this.c = new Controller(hikeDao, userDao, dtDao);
         this.gp = new GridPane();
         this.bp = new BorderPane();
     }

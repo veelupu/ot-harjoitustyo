@@ -3,9 +3,11 @@
  */
 package hikingdiary.ui;
 
+import hikingdiary.dao.DBDayTripDao;
 import hikingdiary.domain.Controller;
 import hikingdiary.dao.DBHikeDao;
 import hikingdiary.dao.DBUserDao;
+import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
 import hikingdiary.domain.Hike;
@@ -24,26 +26,28 @@ public class UserInterface {
     Controller c;
     HikeDao hikeDao;
     UserDao userDao;
+    DayTripDao dtDao;
 
     public UserInterface(Scanner reader, User user) {
         this.reader = reader;
         this.user = user;
         this.hikeDao = new DBHikeDao();
         this.userDao = new DBUserDao();
-        c = new Controller(this.hikeDao, this.userDao);
+        this.dtDao = new DBDayTripDao();
+        c = new Controller(this.hikeDao, this.userDao, this.dtDao);
     }
 
     public UserInterface(InputStream ips, User user) {
         this.user = user;
         this.hikeDao = new DBHikeDao();
-        c = new Controller(this.hikeDao, this.userDao);
+        c = new Controller(this.hikeDao, this.userDao, this.dtDao);
         this.reader = new Scanner(ips);
     }
 
     public UserInterface(User user) {
         this.hikeDao = new DBHikeDao();
         this.user = user;
-        c = new Controller(this.hikeDao, this.userDao);
+        c = new Controller(this.hikeDao, this.userDao, this.dtDao);
     }
 
     public void start() {

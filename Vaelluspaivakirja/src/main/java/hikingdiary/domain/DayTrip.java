@@ -5,6 +5,7 @@
 package hikingdiary.domain;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
@@ -12,39 +13,47 @@ import java.util.Date;
  *
  * @author veeralupunen
  */
-public class DayTrip {
+public class DayTrip implements Comparable<DayTrip> {
     
-    private Date date;
+    private LocalDate date;
     private int weekday;
     private String startingPoint;
     private String endingPoint;
-    private int walkDist;
-    private int walkTime;
-    private Meal meal;
+    private double walkDist;
+    private double walkTime;
     private String weather;
     
-    public DayTrip(Date date) {
+    public DayTrip(LocalDate date) {
         this.date = date;
     }
 
-    public DayTrip(Date date, String startingPoint, String endingPoint, int walkDist, int walkTime, Meal meal, String weather) {
+    public DayTrip(LocalDate date, String startingPoint, String endingPoint, double walkDist, double walkTime, String weather) {
         this.date = date;
         this.weekday = DayOfWeek.from((TemporalAccessor) this.date).getValue();
         this.startingPoint = startingPoint;
         this.endingPoint = endingPoint;
         this.walkDist = walkDist;
         this.walkTime = walkTime;
-        this.meal = meal;
         this.weather = weather;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public int getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(int weekday) {
+        this.weekday = weekday;
+    }
+    
+    
 
     public String getStartingPoint() {
         return startingPoint;
@@ -62,28 +71,20 @@ public class DayTrip {
         this.endingPoint = endingPoint;
     }
 
-    public int getWalkDist() {
+    public double getWalkDist() {
         return walkDist;
     }
 
-    public void setWalkDist(int walkDist) {
+    public void setWalkDist(double walkDist) {
         this.walkDist = walkDist;
     }
 
-    public int getWalkTime() {
+    public double getWalkTime() {
         return walkTime;
     }
 
-    public void setWalkTime(int walkTime) {
+    public void setWalkTime(double walkTime) {
         this.walkTime = walkTime;
-    }
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
     }
 
     public String getWeather() {
@@ -97,6 +98,17 @@ public class DayTrip {
     @Override
     public String toString() {
         return "" + weekday + " " + date + " " + walkDist + " km";
+    }
+
+    @Override
+    public int compareTo(DayTrip d) {
+        if (this.date.compareTo(date) > 0) {
+            return 1;
+        } else if (this.date.compareTo(date) < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
     
     
