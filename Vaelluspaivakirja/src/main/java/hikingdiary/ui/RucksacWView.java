@@ -46,6 +46,7 @@ public class RucksacWView {
             Button ready = new Button("Change!");
             style(ready);
             box.getChildren().addAll(lHike, weight, ready);
+            box.setAlignment(Pos.CENTER);
 
             ready.setOnAction((event) -> {
                 try {
@@ -70,6 +71,7 @@ public class RucksacWView {
             Button ready = new Button("Change!");
             style(ready);
             box.getChildren().addAll(lHike, weight, ready);
+            box.setAlignment(Pos.CENTER);
 
             ready.setOnAction((event) -> {
                 try {

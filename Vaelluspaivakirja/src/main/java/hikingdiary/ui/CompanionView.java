@@ -13,9 +13,13 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -24,37 +28,81 @@ import javafx.scene.layout.VBox;
 public class CompanionView {
 
     Controller c;
+    boolean visible;
 
     public CompanionView(Controller c) {
         this.c = c;
+        this.visible = false;
     }
 
     public GridPane getView(Hike hike) {
         GridPane gp = new GridPane();
 
+//        VBox box = new VBox();
+        
         Label title = new Label("Your company during " + hike.toString() + ":");
         Label companion = new Label(hike.formatCompanions());
         Label empty = new Label();
         Label add = new Label("Add more companions:");
 
         TextField newComp = new TextField();
-        Button ready = new Button("Ready to add a companion!");
+        Button ready = new Button("Ready\nto add!");
+        
+        ready.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 80px; "
+                + "-fx-min-height: 80px; "
+                + "-fx-max-width: 80px; "
+                + "-fx-max-height: 80px;");
+        
+//        box.getChildren().addAll(title, companion, empty, add, newComp, ready);
+//        box.setAlignment(Pos.CENTER);
+//        gp.add(box, 0, 0);
 
-        Button delete = new Button("Remove companion");
+        Button remove = new Button("Remove\ncompanion");
+        
+        remove.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 80px; "
+                + "-fx-min-height: 80px; "
+                + "-fx-max-width: 80px; "
+                + "-fx-max-height: 80px;");
+        
         VBox boxRm = new VBox();
         Label lCompToRm = new Label("Who you want to remove from this hike?");
-        TextField compToRm = new TextField();
-        Button remove = new Button("Delete");
-        boxRm.getChildren().addAll(lCompToRm, compToRm, remove);
+        lCompToRm.setPadding(new Insets(5, 5, 5, 5));
         
-        delete.setOnAction((event) -> {
+        TextField compToRm = new TextField();
+        Button delete = new Button("Delete");
+        
+        delete.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;");
+        
+        boxRm.getChildren().addAll(lCompToRm, compToRm, delete);
+        boxRm.setAlignment(Pos.CENTER);
+        
+        remove.setOnAction((event) -> {
+            if (visible) {
+                gp.getChildren().remove(boxRm);
+                visible = false;
+            } else {
             gp.add(boxRm, 0, 1);
+            visible = true;
+            }
         });
         
         Label succ = new Label("Companion removed succesfully!");
-        Label unsucc = new Label("Couldn't remove companion. Make sure you wrote the name correctly.");
+        BackgroundFill bgF = new BackgroundFill(Color.WHITE, new CornerRadii(1), null);
+        succ.setBackground(new Background(bgF));
         
-        remove.setOnAction((event) -> {
+        Label unsucc = new Label("Couldn't remove companion. Make sure you wrote the name correctly.");
+        unsucc.setBackground(new Background(bgF));
+        
+        delete.setOnAction((event) -> {
             String name = compToRm.getText();
             if (c.removeCompanion(hike, name)) {
                 boxRm.getChildren().add(succ);
@@ -66,8 +114,16 @@ public class CompanionView {
         });
         
         VBox box = new VBox();
-        box.getChildren().addAll(title, companion, empty, add, newComp, ready, delete);
-
+        box.getChildren().addAll(title, companion, empty, add, newComp, ready, remove);
+        box.setAlignment(Pos.CENTER);
+        
+        title.setPadding(new Insets(5, 5, 5, 5));
+        companion.setPadding(new Insets(5, 5, 5, 5));
+        add.setPadding(new Insets(5, 5, 5, 5));
+        newComp.setPadding(new Insets(5, 5, 5, 5));
+        ready.setPadding(new Insets(5, 5, 5, 5));
+        remove.setPadding(new Insets(5, 5, 5, 5));
+        
         Label done = new Label("Companion added!");
         ready.setOnAction((event) -> {
             Companion comp = new Companion(newComp.getText());
@@ -92,5 +148,9 @@ public class CompanionView {
 
         return gp;
     }
+    
+//    private void setVisible(boolean v) {
+//        this.visible = v;
+//    }
     
 }

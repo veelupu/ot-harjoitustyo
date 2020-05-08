@@ -169,6 +169,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     public void createItem(Hike hike, Item item) {
         try {
             int id = fetchItemId(item.getName());
+            item.setId(id);
 
             if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -184,9 +185,7 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 ps.close();
                 rs.close();
             }
-
             addHikeItem(hike, item);
-
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
             System.err.println("Item creation failed." + e.getMessage());
@@ -239,13 +238,13 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
     @Override
     public void createMeal(Hike hike, Meal meal) {
         try {
-            int id = fetchItemId(meal.getName());
+            int id = fetchMealId(meal.getName());
 
             if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, meal.getName());
                 ps.setInt(2, meal.getCategory());
-                ps.setString(3, meal.getIngredients().toString());
+                ps.setString(3, String.join(",", meal.getIngredients()));
 
                 int executeUpdate = ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
@@ -257,19 +256,19 @@ public class DBHikeDao implements HikeDao<Hike, Integer> {
                 rs.close();
             }
 
-            addHikeMeal(hike, meal);
+            addHikeMeal(hike, id);
 
         } catch (SQLException e) {
             //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Item creation failed." + e.getMessage());
+            System.err.println("Meal creation failed." + e.getMessage());
         }
     }
 
-    private void addHikeMeal(Hike hike, Meal meal) {
+    private void addHikeMeal(Hike hike, int id) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Me (h_id, m_id) VALUES (?, ?)");
             ps.setInt(1, hike.getId());
-            ps.setInt(2, meal.getId());
+            ps.setInt(2, id);
             int executeUpdate = ps.executeUpdate();
             System.out.println("Add in Hikes_Meal: " + executeUpdate);
             ps.close();

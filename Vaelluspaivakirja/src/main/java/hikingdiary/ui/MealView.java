@@ -42,10 +42,20 @@ public class MealView {
             ingredients.append(i + "\n");
         }
         Label ingr = new Label(ingredients.toString());
-        Button remove = new Button("Remove this meal from " + hike.toString());
+        
+        Button remove = new Button("Remove\nthis meal from\n" + hike.toString());
+        remove.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 100px; "
+                + "-fx-min-height: 100px; "
+                + "-fx-max-width: 100px; "
+                + "-fx-max-height: 100px;");
         
         VBox box = new VBox();
         box.getChildren().addAll(name, empty, ingr, remove);
+        box.setAlignment(Pos.CENTER);
+        remove.setPadding(new Insets(5, 5, 5, 5));
+        ingr.setPadding(new Insets(5, 5, 5, 5));
         
         remove.setOnAction((event) -> {
             if (c.removeMeal(hike, meal.getName())) {

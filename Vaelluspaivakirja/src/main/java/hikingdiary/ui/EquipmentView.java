@@ -50,10 +50,18 @@ public class EquipmentView {
         TextField tfWeight = new TextField();
         Label lCount = new Label("How many items of this kind you want to add?");
         TextField tfCount = new TextField();
-        Button ready = new Button("Ready to add an item to the equipment list!");
+        Button ready = new Button("Ready\nto add!");
+        
+        ready.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 75px; "
+                + "-fx-min-height: 75px; "
+                + "-fx-max-width: 75px; "
+                + "-fx-max-height: 75px;");
 
         VBox box = new VBox();
         box.getChildren().addAll(add, lName, tfName, lWeight, tfWeight, lCount, tfCount, ready);
+        box.setAlignment(Pos.CENTER);
 
         Label done = new Label("Item added!");
         Label exists = new Label("This hike already has this item.");

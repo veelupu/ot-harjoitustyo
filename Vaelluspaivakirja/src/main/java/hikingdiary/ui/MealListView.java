@@ -8,12 +8,17 @@ import hikingdiary.domain.Controller;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.Meal;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,36 +28,46 @@ import javafx.scene.layout.VBox;
  * @author veeralupunen
  */
 public class MealListView {
-    
+
     Controller c;
     GraphicalUserInterface ui;
-    VBox mealList;
+//    VBox mealList;
     int category;
-    
+    GridPane gp;
+    ListView<Button> mealButtons;
+    VBox upperBox;
+
     public MealListView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
         this.ui = ui;
-        this.mealList = new VBox();
+//        this.mealList = new VBox();
         this.category = 5;
     }
-    
+
     public Parent getView(Hike hike) {
-        GridPane gp = new GridPane();
+        gp = new GridPane();
 
         Label title = new Label("Your meals during " + hike.toString() + ":");
-
-        formatMealButtons(hike);
+        upperBox = new VBox();
+        upperBox.getChildren().add(title);
+        upperBox.setAlignment(Pos.CENTER);
         
+        
+        getMealButtons(hike);
+        
+//        gp.add(getMealButtons(hike), 0, 1);
+
+//        formatMealButtons(hike);
         Label empty = new Label("");
         Label add = new Label("Add more meals to the meal list!");
-        
+
         Label lName = new Label("Meal name:");
         TextField tfName = new TextField();
-        
+
         Label lCateg = new Label("In which category this meal belongs to?");
-        
+
         ArrayList<Button> buttons = new ArrayList<>();
-        
+
         Button b0 = new Button("Snacks");
         buttons.add(b0);
         Button b1 = new Button("Breakfast");
@@ -63,37 +78,52 @@ public class MealListView {
         buttons.add(b3);
         Button b4 = new Button("Dessert");
         buttons.add(b4);
-        Button b5 = new Button("Outside of all categories");
+        Button b5 = new Button("Other");
         buttons.add(b5);
-        
+
         for (int i = 0; i < buttons.size(); i++) {
             final int a = i;
             buttons.get(i).setOnAction((event) -> {
                 setCategory(a);
             });
+            buttons.get(i).setStyle("-fx-text-alignment: center;"
+                    + "-fx-background-radius: 5em; "
+                    + "-fx-min-width: 77px; "
+                    + "-fx-min-height: 77px; "
+                    + "-fx-max-width: 77px; "
+                    + "-fx-max-height: 77px;");
         }
-        
-        HBox buttons1 = new HBox();
-        HBox buttons2 = new HBox();
-        buttons1.getChildren().addAll(b0, b1, b2, b3);
-        buttons2.getChildren().addAll(b4, b5);
-        
-        Label lIngr = new Label("Ingredients needed for this meal\n(Separate ingredients with comma and whitespace))");
+
+        HBox bBox = new HBox();
+        //HBox buttons2 = new HBox();
+        bBox.getChildren().addAll(b0, b1, b2, b3, b4, b5);
+        //buttons2.getChildren().addAll(b3, b4, b5);
+        bBox.setAlignment(Pos.CENTER);
+        //buttons2.setAlignment(Pos.CENTER);
+
+        Label lIngr = new Label("Ingredients needed for this meal\n(Separate ingredients with comma and whitespace)");
         TextField tfIngr = new TextField();
-        Button ready = new Button("Ready to add an item to the meal list!");
-        
-        VBox box = new VBox();
-        box.getChildren().addAll(title, mealList, empty, add, lName, tfName, lCateg, buttons1, buttons2, lIngr, tfIngr, ready);
-        
+        Button ready = new Button("Ready\nto add!");
+        ready.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;");
+
+        VBox lowerBox = new VBox();
+        lowerBox.getChildren().addAll(add, lName, tfName, lCateg, bBox, lIngr, tfIngr, ready);
+        lowerBox.setAlignment(Pos.CENTER);
+
         Label done = new Label("Meal added!");
         Label exists = new Label("This hike already has this meal.");
         Label error = new Label("Oops, something went wrong.\nTry again!");
-        
+
         //Painetaan nappia ja ruoan luominen alkaa
         ready.setOnAction((event) -> {
             try {
                 Meal meal = new Meal(tfName.getText(), this.category);
-                
+
                 ArrayList<String> ingredients = new ArrayList<>();
                 if (tfIngr.getLength() != 0) {
                     String ingr = tfIngr.getText();
@@ -102,44 +132,46 @@ public class MealListView {
                         ingredients.add(pcs[i]);
                     }
                 }
-                
+
                 meal.setIngredients(ingredients);
-                
+
                 if (c.addMeal(hike, meal)) {
-                    formatMealButtons(hike);
+                    getMealButtons(hike);
                     tfName.clear();
                     tfIngr.clear();
-                    box.getChildren().add(done);
+                    lowerBox.getChildren().add(done);
                 } else {
-                    box.getChildren().add(exists);
+                    lowerBox.getChildren().add(exists);
                 }
             } catch (Exception e) {
-                box.getChildren().add(error);
+                lowerBox.getChildren().add(error);
                 //poista alla oleva ennen lopullista palautusta
                 System.out.println("Adding item failed: " + e.getMessage());
             }
         });
-        
+
         tfName.setOnMouseClicked((event) -> {
-            box.getChildren().remove(done);
-            box.getChildren().remove(exists);
-            box.getChildren().remove(error);
+            lowerBox.getChildren().remove(done);
+            lowerBox.getChildren().remove(exists);
+            lowerBox.getChildren().remove(error);
         });
-    
+
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
+        gp.setPrefWidth(300);
 
-        gp.add(box, 0, 0);
+        gp.add(upperBox, 0, 0);
+        gp.add(lowerBox, 0, 1);
 
         return gp;
     }
-    
+
     private void setCategory(int i) {
         this.category = i;
     }
-    
+
 //    private void updateMealsBox(Meal meal) {
 //        Button b = new Button(meal.toString());
 //            
@@ -149,15 +181,46 @@ public class MealListView {
 //            
 //            mealList.getChildren().add(b);
 //    }
-    
-    private void formatMealButtons(Hike hike) {
-        mealList.getChildren().clear();
+//    private void formatMealButtons(Hike hike) {
+//        mealList.getChildren().clear();
+//        for (Meal meal : hike.getMeals()) {
+//            Button b = new Button(meal.toString());
+//            b.setOnAction((event) -> {
+//                ui.bp.setCenter(new MealView(c, meal, hike).getView());
+//            });
+//            mealList.getChildren().add(b);
+//        }
+//    }
+    private void getMealButtons(Hike hike) {
+        upperBox.getChildren().remove(mealButtons);
+        mealButtons = new ListView<>();
+
+        ObservableList<Button> buttons = FXCollections.observableArrayList();
+
         for (Meal meal : hike.getMeals()) {
             Button b = new Button(meal.toString());
             b.setOnAction((event) -> {
                 ui.bp.setCenter(new MealView(c, meal, hike).getView());
             });
-            mealList.getChildren().add(b);
+            //style(b);
+            buttons.add(b);
         }
+        mealButtons.setItems(buttons);
+        //mealButtons.setPrefWidth(120);
+        mealButtons.setPrefHeight(120);
+        //mealButtons.setFixedCellSize(110);
+        //mealButtons.setOrientation(Orientation.HORIZONTAL);
+        mealButtons.setStyle("-fx-background-color: transparent;");
+        upperBox.getChildren().add(mealButtons);
+        upperBox.setPrefWidth(300);
+    }
+
+    private void style(Button b) {
+        b.setStyle("-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 100px; "
+                + "-fx-min-height: 100px; "
+                + "-fx-max-width: 100px; "
+                + "-fx-max-height: 100px;");
     }
 }
