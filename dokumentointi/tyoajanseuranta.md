@@ -18,5 +18,6 @@
 | 28.4.2020 | 4 | Yksittäisen aterian näkymä, yksikkötestejä
 |  | 5 | JavaDocin aloittaminen, käyttöohjeen aloittaminen, sovellusarkkitehtuurin päivittäminen |
 | 6.5.2020 | 4,5 | Lisää toiminnallisuutta: poistamis- ja muokkaamismahdollisuuksia |
+| 7.5.2020 | 7 | Ulkoasun hiominen, lisää muokkaamismahdollisuuksia |
 
-**Yhteensä** 68,5 tuntia
+**Yhteensä** 75,5 tuntia
