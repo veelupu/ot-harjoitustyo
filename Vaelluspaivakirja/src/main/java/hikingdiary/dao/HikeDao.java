@@ -16,20 +16,15 @@ import java.util.*;
  * @author veeralupunen
  */
 public interface HikeDao {
-    void createHike(Hike hike);
-    void createCompanion(Hike hike, Companion comp);
-    void createItem(Hike hike, Item item);
-    void createMeal(Hike hike, Meal meal);
+    int createHike(Hike hike);
+    int createCompanion(Hike hike, Companion comp);
+    int createItem(Hike hike, Item item);
+    int createMeal(Hike hike, Meal meal);
     Hike readHike(String name);
-//    Item readItem(String name);
-    void updateHike(Hike hike);
-//    void updateHikeItem(Hike hike, Item item);
-    void deleteHike(String name);
-    void deleteCompanion(Hike hike, String name);
+    int updateHike(Hike hike);
+    int deleteHike(String name);
+    int deleteCompanion(Hike hike, String name);
     void deleteMeal(Hike hike, String name);
     void deleteItem(Hike hike, String name);
     List<Hike> list(boolean upcoming);
-//    List<T> listPastHikes();
-//    List<T> listUpcomingHikes();
-//    Map<String, Item> listItems();
 }

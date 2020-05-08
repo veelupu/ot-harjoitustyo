@@ -42,12 +42,14 @@ public class Controller {
      * 
      * @see hikingdiary.dao.DBHikeDao#createHike(Hike)
      * 
-     * @return a new hike
+     * @return a new hike or null if creation failed
      */
     public Hike createNewHike(String name, int year, boolean upcoming) {
         Hike hike = new Hike(name, year, upcoming);
-        hikeDao.createHike(hike);
-        return hike;
+        if (hikeDao.createHike(hike) == 1) {
+            return hike;
+        }
+        return null;
     }
     
     /**
@@ -158,8 +160,9 @@ public class Controller {
      */
     public boolean addCompanion(Hike hike, Companion comp) {
         if (hike.addCompanion(comp.getName())) {
-            hikeDao.createCompanion(hike, comp);
-            return true;
+            if (hikeDao.createCompanion(hike, comp) > 0) {
+                return true;
+            }
         }
         return false;
     }
@@ -176,15 +179,19 @@ public class Controller {
     //kun daytripit haetaan jollekin hikelle, c lukee ne erikseen ja liittää hikeen tms.
     public boolean addDayTrip(Hike hike, DayTrip dt) {
         if (hike.addDayTrip(dt)) {
-            dtDao.create(hike.getId(), dt);
-            return true;
+            if (dtDao.create(hike.getId(), dt) == 1) {
+                return true;
+            }
         }
         return false;
     }
     
-    public void updateDayTrip(Hike hike, DayTrip dt) {
+    public boolean updateDayTrip(Hike hike, DayTrip dt) {
         hike.updateDayTrip(dt);
-        dtDao.update(hike.getId(), dt);
+        if (dtDao.update(dt) == 1) {
+            return true;
+        }
+        return false;
     }
     
     public boolean removeMeal(Hike hike, String name) {

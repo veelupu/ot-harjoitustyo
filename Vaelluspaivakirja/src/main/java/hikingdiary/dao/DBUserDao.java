@@ -85,19 +85,19 @@ public class DBUserDao implements UserDao<User> {
      * Method adds a new user into the User table in the database.
      * 
      * @param user user to be added
+     * @return 1 if creation succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void create(User user) {
+    public int create(User user) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO User (name) VALUES (?)");
             ps.setString(1, user.getName());
-
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Create user: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("User creation failed.");
-            System.err.println(e.getMessage());
+            return -1;
         }
     }
 
@@ -114,14 +114,11 @@ public class DBUserDao implements UserDao<User> {
             PreparedStatement ps = connection.prepareStatement("UPDATE User SET name=? WHERE name=?");
             ps.setString(1, newName);
             ps.setString(2, user.getName());
-
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Update user: " + executeUpdate);
+
             ps.close();
             return true;
         } catch (SQLException e) {
-            System.err.println("Username update failed.");
-            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -137,14 +134,11 @@ public class DBUserDao implements UserDao<User> {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM User WHERE name=?");
             ps.setString(1, user.getName());
-
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Delete user: " + executeUpdate);
+
             ps.close();
             return true;
         } catch (SQLException e) {
-            System.err.println("User deletion failed.");
-            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -152,7 +146,7 @@ public class DBUserDao implements UserDao<User> {
     /**
      * Method gets the user from the database.
      * 
-     * @return user 
+     * @return user or null if an error occurred
      */
     @Override
     public User read() {
@@ -165,8 +159,6 @@ public class DBUserDao implements UserDao<User> {
             rs.close();
             return new User(name);
         } catch (SQLException e) {
-            System.err.println("User get failed.");
-            System.err.println(e.getMessage());
             return null;
         }
     }

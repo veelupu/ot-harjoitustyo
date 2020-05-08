@@ -5,7 +5,6 @@
 package hikingdiary.dao;
 
 import hikingdiary.domain.DayTrip;
-import hikingdiary.domain.Hike;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * Class responsible for database connection for the day trip related data
+ * 
  * @author veeralupunen
  */
 public class DBDayTripDao implements DayTripDao {
@@ -80,8 +80,15 @@ public class DBDayTripDao implements DayTripDao {
         s.execute("COMMIT");
     }
 
+    /**
+     * Method adds a new day trip into the DayTrips table in the database.
+     * 
+     * @param hikeId the id of the hike this day trip belongs to
+     * @param dt the day trip to add into the database
+     * @return 1 if creation succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void create(int hikeId, DayTrip dt) {
+    public int create(int hikeId, DayTrip dt) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO DayTrips (hikeId, date, start, end, dist, hours, weather) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, hikeId);
@@ -98,16 +105,22 @@ public class DBDayTripDao implements DayTripDao {
             int id = rs.getInt(1);
             dt.setId(id);
 
-            System.out.println("Create day trip: " + executeUpdate);
             ps.close();
             rs.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Day trip creation failed." + e.getMessage());
+            return -1;
         }
     }
 
+    /**
+     * Method gets the day trip with the given date from the database.
+     * 
+     * @param date date of the day trip
+     * @return day trip with the given date or null if there is no day trips for this date or an exception occurred
+     */
     @Override
-    public DayTrip read(LocalDate date) throws SQLException {
+    public DayTrip read(LocalDate date) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM DayTrips WHERE date = ?");
             ps.setString(1, date.toString());
@@ -120,39 +133,61 @@ public class DBDayTripDao implements DayTripDao {
             rs.close();
             return dt;
         } catch (SQLException e) {
-            System.err.println("DayTrip get failed.");
-            System.err.println(e.getMessage());
+            return null;
         }
-        return null;
     }
 
+    /**
+     * Method updates the given day trip in the database.
+     * 
+     * @param dt the day trip to update
+     * @return 1 if update succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void update(int hikeId, DayTrip dt) {
+    public int update(DayTrip dt) {
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE DayTrips SET start=?, end=?, dist=?, hours=?, weather=? WHERE hikeId=? AND date=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE DayTrips SET start=?, end=?, dist=?, hours=?, weather=? WHERE date=?");
             ps.setString(1, dt.getStartingPoint());
             ps.setString(2, dt.getEndingPoint());
             ps.setDouble(3, dt.getWalkDist());
             ps.setDouble(4, dt.getWalkTime());
             ps.setString(5, dt.getWeather());
-            ps.setInt(6, hikeId);
-            ps.setString(7, dt.getDate().toString());
+            ps.setString(6, dt.getDate().toString());
 
             int executeUpdate = ps.executeUpdate();
-
-            System.out.println("Update day trip: " + executeUpdate);
             ps.close();
-
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Day trip update failed." + e.getMessage());
+            return -1;
         }
     }
 
+    /**
+     * Method removes the given day trip from the database.
+     * 
+     * @param dt the day trip to remove
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void delete(Object key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int delete(DayTrip dt) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM DayTrip WHERE date = ?");
+            ps.setString(1, dt.getDate().toString());
+            
+            int executeUpdate = ps.executeUpdate();
+            ps.close();
+            return executeUpdate;
+        } catch (SQLException e) {
+            return -1;
+        }
     }
 
+    /**
+     * Method forms a list of day trips belonging to the given hike.
+     * 
+     * @param hikeId id of the hike day trips are asked for
+     * @return list of day trips or null if there is no day trips for this date or an exception occurred
+     */
     @Override
     public List list(int hikeId) {
         ArrayList<DayTrip> dayTrips = new ArrayList<>();
@@ -162,24 +197,16 @@ public class DBDayTripDao implements DayTripDao {
             ps.setInt(1, hikeId);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-//                ArrayList<String> date = new ArrayList<>(Arrays.asList(rs.getString("date").split("-")));
-//                int year = Integer.valueOf(date.get(0));
-//                int month = Integer.valueOf(date.get(1));
-//                int day = Integer.valueOf(date.get(2));
-//                LocalDate lDate = LocalDate.of(year, month, day);
-//                LocalDate lDate = LocalDate.parse(rs.getString("date"));
-                
+            while (rs.next()) {                
                 DayTrip dt = new DayTrip(LocalDate.parse(rs.getString("date")), rs.getString("start"), rs.getString("end"), rs.getDouble("dist"), rs.getDouble("hours"), rs.getString("weather"));
                 dt.setId(rs.getInt("id"));
                 dayTrips.add(dt);
             }
             ps.close();
             rs.close();
+            return dayTrips;
         } catch (SQLException e) {
-            System.err.println("Listing day trips failed." + e.getMessage());
+            return null;
         }
-        return dayTrips;
     }
-    
 }

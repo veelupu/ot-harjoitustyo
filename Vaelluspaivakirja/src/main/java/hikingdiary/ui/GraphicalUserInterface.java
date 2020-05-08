@@ -163,10 +163,10 @@ public class GraphicalUserInterface extends Application {
         for (Button b: buttons) {
             box.getChildren().add(b);
             b.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 80px; "
-                + "-fx-min-height: 80px; "
-                + "-fx-max-width: 80px; "
+                + "-fx-background-radius: 5em;"
+                + "-fx-min-width: 80px;"
+                + "-fx-min-height: 80px;"
+                + "-fx-max-width: 80px;"
                 + "-fx-max-height: 80px;");
         }
         

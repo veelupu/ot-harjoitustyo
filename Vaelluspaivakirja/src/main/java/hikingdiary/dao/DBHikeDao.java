@@ -82,12 +82,13 @@ public class DBHikeDao implements HikeDao {
     }
 
     /**
-     * Method adds a new hike into the Hike table in the database.
+     * Method adds a new hike into the Hikes table in the database.
      * 
-     * @param hike hike to be created
+     * @param hike hike to be added
+     * @return 1 if creation succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void createHike(Hike hike) {
+    public int createHike(Hike hike) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hikes (name, year, upcoming) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, hike.getName());
@@ -100,102 +101,109 @@ public class DBHikeDao implements HikeDao {
             int id = rs.getInt(1);
             hike.setId(id);
 
-            System.out.println("Create hike: " + executeUpdate);
             ps.close();
             rs.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Hike creation failed." + e.getMessage());
+            return -1;
         }
-        //connection.close(); //tee tälle oma metodi ja kutsu sitä kun lopetetaan
     }
 
     /**
-     * Method checks if the given companion already exists in the database. 
-     * If not, it adds the companion into the Companion table.
-     * Finally method adds a connection between the given hike and companion 
-     * into the Hi_Co table.
+     * Method checks if the given companion already exists in the database.If not, it adds the companion into the Companion table.
+     * Lastly method adds a connection between the given hike and companion 
+ into the Hi_Co table.
      * 
      * @param hike hike to add the companion for
      * @param comp companion to be added in the database and/or for the hike
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void createCompanion(Hike hike, Companion comp) {
+    public int createCompanion(Hike hike, Companion comp) {
         try {
+            int executeUpdate = 0;
             int id = fetchCompanionId(comp.getName());
-            if (id == 0) {
+            
+            if (id == -1) {
+                return -1;
+            } else if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Companion (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, comp.getName());
 
-                int executeUpdate = ps.executeUpdate();
+                executeUpdate += ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
                 id = rs.getInt(1);
                 comp.setId(id);
-                System.out.println("Create companion: " + executeUpdate);
+                
                 ps.close();
                 rs.close();
             }
-            addHikeCompanion(hike, id);
+            executeUpdate += addHikeCompanion(hike, id);
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Companion creation failed." + e.getMessage());
+            return -1;
         }
     }
 
-    private void addHikeCompanion(Hike hike, int id) {
+    private int addHikeCompanion(Hike hike, int id) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Co (h_id, c_id) VALUES (?, ?)");
             ps.setInt(1, hike.getId());
             ps.setInt(2, id);
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Adding Hike_Companion: " + executeUpdate);
+            
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Adding Hike_Companion failed." + e.getMessage());
+            return -1;
         }
     }
     
     /**
-     * Method checks if the given item already exists in the database. 
-     * If not, it adds the item into the Item table.
+     * Method checks if the given item already exists in the database.If not, it adds the item into the Item table.
      * Finally method adds a connection between the given hike and item 
-     * into the Hi_It table.
+ into the Hi_It table.
      * 
      * @param hike hike to add the item for
      * @param item item to be added in the database and/or for the hike
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void createItem(Hike hike, Item item) {
+    public int createItem(Hike hike, Item item) {
         try {
             int id = fetchItemId(item.getName());
             item.setId(id);
+            int executeUpdate = 0;
 
-            if (id == 0) {
+            if (id == -1) {
+                return -1;
+            } else if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Item (name, weight) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, item.getName());
                 ps.setDouble(2, item.getWeight());
 
-                int executeUpdate1 = ps.executeUpdate();
+                executeUpdate += ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
                 id = rs.getInt(1);
                 item.setId(id);
-                System.out.println("Create item: " + executeUpdate1);
+
                 ps.close();
                 rs.close();
+                
             }
-            addHikeItem(hike, item);
+            executeUpdate += addHikeItem(hike, item);
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Item creation failed." + e.getMessage());
+            return -1;
         }
     }
 
-    private void addHikeItem(Hike hike, Item item) {
+    private int addHikeItem(Hike hike, Item item) {
         if (fetchEquipment(hike).containsKey(item.getName())) {
-            addCountHikeItem(hike, item);
-            return;
+            int executeUpdate = addCountHikeItem(hike, item);
+            return executeUpdate;
         }
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_It (h_id, i_id, count) VALUES (?, ?, ?)");
@@ -203,87 +211,88 @@ public class DBHikeDao implements HikeDao {
             ps.setInt(2, item.getId());
             ps.setInt(3, item.getCount());
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Add in Hikes_Item: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Hikes_Item add failed." + e.getMessage());
+            return -1;
         }
     }
     
-    private void addCountHikeItem(Hike hike, Item item) {
+    private int addCountHikeItem(Hike hike, Item item) {
         try {
                 PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count = ? WHERE h_id = ? AND i_id = ?");
                 ps.setInt(1, item.getCount());
                 ps.setInt(2, hike.getId());
                 ps.setInt(3, item.getId());
                 int executeUpdate = ps.executeUpdate();
-                System.out.println("Update in Hikes_Item: " + executeUpdate);
+
                 ps.close();
+                return executeUpdate;
             } catch (SQLException e) {
-                //poista tämä ennen lopullista palautusta / muuta muuksi
-                System.err.println("Hikes_Item update failed." + e.getMessage());
+                return -1;
             }
     }
 
     /**
-     * Method checks if the given meal already exists in the database.
-     * If not, it adds the meal into the Meal table.
+     * Method checks if the given meal already exists in the database.If not, it adds the meal into the Meal table.
      * Finally method adds a connection between the given hike and meal 
-     * into the Hi_Co table.
+ into the Hi_Co table.
      * 
      * @param hike hike to add the meal for
      * @param meal meal to be added in the database and/or for the hike
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void createMeal(Hike hike, Meal meal) {
+    public int createMeal(Hike hike, Meal meal) {
         try {
             int id = fetchMealId(meal.getName());
+            int executeUpdate = 0;
 
-            if (id == 0) {
+            if (id == -1) {
+                return -1;
+            } else if (id == 0) {
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, meal.getName());
                 ps.setInt(2, meal.getCategory());
                 ps.setString(3, String.join(",", meal.getIngredients()));
 
-                int executeUpdate = ps.executeUpdate();
+                executeUpdate += ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
                 id = rs.getInt(1);
                 meal.setId(id);
-                System.out.println("Create meal: " + executeUpdate);
+
                 ps.close();
-                rs.close();
+                rs.close();  
             }
-
-            addHikeMeal(hike, id);
-
+            executeUpdate += addHikeMeal(hike, id);
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Meal creation failed." + e.getMessage());
+            return -1;
         }
     }
 
-    private void addHikeMeal(Hike hike, int id) {
+    private int addHikeMeal(Hike hike, int id) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Hi_Me (h_id, m_id) VALUES (?, ?)");
             ps.setInt(1, hike.getId());
             ps.setInt(2, id);
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Add in Hikes_Meal: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            //poista tämä ennen lopullista palautusta / muuta muuksi
-            System.err.println("Hikes_Meal add failed." + e.getMessage());
+            return -1;
         }
     }
 
     /**
-     * Method gets hike with given name and all its companions, items and meals
+     * Method gets the hike with the given name and all its companions, items and meals
      * from the database.
      * 
      * @param name name of the hike
-     * @return hike with its companion, items and meals
+     * @return hike with its companion, items and meals or null if an error occurred
      */
     @Override
     public Hike readHike(String name) {
@@ -306,10 +315,8 @@ public class DBHikeDao implements HikeDao {
             rs.close();
             return hike;
         } catch (SQLException e) {
-            System.err.println("Hike get failed.");
-            System.err.println(e.getMessage());
+            return null;
         }
-        return null;
     }
 
     private int fetchHikeId(String name) {
@@ -325,8 +332,7 @@ public class DBHikeDao implements HikeDao {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            //poista tai muuta nämä ennen lopullista palautusta
-            System.err.println("Hike id get failed." + e.getMessage());
+            return -1;
         }
         return 0;
     }
@@ -338,14 +344,14 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                ps.close();
+                rs.close();
                 return rs.getInt("id");
-            }
-            
+            } 
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            //poista tai muuta nämä ennen lopullista palautusta
-            System.err.println("Companion id get failed." + e.getMessage());
+            return -1;
         }
         return 0;
     }
@@ -357,13 +363,14 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                ps.close();
+                rs.close();
                 return rs.getInt("id");
             }
-            
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Item id get failed." + e.getMessage());
+            return -1;
         }
         return 0;
     }
@@ -375,13 +382,15 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                ps.close();
+                rs.close();
                 return rs.getInt("id");
             }
             
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.err.println("Meal id get failed." + e.getMessage());
+            return -1;
         }
         return 0;
     }
@@ -402,10 +411,8 @@ public class DBHikeDao implements HikeDao {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            //muuta tämä ennen lopullista palautusta
-            System.err.println("Companions get failed." + e.getMessage());
+            return null;
         }
-
         Collections.sort(companion);
         return companion;
     }
@@ -431,14 +438,14 @@ public class DBHikeDao implements HikeDao {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            //muuta tämä ennen lopullista palautusta
-            System.err.println("Equipment get failed." + e.getMessage());
+            return null;
         }
         return equipment;
     }
 
     private HashMap<String, Meal> fetchMeals(Hike hike) {
         HashMap<String, Meal> meals = new HashMap<>();
+        
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT M.id, M.name, category, ingr FROM Hikes H JOIN Hi_Me ON H.id = h_id JOIN Meal M ON m_id = M.id WHERE h_id = ?");
             ps.setInt(1, hike.getId());
@@ -452,8 +459,7 @@ public class DBHikeDao implements HikeDao {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            //muuta tämä ennen lopullista palautusta
-            System.err.println("Meals get failed." + e.getMessage());
+            return null;
         }
         return meals;
     }
@@ -472,8 +478,8 @@ public class DBHikeDao implements HikeDao {
 
     private ArrayList<String> formatIngredients(String ingr) {
         ArrayList<String> ingredients = new ArrayList<>();
+        
         if (ingr.length() != 0) {
-
             String[] pcs = ingr.split(", ");
             for (int i = 0; i < pcs.length; i++) {
                 ingredients.add(pcs[i]);
@@ -486,9 +492,10 @@ public class DBHikeDao implements HikeDao {
      * Method updates the given hikes data into the database.
      * 
      * @param hike hike to update
+     * @return 1 if update succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void updateHike(Hike hike) {
+    public int updateHike(Hike hike) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE Hikes SET name=?, year=?, upcoming=?, rucksacBeg=?, rucksacEnd=?, locationStart=?, locationEnd=? WHERE id=?");
             ps.setString(1, hike.getName());
@@ -502,11 +509,10 @@ public class DBHikeDao implements HikeDao {
 
             int executeUpdate = ps.executeUpdate();
 
-            System.out.println("Update hike: " + executeUpdate);
             ps.close();
-
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Hike update failed." + e.getMessage());
+            return -1;
         }
     }
 
@@ -514,72 +520,105 @@ public class DBHikeDao implements HikeDao {
      * Method removes the given hike from the database.
      * 
      * @param name the name for the hike to be removed
-     * @throws SQLException insert description here
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
      */
     @Override
-    public void deleteHike(String name) {
+    public int deleteHike(String name) {
         try {
             int id = fetchHikeId(name);
+            if (id == 0) {
+                return 0;
+            }
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hikes WHERE id = ?");
-            ps.setInt(1, id);
-            
+            ps.setInt(1, id);            
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Delete hike: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Deleting hike failed." + e.getMessage());
+            return -1;
         }
     }
     
+    /**
+     * Method removes the given companion from the database.
+     * 
+     * @param hike hike to remove the companion from
+     * @param name name of the companion to be deleted
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void deleteCompanion(Hike hike, String name) {
+    public int deleteCompanion(Hike hike, String name) {
         try {
-            int idC = fetchCompanionId(name);
+            int id = fetchCompanionId(name);
+            if (id == 0) {
+                return -1;
+            }
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_Co WHERE c_id = ? AND h_id = ?");
-            ps.setInt(1, idC);
-            ps.setInt(2, hike.getId());
-            
+            ps.setInt(1, id);
+            ps.setInt(2, hike.getId());            
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Delete companion: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Deleting companion failed." + e.getMessage());
+            return -1;
         }
     }
     
+    /**
+     * Method removes the given meal from the database.
+     * 
+     * @param hike hike to remove the meal from
+     * @param name name of the meal to be deleted
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void deleteMeal(Hike hike, String name) {
+    public int deleteMeal(Hike hike, String name) {
         try {
-            int idM = fetchMealId(name);
+            int id = fetchMealId(name);
+            if (id == 0) {
+                return -1;
+            }
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_Me WHERE m_id = ? AND h_id = ?");
-            ps.setInt(1, idM);
+            ps.setInt(1, id);
             ps.setInt(2, hike.getId());
-            
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Delete meal: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Deleting meal failed." + e.getMessage());
+            return -1;
         }
     }
     
+    /**
+     * Method removes the given item from the database.
+     * 
+     * @param hike hike to remove the item from
+     * @param name name of the item to be deleted
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     */
     @Override
-    public void deleteItem(Hike hike, String name) {
+    public int deleteItem(Hike hike, String name) {
         try {
-            int idI = fetchItemId(name);
+            int id = fetchItemId(name);
+            if (id == 0) {
+                return -1;
+            }
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_It WHERE i_id = ? AND h_id = ?");
-            ps.setInt(1, idI);
-            ps.setInt(2, hike.getId());
-            
+            ps.setInt(1, id);
+            ps.setInt(2, hike.getId());            
             int executeUpdate = ps.executeUpdate();
-            System.out.println("Delete item: " + executeUpdate);
+
             ps.close();
+            return executeUpdate;
         } catch (SQLException e) {
-            System.err.println("Deleting item failed." + e.getMessage());
+            return -1;
         }
     }
 
@@ -613,9 +652,9 @@ public class DBHikeDao implements HikeDao {
             }
             ps.close();
             rs.close();
+            return hikes;
         } catch (SQLException e) {
-            System.err.println("Listing hikes failed." + e.getMessage());
+            return null;
         }
-        return hikes;
     }
 }

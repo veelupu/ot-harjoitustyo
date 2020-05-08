@@ -13,11 +13,11 @@ import java.util.*;
  *
  * @author veeralupunen
  */
-public interface DayTripDao<T, K> {
-    void create(int hikeId, DayTrip dt);
-    T read(LocalDate date) throws SQLException;
-    void update(int hikeId, DayTrip dt);
-    void delete(K key) throws SQLException;
-    List<T> list(int hikeId);
+public interface DayTripDao {
+    int create(int hikeId, DayTrip dt);
+    DayTrip read(LocalDate date);
+    int update(DayTrip dt);
+    int delete(DayTrip dt);
+    List<DayTrip> list(int hikeId);
     
 }
