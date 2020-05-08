@@ -19,5 +19,6 @@
 |  | 5 | JavaDocin aloittaminen, käyttöohjeen aloittaminen, sovellusarkkitehtuurin päivittäminen |
 | 6.5.2020 | 4,5 | Lisää toiminnallisuutta: poistamis- ja muokkaamismahdollisuuksia |
 | 7.5.2020 | 7 | Ulkoasun hiominen, lisää muokkaamismahdollisuuksia |
+| 8.5.2020 | 9 | Ulkoasun hiomista, lisää toiminnallisuutta, luokkien siistimistä |
 
-**Yhteensä** 75,5 tuntia
+**Yhteensä** 84,5 tuntia
