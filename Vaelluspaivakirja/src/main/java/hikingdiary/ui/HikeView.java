@@ -68,7 +68,11 @@ public class HikeView {
         });
         
         bDayTrips.setOnAction((event) -> {
-            ui.bp.setCenter(new DayTripView(c, ui).getView(hike));
+            ui.bp.setCenter(new DayTripListView(c, ui).getView(hike));
+        });
+        
+        bJourney.setOnAction((event) -> {
+            ui.bp.setCenter(new DayTripListView(c, ui).getView(hike));
         });
         
         gp.add(lName, 0, 0);

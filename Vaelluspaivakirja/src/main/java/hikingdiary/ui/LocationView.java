@@ -35,12 +35,12 @@ public class LocationView {
         title.setPadding(new Insets(5, 5, 5, 5));
         Label lStart = new Label("Where " + hike.toString() + " begings from?");
         lStart.setPadding(new Insets(5, 5, 5, 5));
-        TextField tfStart = new TextField();
+        TextField tfStart = new TextField(hike.getLocationStart());
         tfStart.setPadding(new Insets(5, 5, 5, 5));
         
         Label lEnd = new Label("Where " + hike.toString() + " ends to?");
         lEnd.setPadding(new Insets(5, 5, 5, 5));
-        TextField tfEnd = new TextField();
+        TextField tfEnd = new TextField(hike.getLocationEnd());
         tfEnd.setPadding(new Insets(5, 5, 5, 5));
         
         Button ready = new Button("Ready!");
@@ -66,8 +66,6 @@ public class LocationView {
             hike.setLocationEnd(tfEnd.getText());
             c.updateHike(hike);
             box.getChildren().add(done);
-            tfStart.clear();
-            tfEnd.clear();
         });
         
         tfStart.setOnAction((event) -> {

@@ -8,19 +8,14 @@ import hikingdiary.domain.Controller;
 import hikingdiary.domain.DayTrip;
 import hikingdiary.domain.Hike;
 import java.time.LocalDate;
-import java.util.Date;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -30,92 +25,128 @@ import javafx.scene.layout.VBox;
 public class DayTripView {
 
     Controller c;
-    GraphicalUserInterface ui;
-    ListView<Button> dayButtons;
-    VBox upperBox;
-    DayTrip dtToModify;
-//    VBox lowerBox;
 
-    public DayTripView(Controller c, GraphicalUserInterface ui) {
+    public DayTripView(Controller c) {
         this.c = c;
-        this.ui = ui;
-        upperBox = new VBox();
-//        lowerBox = new VBox();
     }
-    
-    public Parent getView(Hike hike) {
+
+    public Parent getCreationView(Hike hike) {
+        return formatContent(hike, null, false, "", "", 0, 0, "");
+    }
+
+    public Parent getModifyView(Hike hike, DayTrip td) {
+        return formatContent(hike, td.getDate(), true, td.getStartingPoint(), td.getEndingPoint(), td.getWalkDist(), td.getWalkTime(), td.getWeather());
+    }
+
+    private GridPane formatContent(Hike hike, LocalDate date, boolean disable, String start, String end, double dist, double hours, String weather) {
         GridPane gp = new GridPane();
-        
-        Label title = new Label("Day trips during " + hike.toString());
-        title.setPadding(new Insets(10, 10, 10, 10));
-        
-        upperBox.setAlignment(Pos.CENTER);
-        upperBox.getChildren().addAll(title);
-//        lowerBox.setAlignment(Pos.CENTER);
-        formatDayButtons(hike);
-        
-        Button add = new Button("Add\nmore day\ntrips!");
-        Button modify = new Button("Modify\nthe day\ntrip");
-        style(add);
-        style(modify);
-        
-        add.setOnAction((event) -> {
-            ui.bp.setCenter(new CreateDayTripView(c).getCreationView(hike));
+
+        VBox box = new VBox();
+        box.setAlignment(Pos.CENTER);
+
+        Label lDate = new Label("Add a new day trip for " + hike.toString() + ":");
+        DatePicker dateP = new DatePicker(date);
+        dateP.setDisable(disable);
+
+        Label lStart = new Label("My day trip starts here:");
+        TextField tfStart = new TextField(start);
+
+        Label lEnd = new Label("My day trip ends here:");
+        TextField tfEnd = new TextField(end);
+
+        Label lDist = new Label("Kilometres of the day:");
+        TextField tfDist = new TextField("" + dist);
+
+        Label lTime = new Label("Walking hours of the day:");
+        TextField tfHours = new TextField("" + hours);
+
+        Label lWeather = new Label("The weather was like:");
+        TextField tfWeather = new TextField(weather);
+
+        Button ready = new Button("Ready!");
+
+        ready.setStyle(
+                "-fx-text-alignment: center;"
+                + "-fx-background-radius: 5em; "
+                + "-fx-min-width: 70px; "
+                + "-fx-min-height: 70px; "
+                + "-fx-max-width: 70px; "
+                + "-fx-max-height: 70px;"
+        );
+
+        box.getChildren().addAll(lDate, dateP, lStart, tfStart, lEnd, tfEnd, lDist, tfDist, lTime, tfHours, lWeather, tfWeather, ready);
+
+        Label done = new Label("Operation succeeded!");
+        Label exists = new Label("This hike has this day trip already.");
+        Label error = new Label("Oops, something went wrong. Did you fill all the textfields correctly?");
+
+        ready.setOnAction((event) -> {
+            try {
+                LocalDate d = dateP.getValue();
+                String startV = tfStart.getText();
+                String endV = tfEnd.getText();
+                double distV = Double.valueOf(tfDist.getText());
+                double hoursV = Double.valueOf(tfHours.getText());
+                String weatherV = tfWeather.getText();
+
+                DayTrip dt = new DayTrip(d, startV, endV, distV, hoursV, weatherV);
+
+                if (disable) {
+                    if (c.updateDayTrip(hike, dt)) {
+                        box.getChildren().add(done);
+                        tfStart.clear();
+                        tfEnd.clear();
+                        tfDist.clear();
+                        tfHours.clear();
+                        tfWeather.clear();
+                    } else {
+                        box.getChildren().add(exists);
+                    }
+                } else {
+                    if (c.addDayTrip(hike, dt)) {
+                        box.getChildren().add(done);
+                        tfStart.clear();
+                        tfEnd.clear();
+                        tfDist.clear();
+                        tfHours.clear();
+                        tfWeather.clear();
+                    } else {
+                        box.getChildren().add(exists);
+                    }
+                }
+
+            } catch (Exception e) {
+                box.getChildren().add(error);
+            }
         });
-        
-        modify.setOnAction((event) -> {
-            ui.bp.setCenter(new CreateDayTripView(c).getModifyView(hike, dtToModify));
+
+        tfStart.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
         });
-        
-        HBox boxB = new HBox();
-        boxB.getChildren().addAll(add, modify);
-        boxB.setAlignment(Pos.CENTER);
-        upperBox.getChildren().add(boxB);
-        
-        gp.add(upperBox, 0, 0);
-//        gp.add(lowerBox, 0, 0);
+
+        tfEnd.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        tfDist.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        tfHours.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        tfWeather.setOnMouseClicked((event) -> {
+            box.getChildren().removeAll(done, exists, error);
+        });
+
+        gp.add(box, 0, 0);
+
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
         gp.setPadding(new Insets(5, 5, 5, 5));
-        
+
         return gp;
-    }
-    
-    private void formatDayButtons(Hike hike) {
-        upperBox.getChildren().remove(dayButtons);
-        dayButtons = new ListView<>();
-
-        ObservableList<Button> buttons = FXCollections.observableArrayList();
-        
-        for (DayTrip dt : hike.getDayTrips()) {            
-            Button b = new Button(dt.toString());
-            
-            b.setOnAction((event) -> {
-                dtToModify = dt;
-            });
-            
-            buttons.add(b);
-        }
-        
-        dayButtons.setItems(buttons);
-        dayButtons.setPrefWidth(250);
-        dayButtons.setPrefHeight(290);
-        dayButtons.setFixedCellSize(30);
-        dayButtons.setStyle("-fx-background-color: transparent;");
-        dayButtons.setPadding(Insets.EMPTY);
-
-        upperBox.getChildren().add(dayButtons);
-    }
-    
-    private void style(Button b) {
-        b.setStyle(
-                "-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em; "
-                + "-fx-min-width: 80px; "
-                + "-fx-min-height: 80px; "
-                + "-fx-max-width: 80px; "
-                + "-fx-max-height: 80px;"
-        );
     }
 }

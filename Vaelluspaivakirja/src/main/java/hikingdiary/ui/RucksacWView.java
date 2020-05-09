@@ -53,16 +53,15 @@ public class RucksacWView {
                     double w = Double.valueOf(weight.getText());
                     hike.setRucksackWeightBeg(w);
                     c.updateHike(hike);
-                    gp.add(done, 0, 1);
+                    box.getChildren().add(done);
                 } catch (Exception e) {
-                    gp.add(error, 0, 1);
+                    box.getChildren().add(error);
                 }
 
             });
             
             weight.setOnMouseClicked((event) -> {
-                weight.clear();
-                gp.getChildren().removeAll(done, error);
+                box.getChildren().removeAll(done, error);
             });
 
         } else {
@@ -78,16 +77,15 @@ public class RucksacWView {
                     double w = Double.valueOf(weight.getText());
                     hike.setRucksackWeightEnd(w);
                     c.updateHike(hike);
-                    gp.add(done, 0, 1);
+                    box.getChildren().add(done);
                 } catch (Exception e) {
-                    gp.add(error, 0, 1);
+                    box.getChildren().add(error);
                 }
 
             });
             
             weight.setOnMouseClicked((event) -> {
-                weight.clear();
-                gp.getChildren().removeAll(done, error);
+                box.getChildren().removeAll(done, error);
             });
         }
 

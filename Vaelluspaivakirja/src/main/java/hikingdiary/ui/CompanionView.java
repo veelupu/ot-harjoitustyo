@@ -35,10 +35,8 @@ public class CompanionView {
         this.visible = false;
     }
 
-    public GridPane getView(Hike hike) {
+    public Parent getView(Hike hike) {
         GridPane gp = new GridPane();
-
-//        VBox box = new VBox();
         
         Label title = new Label("Your company during " + hike.toString() + ":");
         Label companion = new Label(hike.formatCompanions());
@@ -54,10 +52,6 @@ public class CompanionView {
                 + "-fx-min-height: 80px; "
                 + "-fx-max-width: 80px; "
                 + "-fx-max-height: 80px;");
-        
-//        box.getChildren().addAll(title, companion, empty, add, newComp, ready);
-//        box.setAlignment(Pos.CENTER);
-//        gp.add(box, 0, 0);
 
         Button remove = new Button("Remove\ncompanion");
         
@@ -126,6 +120,9 @@ public class CompanionView {
         
         Label done = new Label("Companion added!");
         ready.setOnAction((event) -> {
+            if (newComp.getText().length() < 1) {
+                return;
+            }
             Companion comp = new Companion(newComp.getText());
             if (!c.addCompanion(hike, comp)) {
                 done.setText("This hike has this company already.");
@@ -148,9 +145,5 @@ public class CompanionView {
 
         return gp;
     }
-    
-//    private void setVisible(boolean v) {
-//        this.visible = v;
-//    }
     
 }

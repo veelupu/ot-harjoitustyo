@@ -327,8 +327,8 @@ public class Hike implements Comparable<Hike> {
      * 
      * @return total kilometres of the hike
      */
-    public int getKilometres() {
-        int total = 0;
+    public double getKilometres() {
+        double total = 0;
         for (DayTrip dayTrip : this.dayTrips.values()) {
             total += dayTrip.getWalkDist();
         }
