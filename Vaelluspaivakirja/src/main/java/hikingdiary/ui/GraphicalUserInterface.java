@@ -11,33 +11,24 @@ import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
-import hikingdiary.domain.Hike;
-import hikingdiary.domain.User;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -46,7 +37,6 @@ import javafx.scene.layout.VBox;
  */
 public class GraphicalUserInterface extends Application {
 
-    //User user;
     Controller c;
     GridPane gp;
     BorderPane bp;
@@ -55,11 +45,9 @@ public class GraphicalUserInterface extends Application {
     DayTripDao dtDao;
 
     public GraphicalUserInterface() {
-        //this.user = new User("Veera");
         this.hikeDao = new DBHikeDao();
         this.userDao = new DBUserDao();
         this.dtDao = new DBDayTripDao();
-        //this.userDao.create(user);
         this.c = new Controller(hikeDao, userDao, dtDao);
         this.gp = new GridPane();
         this.bp = new BorderPane();
@@ -84,7 +72,7 @@ public class GraphicalUserInterface extends Application {
         Label intro = new Label("Hello there, new user!\nStart by entering a username of your choice.");
         TextField username = new TextField();
         Button ready = new Button("Ready!");
-        
+
         ready.setStyle(
                 "-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
@@ -94,9 +82,9 @@ public class GraphicalUserInterface extends Application {
                 + "-fx-max-height: 70px;"
         );
 
-        VBox v = new VBox();
-        v.setAlignment(Pos.CENTER);
-        v.getChildren().addAll(intro, username, ready);
+        VBox box = new VBox();
+        box.setAlignment(Pos.CENTER);
+        box.getChildren().addAll(intro, username, ready);
 
         gp.setPrefSize(400, 250);
         gp.setAlignment(Pos.CENTER);
@@ -109,7 +97,7 @@ public class GraphicalUserInterface extends Application {
             openMainMenuView(window);
         });
 
-        gp.add(v, 0, 0);
+        gp.add(box, 0, 0);
 
         Scene firstView = new Scene(gp);
 
@@ -122,88 +110,68 @@ public class GraphicalUserInterface extends Application {
         window.setTitle(username + "’s Hiking Diary");
 
         ArrayList<Button> buttons = new ArrayList<>();
-        
-//        Button bMainmenu = new Button("Main\nmenu");
-//        buttons.add(bMainmenu);
-//        
-//        bMainmenu.setOnAction((event) -> {
-//            bp.setCenter(new MainMenuView(this, c).getView());
-//        });
-        
+
         Button createHike = new Button("Create\nnew hike");
         buttons.add(createHike);
-        
+
         createHike.setOnAction((event) -> {
             bp.setCenter(new CreateHikeView(c).getView());
         });
-        
+
         Button listPast = new Button("List\npast\nhikes");
         buttons.add(listPast);
-        
+
         listPast.setOnAction((event) -> {
             bp.setCenter(new ListPastHikesView(c, this).getView());
         });
-        
+
         Button listUpcoming = new Button("List\nupcoming\nhikes");
         buttons.add(listUpcoming);
-        
+
         listUpcoming.setOnAction((event) -> {
             bp.setCenter(new ListUpcomingHikesView(c, this).getView());
         });
-        
+
         Button settings = new Button("Settings");
         buttons.add(settings);
-        
+
         settings.setOnAction((event) -> {
             bp.setCenter(new SettingsView(c, this, window).getView());
         });
-        
+
         HBox box = new HBox();
-        
-        for (Button b: buttons) {
+
+        for (Button b : buttons) {
             box.getChildren().add(b);
             b.setStyle("-fx-text-alignment: center;"
-                + "-fx-background-radius: 5em;"
-                + "-fx-min-width: 80px;"
-                + "-fx-min-height: 80px;"
-                + "-fx-max-width: 80px;"
-                + "-fx-max-height: 80px;");
+                    + "-fx-background-radius: 5em;"
+                    + "-fx-min-width: 80px;"
+                    + "-fx-min-height: 80px;"
+                    + "-fx-max-width: 80px;"
+                    + "-fx-max-height: 80px;");
         }
-        
+
         Image image = new Image("file:backgroudImage.png", 780, 780, false, true);
         BackgroundImage bgImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-          BackgroundSize.DEFAULT);
-        
-        bp.setBackground(new Background(bgImage));
-        
-        //ImageView image = new ImageView(bgImage);
-        
-//        image.setScaleX(0.5);
-//        image.setScaleY(0.5);
-//        
-//        Pane p = new Pane();
-//        p.getChildren().add(image);
-//        bp.setCenter(p);
+                BackgroundSize.DEFAULT);
 
+        bp.setBackground(new Background(bgImage));
         bp.setTop(box);
         bp.setPrefSize(800, 900);
-        
+
         Label welcome = new Label("Welcome, " + username + "!\nGreat to see you!");
-        
+
         VBox bBox = new VBox();
         bBox.getChildren().addAll(welcome);
         bBox.setAlignment(Pos.CENTER);
         bp.setCenter(bBox);
-        
-        //Alla olevan sijaan joku kuva tms.?
-        //bp.setCenter(new MainMenuView(this, c).getView());
-        
+
         Scene view = new Scene(bp);
 
         window.setScene(view);
         window.show();
     }
-    
+
     public static void main(String args[]) {
         launch(args);
     }

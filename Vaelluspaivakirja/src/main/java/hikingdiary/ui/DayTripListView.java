@@ -7,18 +7,14 @@ package hikingdiary.ui;
 import hikingdiary.domain.Controller;
 import hikingdiary.domain.DayTrip;
 import hikingdiary.domain.Hike;
-import java.time.LocalDate;
-import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -32,15 +28,13 @@ public class DayTripListView {
     Controller c;
     GraphicalUserInterface ui;
     ListView<Button> dayButtons;
-    VBox upperBox;
+    VBox box;
     DayTrip dtToModify;
-//    VBox lowerBox;
 
     public DayTripListView(Controller c, GraphicalUserInterface ui) {
         this.c = c;
         this.ui = ui;
-        upperBox = new VBox();
-//        lowerBox = new VBox();
+        box = new VBox();
     }
     
     public Parent getView(Hike hike) {
@@ -49,9 +43,8 @@ public class DayTripListView {
         Label title = new Label("Day trips during " + hike.toString());
         title.setPadding(new Insets(10, 10, 10, 10));
         
-        upperBox.setAlignment(Pos.CENTER);
-        upperBox.getChildren().addAll(title);
-//        lowerBox.setAlignment(Pos.CENTER);
+        box.setAlignment(Pos.CENTER);
+        box.getChildren().addAll(title);
         formatDayButtons(hike);
         
         Button add = new Button("Add\nmore day\ntrips!");
@@ -70,10 +63,9 @@ public class DayTripListView {
         HBox boxB = new HBox();
         boxB.getChildren().addAll(add, modify);
         boxB.setAlignment(Pos.CENTER);
-        upperBox.getChildren().add(boxB);
+        box.getChildren().add(boxB);
         
-        gp.add(upperBox, 0, 0);
-//        gp.add(lowerBox, 0, 0);
+        gp.add(box, 0, 0);
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);
@@ -83,7 +75,7 @@ public class DayTripListView {
     }
     
     private void formatDayButtons(Hike hike) {
-        upperBox.getChildren().remove(dayButtons);
+        box.getChildren().remove(dayButtons);
         dayButtons = new ListView<>();
 
         ObservableList<Button> buttons = FXCollections.observableArrayList();
@@ -105,7 +97,7 @@ public class DayTripListView {
         dayButtons.setStyle("-fx-background-color: transparent;");
         dayButtons.setPadding(Insets.EMPTY);
 
-        upperBox.getChildren().add(dayButtons);
+        box.getChildren().add(dayButtons);
     }
     
     private void style(Button b) {

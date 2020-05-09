@@ -54,9 +54,7 @@ public class SettingsView {
                 + "-fx-max-height: 100px;");
         
         gp.add(lNewName, 0, 0);
-        gp.add(newName, 0, 1);
-//        gp.add(bReady, 0, 2);
-        
+        gp.add(newName, 0, 1);        
         gp.add(box, 0, 2);
         
         gp.setAlignment(Pos.CENTER);
@@ -66,7 +64,6 @@ public class SettingsView {
         bReady.setOnMouseClicked((event) -> {
             try {
                 if (newName.getText() != null) {
-                    //ui.user.setName(newName.toString());
                     c.changeUsername(newName.getText());
                     ui.setTitle(window);
                     newName.clear();

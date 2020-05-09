@@ -31,7 +31,6 @@ public class HikeView {
 
     public Parent getView() {
         GridPane gp = new GridPane();
-//        gp.setGridLinesVisible(true);
 
         Label lName = new Label(hike.toString());
         Button bLocation = new Button(getOrDefault("From\n" + hike.getLocationStart() + "\nto\n" + hike.getLocationEnd(), "Add location"));
@@ -105,8 +104,6 @@ public class HikeView {
                 + "-fx-max-width: 100px; "
                 + "-fx-max-height: 100px;");
 
-        //Miten ihmeessä tämän näkymän saisi oikean kokoiseksi heti kättelyssä!?
-        //gp.setPrefSize(1200, 600);
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(5);
         gp.setHgap(5);

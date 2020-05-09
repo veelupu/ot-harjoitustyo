@@ -45,10 +45,9 @@ public class ListUpcomingHikesView {
 
         gp.add(formatHikeButtons(), 0, 1);
 
-        //poistaminen
-        Button deleteButton = new Button("Remove\nhike");
+        Button delete = new Button("Remove\nhike");
         
-        deleteButton.setStyle("-fx-text-alignment: center;"
+        delete.setStyle("-fx-text-alignment: center;"
                 + "-fx-background-radius: 5em; "
                 + "-fx-min-width: 70px; "
                 + "-fx-min-height: 70px; "
@@ -56,12 +55,11 @@ public class ListUpcomingHikesView {
                 + "-fx-max-height: 70px;");
         
         VBox boxRm = new VBox();
-        boxRm.getChildren().add(deleteButton);
+        boxRm.getChildren().add(delete);
         boxRm.setAlignment(Pos.CENTER);
 
-        deleteButton.setOnAction((event) -> {
-            boxRm.getChildren().remove(deleteButton);
-            //gp.add(boxRm, 0, 2);
+        delete.setOnAction((event) -> {
+            boxRm.getChildren().remove(delete);
             delete(boxRm);
         });
 
@@ -109,17 +107,9 @@ public class ListUpcomingHikesView {
         gp.getChildren().remove(hikeButtons);
         hikeButtons = new ListView<>();
 
-//        int i = 1;
-//        int j = 0;
-//        int max = c.listPastHikes().size() / 2;
         ObservableList<Button> buttons = FXCollections.observableArrayList();
 
         for (Hike hike : c.listUpcomingHikes()) {
-//            if (i > max) {
-//                i = 0;
-//                j++;
-//            }
-
             Button b = new Button(hike.getName() + "\n" + hike.getYear());
             b.setUserData(hike.getName());
 
@@ -129,7 +119,6 @@ public class ListUpcomingHikesView {
             });
 
             style(b);
-//            buttons.add(b);
             buttons.add(b);
         }
         hikeButtons.setItems(buttons);
@@ -140,26 +129,6 @@ public class ListUpcomingHikesView {
         hikeButtons.setPadding(Insets.EMPTY);
         
         return hikeButtons;
-//            i++;
-//        buttons.clear();
-//        gp.getChildren().remove(hikeButtons);
-//        hikeButtons = new VBox();
-//        
-//        ArrayList<Button> buttons = new ArrayList<>();
-//        for (Hike hike : c.listUpcomingHikes()) {
-//            Button b = new Button(hike.toString());
-//            b.setUserData(hike.getName());
-//            
-//            b.setOnMouseClicked((event) -> {
-//                String hikeName = (String) b.getUserData();
-//                ui.bp.setCenter(new HikeView(c.getHike(hikeName), c, ui).getView());
-//            });
-//            style(b);
-//            buttons.add(b);
-//            hikeButtons.getChildren().add(b);
-//        }
-//        
-//        return hikeButtons;
     }
 
     private void style(Button b) {

@@ -83,8 +83,8 @@ public class CompanionView {
                 gp.getChildren().remove(boxRm);
                 visible = false;
             } else {
-            gp.add(boxRm, 0, 1);
-            visible = true;
+                gp.add(boxRm, 0, 1);
+                visible = true;
             }
         });
         
@@ -97,6 +97,9 @@ public class CompanionView {
         
         delete.setOnAction((event) -> {
             String name = compToRm.getText();
+            if (name.length() < 1) {
+                return;
+            }
             if (c.removeCompanion(hike, name)) {
                 boxRm.getChildren().add(succ);
                 compToRm.clear();
@@ -104,6 +107,11 @@ public class CompanionView {
             } else {
                 boxRm.getChildren().add(unsucc);
             }
+        });
+        
+        compToRm.setOnMouseClicked((event) -> {
+            boxRm.getChildren().remove(succ);
+            boxRm.getChildren().remove(unsucc);
         });
         
         VBox box = new VBox();

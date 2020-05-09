@@ -4,13 +4,9 @@
  */
 package hikingdiary.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -85,13 +81,11 @@ public class HikeTest {
 
     @Test
     public void getKilometresWorksAsWanted() {
-        Date date1 = new GregorianCalendar(2019, 7, 19).getTime();
-        Date date2 = new GregorianCalendar(2019, 7, 20).getTime();
-        DayTrip dt1 = hike.addADayTrip(date1);
-        DayTrip dt2 = hike.addADayTrip(date2);
-        dt1.setWalkDist(15);
-        dt2.setWalkDist(22);
-        assertEquals(37, hike.getKilometres());
+        LocalDate date1 = LocalDate.of(2019, 7, 19);
+        LocalDate date2 = LocalDate.of(2019, 7, 20);
+        hike.addDayTrip(new DayTrip(date1, "a", "b", 15, 5, "ok"));
+        hike.addDayTrip(new DayTrip(date2, "a", "b", 22, 7, "not ok"));
+        assertTrue(37 == hike.getKilometres());
     }
 
     @Test

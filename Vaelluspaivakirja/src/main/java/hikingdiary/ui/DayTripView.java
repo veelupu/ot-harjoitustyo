@@ -15,8 +15,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -78,12 +82,24 @@ public class DayTripView {
 
         Label done = new Label("Operation succeeded!");
         Label exists = new Label("This hike has this day trip already.");
-        Label error = new Label("Oops, something went wrong. Did you fill all the textfields correctly?");
+        Label error = new Label("Oops, something went wrong. Did you fill the textfields correctly?"
+                + "\nDo not forget to set the date! Note, that there can be only one day trip for each date.");
+        
+        BackgroundFill bgF = new BackgroundFill(Color.WHITE, new CornerRadii(1), null);
+        done.setBackground(new Background(bgF));
+        exists.setBackground(new Background(bgF));
+        error.setBackground(new Background(bgF));
 
         ready.setOnAction((event) -> {
             try {
                 LocalDate d = dateP.getValue();
                 String startV = tfStart.getText();
+                
+                if (d == null || startV.length() < 1) {
+                    box.getChildren().add(error);
+                    return;
+                }
+                
                 String endV = tfEnd.getText();
                 double distV = Double.valueOf(tfDist.getText());
                 double hoursV = Double.valueOf(tfHours.getText());

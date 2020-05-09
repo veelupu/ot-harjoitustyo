@@ -12,9 +12,13 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -31,101 +35,88 @@ public class CreateHikeView {
 
     public Parent getView() {
         GridPane gp = new GridPane();
-        VBox boxV = new VBox();
+        VBox bigBox = new VBox();
 
         Label lName = new Label("Name of the hike:");
         TextField tfName = new TextField();
-//        gp.add(lName, 0, 0);
-//        gp.add(tfName, 0, 1);
 
         Label lYear = new Label("Year of the hike:");
         TextField tfYear = new TextField();
-//        gp.add(lYear, 0, 2);
-//        gp.add(tfYear, 0, 3);
 
         Label lUpcoming = new Label("Past or\nupcoming\nhike?");
         lUpcoming.setPadding(new Insets(0, 5, 0, 0));
         
-        HBox twoButtons = new HBox();
+        HBox middleBox = new HBox();
         Button bPast = new Button("Past");
         Button bUpcoming = new Button("Upcoming");
         
         style(bPast);
         style(bUpcoming);
         
-//        bPast.setStyle("-fx-text-alignment: center;"
-//                + "-fx-background-radius: 5em; "
-//                + "-fx-min-width: 81px; "
-//                + "-fx-min-height: 81px; "
-//                + "-fx-max-width: 81px; "
-//                + "-fx-max-height: 81px;");
-//        
-//        bUpcoming.setStyle("-fx-text-alignment: center;"
-//                + "-fx-background-radius: 5em; "
-//                + "-fx-min-width: 81px; "
-//                + "-fx-min-height: 81px; "
-//                + "-fx-max-width: 81px; "
-//                + "-fx-max-height: 81px;");
-        
-        twoButtons.getChildren().addAll(lUpcoming, bPast, bUpcoming);
-        twoButtons.setPadding(new Insets(5, 5, 5, 5));
-        twoButtons.setAlignment(Pos.CENTER);
-        //gp.add(lUpcoming, 0, 4);
-//        gp.add(twoButtons, 0, 4);
-        
-//        gp.add(bPast, 0, 5);
-//        gp.add(bUpcoming, 0, 5);
+        middleBox.getChildren().addAll(lUpcoming, bPast, bUpcoming);
+        middleBox.setPadding(new Insets(5, 5, 5, 5));
+        middleBox.setAlignment(Pos.CENTER);
 
         bPast.setOnAction((event) -> {
             upcomingFalse();
         });
+        
         bUpcoming.setOnAction((event) -> {
             upcomingTrue();
         });
         
         Label rucksacBeg = new Label("How much your rucksac weighted in the beginning?");
         TextField rucksacWBeg = new TextField();
-//        gp.add(rucksacBeg, 0, 7);
-//        gp.add(rucksacWBeg, 0, 8);
+
         Label rucksacEnd = new Label("How much your rucksac weighted in the end?");
         TextField rucksacWEnd = new TextField();
-//        gp.add(rucksacEnd, 0, 9);
-//        gp.add(rucksacWEnd, 0, 10);
 
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(1);
         gp.setHgap(1);
-        //gp.setPadding(new Insets(5, 5, 5, 5));
 
-        VBox boxR = new VBox();
         Button bReady = new Button("Create\nnew\nhike!");
-        boxR.getChildren().add(bReady);
-        boxR.setPadding(new Insets(5, 5, 5, 5));
-        boxR.setAlignment(Pos.CENTER);
-        
         style(bReady);
         
+        VBox messageBox = new VBox();
+        messageBox.getChildren().add(bReady);
+        messageBox.setPadding(new Insets(5, 5, 5, 5));
+        messageBox.setAlignment(Pos.CENTER);
+        
         Label done = new Label("New hike created succesfully!");
-        Label error = new Label("Oops, something went wrong.\nDid you fill all the tecxtfields correctly?");
-//        gp.add(bReady, 0, 11);
+        Label exists = new Label("There already is a hike with that name.\nTry again with different name!");
+        Label error = new Label("Oops, something went wrong.\nDid you fill all the textfields correctly?");
+        
+        BackgroundFill bgF = new BackgroundFill(Color.WHITE, new CornerRadii(1), null);
+        done.setBackground(new Background(bgF));
+        exists.setBackground(new Background(bgF));
+        error.setBackground(new Background(bgF));
 
-        //Jos samanniminen vaellus on jo olemassa, pitäisi tulla virheilmoitus. Nyt ei tule.
-        //Lisäksi aina tulee onnistumisilmoitus --> ei pitäisi
-        //Ja vielä: kun klikkaa mitä tahansa kenttää, ilmoitusten pitäisi mennä pois. Nyt ei.
         bReady.setOnMouseClicked((event) -> {
             try {
                 int year = Integer.parseInt(tfYear.getText());
                 String name = tfName.getText();
                 Hike hike = c.createNewHike(name, Integer.valueOf(tfYear.getText()), this.upcoming);
                 
+                if (hike == null) {
+                    messageBox.getChildren().add(exists);
+                    return;
+                }
+                
                 if (rucksacWBeg.getLength() != 0) {
                     hike.setRucksackWeightBeg(Double.parseDouble(rucksacWBeg.getText()));
-                    c.updateHike(hike);
+                    if (!c.updateHike(hike)) {
+                        messageBox.getChildren().add(error);
+                        return;
+                    }
                 }
                 
                 if (rucksacWEnd.getLength() != 0) {
                     hike.setRucksackWeightEnd(Double.parseDouble(rucksacWEnd.getText()));
-                    c.updateHike(hike);
+                    if (c.updateHike(hike)) {
+                        messageBox.getChildren().add(error);
+                        return;
+                    }
                 }
 
                 rucksacWBeg.clear();
@@ -134,20 +125,20 @@ public class CreateHikeView {
                 tfYear.clear();
                 
             } catch (Exception e) {
-                boxR.getChildren().add(error);
-                //poista alla oleva ennen lopullista palautusta
-                System.out.println("Hike creation failed: " + e.getMessage());
+                messageBox.getChildren().add(error);
+                return;
             }
-            boxR.getChildren().add(done);
+            messageBox.getChildren().add(done);
         });
         
-        tfName.setOnAction((event) -> {
-            boxR.getChildren().remove(done);
-            boxR.getChildren().remove(error);
+        tfName.setOnMouseClicked((event) -> {
+            messageBox.getChildren().remove(done);
+            messageBox.getChildren().remove(error);
+            messageBox.getChildren().remove(exists);
         });
 
-        boxV.getChildren().addAll(lName, tfName, lYear, tfYear, twoButtons, rucksacBeg, rucksacWBeg, rucksacEnd, rucksacWEnd, boxR);
-        gp.add(boxV, 0, 0);
+        bigBox.getChildren().addAll(lName, tfName, lYear, tfYear, middleBox, rucksacBeg, rucksacWBeg, rucksacEnd, rucksacWEnd, messageBox);
+        gp.add(bigBox, 0, 0);
         
         return gp;
     }

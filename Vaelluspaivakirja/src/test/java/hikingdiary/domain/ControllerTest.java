@@ -4,6 +4,7 @@
  */
 package hikingdiary.domain;
 
+import hikingdiary.dao.DBDayTripDao;
 import hikingdiary.dao.DBHikeDao;
 import hikingdiary.dao.DBUserDao;
 import hikingdiary.domain.Controller;
@@ -27,26 +28,27 @@ public class ControllerTest {
     private Controller c;
     private DBHikeDao hikeDao;
     private DBUserDao userDao;
+    private DBDayTripDao dtDao;
     
     public ControllerTest() {
         hikeDao = new DBHikeDao("hikesTest.db");
         userDao = new DBUserDao("hikesTest.db");
-//        hikeDao = new FakeDBHikeDao();
-//        userDao = new FakeDBUserDao();
+        dtDao = new DBDayTripDao("hikesTest.db");
     }
     
     @Before
     public void setUp() {
-        c = new Controller(hikeDao, userDao);
+        c = new Controller(hikeDao, userDao, dtDao);
     }
     
     @After
     public void tearDown() {
         File file1 = new File(hikeDao.getDBAdress());
         File file2 = new File(userDao.getDBAdress());
+        File file3 = new File(dtDao.getDBAdress());
         file1.delete();
         file2.delete();
-        //hikeDao.emptyHashMap();
+        file3.delete();
     }
     
     @Test
@@ -63,12 +65,11 @@ public class ControllerTest {
         assertTrue(hikeDao.list(true).isEmpty());
     }
     
-//    //Tee tälle asialle jotain controllerissa ja DBHikeDaossa: samannimisen hiken luominen ei saa onnistua
-//    @Test
-//    public void createHikeDoesNotCreateHikeIfTheNameIsAlreadyUsed() {
-//        c.createNewHike("Kaldoaivi", 2019, false);
-//        assertEquals(null, c.createNewHike("Kaldoaivi", 2020, false));
-//    }
+    @Test
+    public void createHikeDoesNotCreateHikeIfTheNameIsAlreadyUsed() {
+        c.createNewHike("Kaldoaivi", 2019, false);
+        assertEquals(null, c.createNewHike("Kaldoaivi", 2020, false));
+    }
     
     @Test
     public void updateHikeUpdatesHikeCorrectly() {
@@ -80,7 +81,7 @@ public class ControllerTest {
     }
     
     @Test
-    public void getHikeReturnsTheNameOfTheHikeIfHikeExistsOrNullIfItDoesNot() {
+    public void getHikeReturnsTheHikeWithTheGivenNameIfHikeExistsOrNullIfItDoesNot() {
         Hike h = new Hike("Kaldoaivi", 2019, false);
         c.createNewHike("Kaldoaivi", 2019, false);
         assertEquals(h, c.getHike("Kaldoaivi"));
@@ -124,15 +125,15 @@ public class ControllerTest {
     }
     
     //Testi ei toimi – mikä vikana?
-//    @Test
-//    public void addItemAddsAnItemToTheGivenHike() {
-//        c.createNewHike("Kaldoaivi", 2019, false);
-//        Item item = new Item("makuupussi", 1);
-//        Hike hike = c.getHike("Kaldoaivi");
-//        assertFalse(hike.formatEquipment().contains(item.getName()));
-//        c.addItem(hike, item);
-//        assertTrue(hike.formatEquipment().contains(item.getName()));
-//    }
+    @Test
+    public void addItemAddsAnItemToTheGivenHike() {
+        c.createNewHike("Kaldoaivi", 2019, false);
+        Item item = new Item("makuupussi", 1);
+        Hike hike = c.getHike("Kaldoaivi");
+        assertFalse(hike.formatEquipment().contains(item.getName()));
+        c.addItem(hike, item);
+        assertTrue(hike.formatEquipment().contains(item.getName()));
+    }
     
     @Test
     public void addMealAddsAMealToTheGivenHike() {

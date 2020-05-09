@@ -74,5 +74,4 @@ public class MealView {
         
         return gp;
     }
-    
 }

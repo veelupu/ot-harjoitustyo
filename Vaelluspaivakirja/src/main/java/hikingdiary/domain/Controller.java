@@ -74,6 +74,9 @@ public class Controller {
      */
     public Hike getHike(String name) {
         Hike hike = hikeDao.readHike(name);
+        if (hike == null) {
+            return null;
+        }
         List<DayTrip> dayTrips = dtDao.list(hike.getId());
         hike.setDayTrips(dayTrips);
         return hike;
