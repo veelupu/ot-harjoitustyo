@@ -7,41 +7,37 @@ package hikingdiary.domain;
 import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
-import hikingdiary.domain.Companion;
-import hikingdiary.domain.Hike;
-import hikingdiary.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
-//import java.util.HashMap;
 
 /**
  * Class responsible for the application logic
- * 
+ *
  * @author veeralupunen
  */
 public class Controller {
 
     private HikeDao hikeDao;
     private UserDao userDao;
-    private DayTripDao dtDao; 
+    private DayTripDao dtDao;
 
     public Controller(HikeDao hikeDao, UserDao userDao, DayTripDao dtDao) {
         this.hikeDao = hikeDao;
         this.userDao = userDao;
         this.dtDao = dtDao;
     }
-    
+
     /**
-     * Method creates a new hike with given parametres 
-     * and saves it to the database.
-     * 
+     * Method creates a new hike with given parametres and saves it to the
+     * database.
+     *
      * @param name the name of the new hike
      * @param year the happening year of the new hike
      * @param upcoming whether the hike is upcoming or past
-     * 
+     *
      * @see hikingdiary.dao.DBHikeDao#createHike(Hike)
-     * 
+     *
      * @return a new hike or null if creation failed
      */
     public Hike createNewHike(String name, int year, boolean upcoming) {
@@ -51,25 +47,29 @@ public class Controller {
         }
         return null;
     }
-    
+
     /**
      * Method updates the given hike in the database.
-     * 
-     * @see hikingdiary.dao.DBHikeDao#updateHike(Hike)
-     * 
+     *
      * @param hike hike to be updated
+     * @see hikingdiary.dao.DBHikeDao#updateHike(Hike)
+     * @return whether the update succeeded or not
      */
-    public void updateHike(Hike hike) {
-        hikeDao.updateHike(hike);
+    public boolean updateHike(Hike hike) {
+        if (hikeDao.updateHike(hike) > 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Method gets hike with the given name from the database.
-     * 
+     *
      * @param name name of the hike wanted
-     * 
+     *
      * @see hikingdiary.dao.DBHikeDao#readHike(String)
-     * 
+     * @see hikingdiary.dao.DBDayTripDao#list(int)
+     *
      * @return the hike with the name
      */
     public Hike getHike(String name) {
@@ -78,15 +78,32 @@ public class Controller {
         hike.setDayTrips(dayTrips);
         return hike;
     }
-    
-    public boolean removeHike(Hike h) {
-        if (hikeDao.list(h.isUpcoming()).contains(h)) {
-            hikeDao.deleteHike(h.getName());
-            return true;
+
+    /**
+     * Method removes the given hike from the database
+     *
+     * @param hike hike to be deleted
+     *
+     * @see hikingdiary.dao.DBHikeDao#list(boolean)
+     * @see hikingdiary.dao.DBHikeDao#deleteHike(String)
+     *
+     * @return whether the deletion succeeded or not
+     */
+    public boolean removeHike(Hike hike) {
+        if (hikeDao.list(hike.isUpcoming()).contains(hike)) {
+            if (hikeDao.deleteHike(hike.getName()) > 0) {
+                return true;
+            }
         }
         return false;
     }
-    
+
+    /**
+     * Method gets all the hikes from the database.
+     *
+     * @see hikingdiary.dao.DBHikeDao#list(boolean)
+     * @return list of hikes or null if an error occurred
+     */
     public List<Hike> listHikes() {
         List<Hike> hikes = new ArrayList<>();
 
@@ -96,21 +113,19 @@ public class Controller {
                 hikes.add(h);
             }
         } catch (Exception e) {
-            //poista tulostus lopullisesta versiosta – käsittele muutoin
-            System.err.println("Something went wrong with listing past hikes.");
+            return null;
         }
-        
+
         Collections.sort(hikes);
         Collections.reverse(hikes);
         return hikes;
     }
 
     /**
-     * Method gets all the past-marked hikes from the database and sorts it.
-     * 
-     * @see hikingdiary.dao.DBHikeDao#listPastHikes()
-     * 
-     * @return list of the past hikes in the database
+     * Method gets all the past-marked hikes from the database and sorts them.
+     *
+     * @see hikingdiary.dao.DBHikeDao#list(boolean)
+     * @return list of the past hikes or null if an error occurred
      */
     public List<Hike> listPastHikes() {
         List<Hike> pastHikes = new ArrayList<>();
@@ -118,10 +133,9 @@ public class Controller {
         try {
             pastHikes = hikeDao.list(false);
         } catch (Exception e) {
-            //poista tulostus lopullisesta versiosta – käsittele muutoin
-            System.err.println("Something went wrong with listing past hikes.");
+            return null;
         }
-        
+
         Collections.sort(pastHikes);
         Collections.reverse(pastHikes);
         return pastHikes;
@@ -129,9 +143,8 @@ public class Controller {
 
     /**
      * Method gets all the upcoming-marked hikes from the database and sorts it.
-     * 
-     * @see hikingdiary.dao.DBHikeDao#listUpcomingHikes()
-     * 
+     *
+     * @see hikingdiary.dao.DBHikeDao#list(boolean)
      * @return list of the upcoming hikes in the database
      */
     public List<Hike> listUpcomingHikes() {
@@ -140,22 +153,22 @@ public class Controller {
         try {
             upcomingHikes = hikeDao.list(true);
         } catch (Exception e) {
-            System.err.println("Something went wrong with listing upcoming hikes.");
+            return null;
         }
 
         Collections.sort(upcomingHikes);
         return upcomingHikes;
     }
-    
+
     /**
-     * Method checks if the given hike has already the given companion.
-     * If not, it adds the companion for the hike into the database.
-     * 
+     * Method checks if the given hike has already the given companion. If not,
+     * it adds the companion for the hike into the database.
+     *
      * @param hike hike to add the companion for
      * @param comp companion to be added for the hike
-     * 
+     *
      * @see hikingdiary.dao.DBHikeDao#createCompanion(Hike, Companion)
-     * 
+     *
      * @return whether the companion was added to the hike or not
      */
     public boolean addCompanion(Hike hike, Companion comp) {
@@ -166,7 +179,18 @@ public class Controller {
         }
         return false;
     }
-    
+
+    /**
+     * Method removes the given companion from the given hike, if the hike has
+     * the companion.
+     *
+     * @param hike hike to remove the companion from
+     * @param name name of the companion to be removed
+     * 
+     * @see hikingdiary.dao.DBHikeDao#deleteCompanion(Hike, String)
+     * 
+     * @return whether removing succeeded or not
+     */
     public boolean removeCompanion(Hike hike, String name) {
         if (hike.removeCompanion(name)) {
             hikeDao.deleteCompanion(hike, name);
@@ -174,9 +198,18 @@ public class Controller {
         }
         return false;
     }
-    
-    //tehdään tämä näin: dayTripDaossa on taulu ja liitostaulu hikeen
-    //kun daytripit haetaan jollekin hikelle, c lukee ne erikseen ja liittää hikeen tms.
+
+    /**
+     * Method adds the given day trip to the given hike into the database if the
+     * hike did not alredy have that day trip.
+     *
+     * @param hike hike to add the day trip to
+     * @param dt day trip to be added
+     * 
+     * @see hikingdiary.dao.DBDayTripDao#create(int, DayTrip)
+     * 
+     * @return whether adding succeeded or not
+     */
     public boolean addDayTrip(Hike hike, DayTrip dt) {
         if (hike.addDayTrip(dt)) {
             if (dtDao.create(hike.getId(), dt) == 1) {
@@ -185,15 +218,36 @@ public class Controller {
         }
         return false;
     }
-    
+
+    /**
+     * Method updates the given day trip belonging to the given hike.
+     *
+     * @param hike hike day trip to be updated belongs to
+     * @param dt day trip to be updated
+     * 
+     * @see hikingdiary.dao.DBDayTripDao#update(DayTrip)
+     * 
+     * @return whether updating succeeded or not
+     */
     public boolean updateDayTrip(Hike hike, DayTrip dt) {
-        hike.updateDayTrip(dt);
-        if (dtDao.update(dt) == 1) {
-            return true;
+        if (!hike.addDayTrip(dt)) {
+            if (dtDao.update(dt) == 1) {
+                return true;
+            }
         }
         return false;
     }
-    
+
+    /**
+     * Method removes the given meal from the given hike from the database.
+     * 
+     * @param hike hike to remove the meal from
+     * @param meal meal to be removed
+     * 
+     * @see hikingdiary.dao.DBDayTripDao#deleteMeal(Hike, Meal)
+     * 
+     * @return whether removing succeeded or not
+     */
     public boolean removeMeal(Hike hike, Meal meal) {
         if (hike.removeMeal(meal)) {
             hikeDao.deleteMeal(hike, meal);
@@ -201,16 +255,16 @@ public class Controller {
         }
         return false;
     }
-    
+
     /**
-     * Method checks if the given hike has already the given item.
-     * If not, it adds the item for the hike into the database.
-     * 
+     * Method checks if the given hike has already the given item. If not, it
+     * adds the item for the hike into the database.
+     *
      * @param hike hike to add the item for
      * @param item item to be added for the hike
-     * 
+     *
      * @see hikingdiary.dao.DBHikeDao#createItem(Hike, Item)
-     * 
+     *
      * @return whether the item was added to the hike or not
      */
     public boolean addItem(Hike hike, Item item) {
@@ -222,7 +276,14 @@ public class Controller {
         }
         return false;
     }
-    
+
+    /**
+     * Method removes the given item from the given hike from the database.
+     * 
+     * @param hike
+     * @param name
+     * @return 
+     */
     public boolean removeItem(Hike hike, String name) {
         if (hike.removeItem(name)) {
             if (hikeDao.deleteItem(hike, name) > 0) {
@@ -231,16 +292,16 @@ public class Controller {
         }
         return false;
     }
-    
+
     /**
-     * Method checks if the given hike has already the given item.
-     * If not, it adds the item for the hike into the database.
-     * 
+     * Method checks if the given hike has already the given item. If not, it
+     * adds the item for the hike into the database.
+     *
      * @param hike hike to add the meal for
      * @param meal meal to be added for the hike
-     * 
+     *
      * @see hikingdiary.dao.DBHikeDao#createMeal(Hike, Meal)
-     * 
+     *
      * @return whether the meal was added to the hike or not
      */
     public boolean addMeal(Hike hike, Meal meal) {
@@ -254,17 +315,17 @@ public class Controller {
 
     /**
      * Method creates a new user into the database.
-     * 
+     *
      * @param name the user's username
      * @see hikingdiary.dao.DBUserDao#create(User)
      */
     public void createUser(String name) {
         userDao.create(new User(name));
     }
-    
+
     /**
      * Method updates the user's username in the database.
-     * 
+     *
      * @param newName the new username for the user
      * @see hikingdiary.dao.DBUserDao#read()
      * @see hikingdiary.dao.DBUserDao#update(User, String)

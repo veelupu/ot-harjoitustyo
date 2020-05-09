@@ -7,10 +7,10 @@ package hikingdiary.domain;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 
 /**
- *
+ * Class representing a single day trip
+ * 
  * @author veeralupunen
  */
 public class DayTrip implements Comparable<DayTrip> {
@@ -54,6 +54,11 @@ public class DayTrip implements Comparable<DayTrip> {
         this.date = date;
     }
 
+    /**
+     * Method returns the name of the weekday of the day trip.
+     * 
+     * @return the weekday
+     */
     public String getWeekday() {
         if (weekday == 1) {
             return "Monday";
@@ -72,10 +77,6 @@ public class DayTrip implements Comparable<DayTrip> {
         } else {
             return "A special day";
         }
-    }
-
-    public void setWeekday(int weekday) {
-        this.weekday = weekday;
     }
 
     public String getStartingPoint() {
@@ -133,5 +134,4 @@ public class DayTrip implements Comparable<DayTrip> {
             return 0;
         }
     }
- 
 }

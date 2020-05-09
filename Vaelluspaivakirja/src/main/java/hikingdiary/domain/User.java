@@ -26,6 +26,4 @@ public class User {
     public void setName(String newName) {
         this.name = newName;
     }
-    
-    //Lisää jos tarvetta: käyttäjänimen poistaminen
 }

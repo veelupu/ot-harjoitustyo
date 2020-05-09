@@ -7,7 +7,6 @@ package hikingdiary.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -93,8 +92,6 @@ public class Hike implements Comparable<Hike> {
         return locationEnd;
     }
 
-    
-
     public double getRucksackWeightBeg() {
         return rucksackWeightBeg;
     }
@@ -112,10 +109,10 @@ public class Hike implements Comparable<Hike> {
     }
 
     /**
-     * Method creates a new day trip and adds it to this hike's day trips.
+     * Method creates a new day trip and adds it to this hike's day trips if there was not already a day trip for that date.
      * 
-     * @param DayTrip the new day trip
-     * @return if there already was not a day trip with that date and the adding succeeded
+     * @param DayTrip day trip to be added
+     * @return whether adding succeeded or not
      */
     public boolean addDayTrip(DayTrip dt) {
         if (this.dayTrips.containsKey(dt.getDate())) {
@@ -125,13 +122,11 @@ public class Hike implements Comparable<Hike> {
         return true;
     }
     
-    public void setDayTrips(List<DayTrip> dayTrips) {
-        this.dayTrips.clear();
-        for (DayTrip dt : dayTrips) {
-            this.dayTrips.put(dt.getDate(), dt);
-        }
-    }
-    
+    /**
+     * Method forms an arraylist of this hike's day trips and sorts it to the descending order.
+     * 
+     * @return list of day trips
+     */
     public ArrayList<DayTrip> getDayTrips() {
         ArrayList<DayTrip> days = new ArrayList<>();
         for (DayTrip day : this.dayTrips.values()) {
@@ -142,15 +137,23 @@ public class Hike implements Comparable<Hike> {
         return days;
     }
     
-    public void updateDayTrip(DayTrip dt) {
-        this.dayTrips.put(dt.getDate(), dt);
+    /**
+     * Method set the list of day trips to this hike.
+     * 
+     * @param dayTrips list of day trips to be set
+     */
+    public void setDayTrips(List<DayTrip> dayTrips) {
+        this.dayTrips.clear();
+        for (DayTrip dt : dayTrips) {
+            this.dayTrips.put(dt.getDate(), dt);
+        }
     }
 
     /**
      * Method checks if this hike already has a companion with that name.
      * If not, it adds the new companion and returns true.
      * 
-     * @param name Name of the new companion
+     * @param name name of the new companion
      * @return whether did the method add the companion or not
      */
     public boolean addCompanion(String name) {
@@ -161,17 +164,7 @@ public class Hike implements Comparable<Hike> {
         }
         return false;
     }
-
-    /**
-     * Method sets the given arraylist of companions to this hike and sorts it.
-     * 
-     * @param companion the arraylist to be given for the hike
-     */
-    public void setCompanions(ArrayList<String> companion) {
-        this.companions = companion;
-        Collections.sort(companions);
-    }
-
+    
     /**
      * Method returns name's of the companions of this hike in specified form.
      * 
@@ -185,6 +178,12 @@ public class Hike implements Comparable<Hike> {
         return companion.toString();
     }
     
+    /**
+     * Method removes a companion with the given name from this hike.
+     * 
+     * @param name name of the companion to be removed
+     * @return whether the removing succeeded or not
+     */
     public boolean removeCompanion(String name) {
         if (this.companions.contains(name)) {
             this.companions.remove(name);
@@ -194,11 +193,110 @@ public class Hike implements Comparable<Hike> {
     }
 
     /**
+     * Method sets the given arraylist of companions to this hike and sorts it.
+     * 
+     * @param companion the arraylist to be set
+     */
+    public void setCompanions(ArrayList<String> companion) {
+        this.companions = companion;
+        Collections.sort(companions);
+    }
+
+    /**
+     * Method checks if this hike already has a item with that name.
+     * If not, it adds the new item and returns true.
+     * 
+     * @param item the item to be added
+     * @return whether adding succeeded or not
+     */
+    public boolean addItem(Item item) {
+        if (containsItem(item.getName())) {
+            return false;
+        }
+        this.equipment.put(item.getName(), item);
+        return true;
+    }
+    
+    /**
+     * Method checks if this hike has an item with given name.
+     * 
+     * @param name the name of the item
+     * @return whether this hike has the item or not
+     */
+    public boolean containsItem(String name) {
+        return this.equipment.containsKey(name);
+    }
+    
+    /**
+     * Method checks if this hike has an item with the given name.
+     * If yes, it sets the given count to the item.
+     * 
+     * @param name name of the item to be updated
+     * @param count the new count of the item
+     * @return whether updating succeeded or not
+     */
+    public boolean updateItem(String name, int count) {
+        if (containsItem(name)) {
+            Item i = this.equipment.get(name);
+            i.setCount(count);
+            return true;
+        }
+        return false;
+    }
+
+    public void setEquipment(HashMap<String, Item> equList) {
+        this.equipment = equList;
+    }
+
+    /**
+     * Method builds a string containing names, count and combined weight 
+     * of the items of this hike in specified form.
+     * 
+     * @return items of the hike in specified form
+     */
+    public String formatEquipment() {
+        StringBuilder items = new StringBuilder();
+        for (Item item : this.equipment.values()) {
+            items.append(item.toString() + "\n");
+        }
+        return items.toString();
+    }
+    
+    /**
+     * Method forms a sorted arraylist of items belonging to this hike.
+     * 
+     * @return arraylist of items
+     */
+    public ArrayList<Item> getItems() {
+        ArrayList<Item> items = new ArrayList<>();
+        for (Item item : this.equipment.values()) {
+            items.add(item);
+        }
+        Collections.sort(items);
+        return items;
+    }
+    
+    /**
+     * Method checks if this hike has an item with the given name.
+     * If yes, it removes the item from this hike.
+     * 
+     * @param name name of the item to be removed
+     * @return whether removing succeeded or not
+     */
+    public boolean removeItem(String name) {
+        if (this.equipment.containsKey(name)) {
+            this.equipment.remove(name);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Method checks if this hike already has a meal with that name.
      * If not, it adds the new meal and returns true.
      * 
      * @param meal meal to add
-     * @return whether did the method add the meal or not
+     * @return whether adding succeeded or not
      */
     public boolean addMeal(Meal meal) {
         if (this.meals.contains(meal)) {
@@ -223,7 +321,7 @@ public class Hike implements Comparable<Hike> {
     }
     
     /**
-     * Method makes a sorted arraylist containing meals of this hike.
+     * Method forms a sorted arraylist containing meals of this hike.
      * 
      * @return a sorted arraylist containing meals of this hike
      */
@@ -236,10 +334,12 @@ public class Hike implements Comparable<Hike> {
         return meals;
     }
     
-    public void setMeals(ArrayList<Meal> mealList) {
-        this.meals = mealList;
-    }
-    
+    /**
+     * Method removes the given meal from this hike.
+     * 
+     * @param meal meal to be removed
+     * @return whether removing succeeded or not
+     */
     public boolean removeMeal(Meal meal) {
         if (this.meals.contains(meal)) {
             this.meals.remove(meal.getName());
@@ -247,80 +347,10 @@ public class Hike implements Comparable<Hike> {
         }
         return false;
     }
-
-    /**
-     * Method checks if this hike already has a item with that name.
-     * If not, it adds the new item and returns true.
-     * 
-     * @param item the item to be added
-     * @return whether the item was added for the hike or not
-     */
-    public boolean addItem(Item item) {
-        if (containsItem(item.getName())) {
-            return false;
-        }
-        this.equipment.put(item.getName(), item);
-        return true;
-    }
     
-    public boolean updateItem(String name, int count) {
-        if (containsItem(name)) {
-            Item i = this.equipment.get(name);
-            i.setCount(count);
-            return true;
-        }
-        return false;
+    public void setMeals(ArrayList<Meal> mealList) {
+        this.meals = mealList;
     }
-
-    public void setEquipment(HashMap<String, Item> equList) {
-        this.equipment = equList;
-    }
-    
-    public ArrayList<Item> getItems() {
-        ArrayList<Item> items = new ArrayList<>();
-        for (Item item : this.equipment.values()) {
-            items.add(item);
-        }
-        Collections.sort(items);
-        return items;
-    }
-
-    /**
-     * Method checks if this hike has an item with given name.
-     * 
-     * @param name the name of the item
-     * @return whether this hike has the item or not
-     */
-    public boolean containsItem(String name) {
-        return this.equipment.containsKey(name);
-    }
-
-    /**
-     * Method builds a string containing names, count and combined weight 
-     * of the items of this hike in specified form.
-     * 
-     * @return items of the hike in specified form
-     */
-    public String formatEquipment() {
-        StringBuilder items = new StringBuilder();
-        for (Item item : this.equipment.values()) {
-            items.append(item.toString() + "\n");
-        }
-        return items.toString();
-    }
-    
-    public boolean removeItem(String name) {
-        if (this.equipment.containsKey(name)) {
-            this.equipment.remove(name);
-            return true;
-        }
-        return false;
-    }
-    
-//    public void updateItem(String name, int count) {
-//        Item i = this.equipment.get(name);
-//        i.setCount(count);
-//    }
 
     /**
      * Method counts the total kilometres of this hike out of the hike's day trips.
@@ -360,6 +390,6 @@ public class Hike implements Comparable<Hike> {
             return false;
         }
         Hike oHike = (Hike) o;
-        return (this.name.equals(oHike.name)); // && this.year == oHike.year && this.upcoming == oHike.upcoming
+        return (this.name.equals(oHike.name)); 
     }
 }

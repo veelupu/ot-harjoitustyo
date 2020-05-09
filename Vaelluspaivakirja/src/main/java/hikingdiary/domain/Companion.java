@@ -32,7 +32,4 @@ public class Companion {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
 }
