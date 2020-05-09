@@ -356,9 +356,10 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                int id = rs.getInt("id");
                 ps.close();
                 rs.close();
-                return rs.getInt("id");
+                return id;
             }
             ps.close();
             rs.close();
@@ -375,9 +376,10 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                int id = rs.getInt("id");
                 ps.close();
                 rs.close();
-                return rs.getInt("id");
+                return id;
             }
             ps.close();
             rs.close();
@@ -396,9 +398,10 @@ public class DBHikeDao implements HikeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                int id = rs.getInt("id");
                 ps.close();
                 rs.close();
-                return rs.getInt("id");
+                return id;
             }
 
             ps.close();

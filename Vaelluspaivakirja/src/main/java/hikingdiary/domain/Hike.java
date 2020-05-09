@@ -310,7 +310,7 @@ public class Hike implements Comparable<Hike> {
     }
     
     public boolean removeItem(String name) {
-        if (containsItem(name)) {
+        if (this.equipment.containsKey(name)) {
             this.equipment.remove(name);
             return true;
         }

@@ -27,6 +27,8 @@ public class EquipmentView {
     Hike hike;
     GridPane gp;
     VBox equipmentList;
+    Label succ;
+    Label error;
 
     public EquipmentView(Controller c) {
         this.c = c;
@@ -65,8 +67,10 @@ public class EquipmentView {
 
         Label done = new Label("Item added!");
         Label exists = new Label("This hike already has this item.");
+        succ = new Label();
+        error = new Label();
         //muuta virhetekstiä kuvaamammaksi
-        Label error = new Label("Oops, weight and count should be numbers.\nTry again!");
+        Label exception = new Label("Oops, weight and count should be numbers.\nTry again!");
         
         ready.setOnAction((event) -> {
             try {   
@@ -89,16 +93,24 @@ public class EquipmentView {
 //                }
                 
             } catch (Exception e) {
-                box.getChildren().add(error);
+                box.getChildren().add(exception);
                 //poista alla oleva ennen lopullista palautusta
                 System.out.println("Adding item failed: " + e.getMessage());
             }
         });
-
+        
         tfName.setOnMouseClicked((event) -> {
             box.getChildren().remove(done);
             box.getChildren().remove(exists);
-            box.getChildren().remove(error);
+            box.getChildren().remove(exception);
+        });
+
+        gp.setOnMouseClicked((event) -> {
+            box.getChildren().remove(done);
+            box.getChildren().remove(exists);
+            box.getChildren().remove(exception);
+            succ.setText("");
+            error.setText("");
         });
         
         //poistaminen
@@ -157,14 +169,21 @@ public class EquipmentView {
         b.setOnAction((event) -> {
             int count = i.getCount() - 1;
             if (count < 1) {
-                hike.removeItem(i.getName());
-                c.removeItem(hike, i.getName());
+                //hike.removeItem(i.getName());
+                if (c.removeItem(hike, i.getName())) {
+                    succ.setText("Subtraction succeeded!");
+                } else {
+                    error.setText("Subtraction failed.");
+                }
             } else {
                 //hike.updateItem(i.getName(), count);
                 i.setCount(count);
-                c.addItem(hike, i);
+                if (c.addItem(hike, i)) {
+                    succ.setText("Subtraction succeeded!");
+                } else {
+                    error.setText("Subtraction failed.");
+                }
             }
-            
             formatItemsBox();
         });
         

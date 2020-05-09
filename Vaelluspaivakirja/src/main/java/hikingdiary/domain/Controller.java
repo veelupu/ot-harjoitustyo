@@ -213,19 +213,23 @@ public class Controller {
      * 
      * @return whether the item was added to the hike or not
      */
-    public void addItem(Hike hike, Item item) {
+    public boolean addItem(Hike hike, Item item) {
         if (!hike.addItem(item)) {
             hike.updateItem(item.getName(), item.getCount());
         }
-        hikeDao.createItem(hike, item);
+        if (hikeDao.createItem(hike, item) > 0) {
+            return true;
+        }
+        return false;
     }
     
-    public void removeItem(Hike hike, String name) {
-//        if (hike.removeItem(name)) {
-            hikeDao.deleteItem(hike, name);
-//            return true;
-//        }
-//        return false;
+    public boolean removeItem(Hike hike, String name) {
+        if (hike.removeItem(name)) {
+            if (hikeDao.deleteItem(hike, name) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
