@@ -21,9 +21,6 @@ public class DBUserDaoTest {
     private User user;
     
     public DBUserDaoTest() {
-        userDao = new DBUserDao("hikesTest.db");
-        user = new User("Veera");
-        userDao.create(user);
     }
     
     @Before

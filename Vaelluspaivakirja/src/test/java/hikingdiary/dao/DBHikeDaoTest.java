@@ -64,6 +64,19 @@ public class DBHikeDaoTest {
         Companion comp = new Companion("Pekko");
         hikeDao.createCompanion(hike, comp);
         assertTrue(hikeDao.readHike("Kaldoaivi").formatCompanions().contains("Pekko"));
+        Hike hike2 = new Hike("Halti", 2021, true);
+        hikeDao.createHike(hike2);
+        hikeDao.createCompanion(hike2, comp);
+        assertTrue(hikeDao.readHike("Halti").formatCompanions().contains("Pekko"));
+    }
+    
+    @Test
+    public void deleteCompanionRemovesCompanionFromTheDatabase() {
+        Companion comp = new Companion("Kaisu");
+        hikeDao.createCompanion(hike, comp);
+        assertTrue(hikeDao.readHike("Kaldoaivi").formatCompanions().contains("Kaisu"));
+        hikeDao.deleteCompanion(hike, comp.getName());
+        assertFalse(hikeDao.readHike("Kaldoaivi").formatCompanions().contains("Kaisu"));
     }
     
     @Test
@@ -101,6 +114,83 @@ public class DBHikeDaoTest {
         assertFalse(hikeDao.list(true).contains(hike));
         assertTrue(hikeDao.list(true).contains(hike2));
         assertTrue(hikeDao.list(true).contains(hike3));
+    }
+    
+    @Test
+    public void deleteHikeRemovesHikeFromDatabase() {
+        assertTrue(hikeDao.list(false).contains(hike));
+        hikeDao.deleteHike("Kaldoaivi");
+        assertFalse(hikeDao.list(false).contains(hike));
+    }
+
+    @Test
+    public void createMealWorksAsWantedWhenTheMealDoesNotExistYet() {
+        assertTrue(hikeDao.readHike("Kaldoaivi").getMeals().isEmpty());
+        Meal meal = new Meal("chili con carmé", 3);
+        meal.addIngredient("papu");
+        meal.addIngredient("riisi");
+        meal.addIngredient("maustepussi");
+        hikeDao.createMeal(hike, meal);
+        assertTrue(hikeDao.readHike("Kaldoaivi").getMeals().contains(meal));
+        assertEquals(3, hikeDao.readHike("Kaldoaivi").getMeals().get(0).getCategory());
+        assertEquals(3, hikeDao.readHike("Kaldoaivi").getMeals().get(0).getIngredients().size());
+        assertTrue(hikeDao.readHike("Kaldoaivi").getMeals().get(0).getIngredients().contains("papu"));
+    }
+    
+    @Test
+    public void deleteMealRemovesMealFromDatabase() {
+        Meal meal = new Meal("suklaamousse", 4);
+        hikeDao.createMeal(hike, meal);
+        assertTrue(hikeDao.readHike("Kaldoaivi").getMeals().contains(meal));
+        hikeDao.deleteMeal(hike, meal);
+        assertFalse(hikeDao.readHike("Kaldoaivi").getMeals().contains(meal));
+    }
+    
+    @Test
+    public void createMealWorksAsWantedWhenTheMealExistsAlready() {
+        Meal meal = new Meal("chili con carmé", 3);
+        meal.addIngredient("papu");
+        meal.addIngredient("riisi");
+        meal.addIngredient("maustepussi");
+        hikeDao.createMeal(hike, meal);
+        Hike hike2 = new Hike("Halti", 2021, true);
+        hikeDao.createHike(hike2);
+        hikeDao.createMeal(hike2, meal);
+        assertTrue(hikeDao.readHike("Halti").getMeals().contains(meal));
+        assertEquals(3, hikeDao.readHike("Halti").getMeals().get(0).getCategory());
+        assertEquals(3, hikeDao.readHike("Halti").getMeals().get(0).getIngredients().size());
+        assertTrue(hikeDao.readHike("Halti").getMeals().get(0).getIngredients().contains("riisi"));
+    }
+    
+    @Test
+    public void createItemAddsItemToTheDatabaseOrAddsNewConnectionBetweenItemAndHike() {
+        Item item = new Item("trangia", 1);
+        hikeDao.createItem(hike, item);
+        assertEquals("trangia", hikeDao.readHike("Kaldoaivi").getItems().get(0).getName());
+        assertEquals(1, hikeDao.readHike("Kaldoaivi").getItems().get(0).getCount());
+        Hike hike2 = new Hike("Halti", 2021, true);
+        hikeDao.createHike(hike2);
+        hikeDao.createItem(hike2, item);
+        assertEquals("trangia", hikeDao.readHike("Halti").getItems().get(0).getName());
+        assertEquals(1, hikeDao.readHike("Halti").getItems().get(0).getCount());
+    }
+    
+    @Test
+    public void createItemsAddsCountToTheItemIfTheHikeAlreadyHasIt() {
+        Item item = new Item("trangia", 1);
+        hikeDao.createItem(hike, item);
+        item.setCount(5);
+        hikeDao.createItem(hike, item);
+        assertEquals(5, hikeDao.readHike("Kaldoaivi").getItems().get(0).getCount());
+    }
+    
+    @Test
+    public void deleteItemRemovesItemFromTheDatabase() {
+        Item item = new Item("trangia", 1);
+        hikeDao.createItem(hike, item);
+        assertEquals(1, hikeDao.readHike("Kaldoaivi").getItems().size());
+        hikeDao.deleteItem(hike, item.getName());
+        assertEquals(0, hikeDao.readHike("Kaldoaivi").getItems().size());
     }
 
     @Test

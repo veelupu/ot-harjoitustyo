@@ -17,14 +17,7 @@ public class Item implements Comparable<Item> {
     private int count;
     
     public Item(String name, int count) {
-        this.name = name;
-        this.count = count;
-        this.weight = 0;
-    }
-    
-    public Item(String name, double weight) {
-        this.name = name;
-        this.weight = weight;
+        this(name, 0, count);
     }
     
     public Item(String name, double weight, int count) {
