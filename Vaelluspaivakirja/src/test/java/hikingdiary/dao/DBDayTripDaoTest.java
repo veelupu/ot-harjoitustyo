@@ -64,6 +64,26 @@ public class DBDayTripDaoTest {
         assertTrue(5.2 == dtDao.read(date).getWalkTime());
         assertEquals("pilvistä ja tuulista", dtDao.read(date).getWeather());
     }
+    
+    @Test
+    public void deleteRemovesDayTripFromTheDatabase() {
+        assertEquals(1, dtDao.list(1).size());
+        assertTrue(dt.getId() != 0);
+        dtDao.delete(dt);
+        assertEquals(0, dtDao.list(1).size());
+    }
+    
+    @Test 
+    public void listListsAllTheDayTripsBelongingToCertainHike() {
+        assertEquals(1, dtDao.list(1).size());
+        assertEquals(date, dtDao.list(1).get(0).getDate());
+        LocalDate date2 = LocalDate.of(2007, 6, 7);
+        DayTrip dt2 = new DayTrip(date2, "leirintäalue", "autiotupa");
+        dtDao.create(1, dt2);
+        assertEquals(2, dtDao.list(1).size());
+        assertEquals(date, dtDao.list(1).get(0).getDate());
+        assertEquals(date2, dtDao.list(1).get(1).getDate());
+    }
 
     @Test
     public void hello() {}

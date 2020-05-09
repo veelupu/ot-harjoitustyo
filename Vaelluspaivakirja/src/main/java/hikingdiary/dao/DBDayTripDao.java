@@ -171,8 +171,8 @@ public class DBDayTripDao implements DayTripDao {
     @Override
     public int delete(DayTrip dt) {
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM DayTrip WHERE date = ?");
-            ps.setString(1, dt.getDate().toString());
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM DayTrips WHERE id = ?");
+            ps.setInt(1, dt.getId());
             
             int executeUpdate = ps.executeUpdate();
             ps.close();
@@ -189,7 +189,7 @@ public class DBDayTripDao implements DayTripDao {
      * @return list of day trips or null if there is no day trips for this date or an exception occurred
      */
     @Override
-    public List list(int hikeId) {
+    public List<DayTrip> list(int hikeId) {
         ArrayList<DayTrip> dayTrips = new ArrayList<>();
 
         try {
