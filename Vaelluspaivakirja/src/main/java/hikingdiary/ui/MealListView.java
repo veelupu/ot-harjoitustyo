@@ -131,7 +131,7 @@ public class MealListView {
                 ArrayList<String> ingredients = new ArrayList<>();
                 if (tfIngr.getLength() > 0) {
                     String ingr = tfIngr.getText();
-                    String[] pcs = ingr.split(",");
+                    String[] pcs = ingr.split(", ");
                     for (int i = 0; i < pcs.length; i++) {
                         ingredients.add(pcs[i]);
                     }

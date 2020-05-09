@@ -267,7 +267,7 @@ public class DBHikeDao implements HikeDao {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, meal.getName());
             ps.setInt(2, meal.getCategory());
-            ps.setString(3, String.join(",", meal.getIngredients()));
+            ps.setString(3, String.join(", ", meal.getIngredients()));
 
             int executeUpdate = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
