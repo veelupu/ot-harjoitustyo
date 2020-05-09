@@ -194,9 +194,9 @@ public class Controller {
         return false;
     }
     
-    public boolean removeMeal(Hike hike, String name) {
-        if (hike.removeMeal(name)) {
-            hikeDao.deleteMeal(hike, name);
+    public boolean removeMeal(Hike hike, Meal meal) {
+        if (hike.removeMeal(meal)) {
+            hikeDao.deleteMeal(hike, meal);
             return true;
         }
         return false;
@@ -241,11 +241,11 @@ public class Controller {
      */
     public boolean addMeal(Hike hike, Meal meal) {
         if (hike.addMeal(meal)) {
-            hikeDao.createMeal(hike, meal);
-            return true;
-        } else {
-            return false;
+            if (hikeDao.createMeal(hike, meal) > 0) {
+                return true;
+            }
         }
+        return false;
     }
 
     /**

@@ -116,18 +116,22 @@ public class MealListView {
         lowerBox.setAlignment(Pos.CENTER);
 
         Label done = new Label("Meal added!");
+        Label noName = new Label("Please give your meal a name!");
         Label exists = new Label("This hike already has this meal.");
         Label error = new Label("Oops, something went wrong.\nTry again!");
 
         //Painetaan nappia ja ruoan luominen alkaa
         ready.setOnAction((event) -> {
+            if (tfName.getText().length() < 1) {
+                lowerBox.getChildren().add(noName);
+                return;
+            }
+            Meal meal = new Meal(tfName.getText(), this.category);
             try {
-                Meal meal = new Meal(tfName.getText(), this.category);
-
                 ArrayList<String> ingredients = new ArrayList<>();
-                if (tfIngr.getLength() != 0) {
+                if (tfIngr.getLength() > 0) {
                     String ingr = tfIngr.getText();
-                    String[] pcs = ingr.split(", ");
+                    String[] pcs = ingr.split(",");
                     for (int i = 0; i < pcs.length; i++) {
                         ingredients.add(pcs[i]);
                     }
@@ -145,13 +149,15 @@ public class MealListView {
                 }
             } catch (Exception e) {
                 lowerBox.getChildren().add(error);
+                c.removeMeal(hike, meal);
                 //poista alla oleva ennen lopullista palautusta
-                System.out.println("Adding item failed: " + e.getMessage());
+                System.out.println("Adding meal failed: " + e.getMessage());
             }
         });
 
         tfName.setOnMouseClicked((event) -> {
             lowerBox.getChildren().remove(done);
+            lowerBox.getChildren().remove(noName);
             lowerBox.getChildren().remove(exists);
             lowerBox.getChildren().remove(error);
         });

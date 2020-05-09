@@ -58,7 +58,7 @@ public class MealView {
         ingr.setPadding(new Insets(5, 5, 5, 5));
         
         remove.setOnAction((event) -> {
-            if (c.removeMeal(hike, meal.getName())) {
+            if (c.removeMeal(hike, meal)) {
                 box.getChildren().add(new Label("Meal removed!"));
             } else {
                 box.getChildren().add(new Label("Removing meal failed for some reason."));

@@ -16,7 +16,7 @@ import java.sql.*;
 
 /**
  * Class responsible for database connection for the hike related data
- * 
+ *
  * @author veeralupunen
  */
 public class DBHikeDao implements HikeDao {
@@ -40,7 +40,7 @@ public class DBHikeDao implements HikeDao {
 
     /**
      * Constructor for the test classes
-     * 
+     *
      * @param address address where to temporarily place a test database
      */
     public DBHikeDao(String address) {
@@ -76,16 +76,17 @@ public class DBHikeDao implements HikeDao {
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Co (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, c_id INTEGER REFERENCES Companion ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (h_id, c_id))");
         s.execute("CREATE TABLE IF NOT EXISTS Item (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, weight INTEGER)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_It (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, i_id INTEGER REFERENCES Item ON UPDATE CASCADE ON DELETE CASCADE, count INTEGER NOT NULL, PRIMARY KEY (h_id, i_id))");
-        s.execute("CREATE TABLE IF NOT EXISTS Meal (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, category INTEGER NOT NULL, ingr TEXT)");
+        s.execute("CREATE TABLE IF NOT EXISTS Meal (id INTEGER PRIMARY KEY, name TEXT NOT NULL, category INTEGER NOT NULL, ingr TEXT)");
         s.execute("CREATE TABLE IF NOT EXISTS Hi_Me (h_id INTEGER REFERENCES Hikes ON UPDATE CASCADE ON DELETE CASCADE, m_id INTEGER REFERENCES Meal ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (h_id, m_id))");
         s.execute("COMMIT");
     }
 
     /**
      * Method adds a new hike into the Hikes table in the database.
-     * 
+     *
      * @param hike hike to be added
-     * @return 1 if creation succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if creation succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int createHike(Hike hike) {
@@ -110,20 +111,21 @@ public class DBHikeDao implements HikeDao {
     }
 
     /**
-     * Method checks if the given companion already exists in the database.If not, it adds the companion into the Companion table.
-     * Lastly method adds a connection between the given hike and companion 
- into the Hi_Co table.
-     * 
+     * Method checks if the given companion already exists in the database.If
+     * not, it adds the companion into the Companion table. Lastly method adds a
+     * connection between the given hike and companion into the Hi_Co table.
+     *
      * @param hike hike to add the companion for
      * @param comp companion to be added in the database and/or for the hike
-     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int createCompanion(Hike hike, Companion comp) {
         try {
             int executeUpdate = 0;
             int id = fetchCompanionId(comp.getName());
-            
+
             if (id == -1) {
                 return -1;
             } else if (id == 0) {
@@ -135,7 +137,7 @@ public class DBHikeDao implements HikeDao {
                 rs.next();
                 id = rs.getInt(1);
                 comp.setId(id);
-                
+
                 ps.close();
                 rs.close();
             }
@@ -152,22 +154,23 @@ public class DBHikeDao implements HikeDao {
             ps.setInt(1, hike.getId());
             ps.setInt(2, id);
             int executeUpdate = ps.executeUpdate();
-            
+
             ps.close();
             return executeUpdate;
         } catch (SQLException e) {
             return -1;
         }
     }
-    
+
     /**
-     * Method checks if the given item already exists in the database.If not, it adds the item into the Item table.
-     * Finally method adds a connection between the given hike and item 
- into the Hi_It table.
-     * 
+     * Method checks if the given item already exists in the database.If not, it
+     * adds the item into the Item table. Finally method adds a connection
+     * between the given hike and item into the Hi_It table.
+     *
      * @param hike hike to add the item for
      * @param item item to be added in the database and/or for the hike
-     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int createItem(Hike hike, Item item) {
@@ -191,7 +194,7 @@ public class DBHikeDao implements HikeDao {
 
                 ps.close();
                 rs.close();
-                
+
             }
             executeUpdate += addHikeItem(hike, item);
             return executeUpdate;
@@ -218,54 +221,62 @@ public class DBHikeDao implements HikeDao {
             return -1;
         }
     }
-    
+
     private int addCountHikeItem(Hike hike, Item item) {
         try {
-                PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count = ? WHERE h_id = ? AND i_id = ?");
-                ps.setInt(1, item.getCount());
-                ps.setInt(2, hike.getId());
-                ps.setInt(3, item.getId());
-                int executeUpdate = ps.executeUpdate();
+            PreparedStatement ps = connection.prepareStatement("UPDATE Hi_It SET count = ? WHERE h_id = ? AND i_id = ?");
+            ps.setInt(1, item.getCount());
+            ps.setInt(2, hike.getId());
+            ps.setInt(3, item.getId());
+            int executeUpdate = ps.executeUpdate();
 
-                ps.close();
-                return executeUpdate;
-            } catch (SQLException e) {
-                return -1;
-            }
+            ps.close();
+            return executeUpdate;
+        } catch (SQLException e) {
+            return -1;
+        }
     }
 
     /**
-     * Method checks if the given meal already exists in the database.If not, it adds the meal into the Meal table.
-     * Finally method adds a connection between the given hike and meal 
- into the Hi_Co table.
-     * 
+     * Method checks if the given meal already exists in the database.If not, it
+     * adds the meal into the Meal table. Finally method adds a connection
+     * between the given hike and meal into the Hi_Co table.
+     *
      * @param hike hike to add the meal for
      * @param meal meal to be added in the database and/or for the hike
-     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 or 2 if creation succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int createMeal(Hike hike, Meal meal) {
         try {
-            int id = fetchMealId(meal.getName());
-            int executeUpdate = 0;
-
-            if (id == -1) {
+            ArrayList<Meal> meals = fetchAllMeals();
+            if (meals == null) {
                 return -1;
-            } else if (id == 0) {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, meal.getName());
-                ps.setInt(2, meal.getCategory());
-                ps.setString(3, String.join(",", meal.getIngredients()));
-
-                executeUpdate += ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                rs.next();
-                id = rs.getInt(1);
-                meal.setId(id);
-
-                ps.close();
-                rs.close();  
             }
+            int id = 0;
+            if (meals.contains(meal)) {
+                for (Meal m : meals) {
+                    if (m.equals(meal)) {
+                        id = m.getId();
+                    }
+                }
+                return addHikeMeal(hike, id);
+            }
+
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, meal.getName());
+            ps.setInt(2, meal.getCategory());
+            ps.setString(3, String.join(",", meal.getIngredients()));
+
+            int executeUpdate = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
+            meal.setId(id);
+
+            ps.close();
+            rs.close();
             executeUpdate += addHikeMeal(hike, id);
             return executeUpdate;
         } catch (SQLException e) {
@@ -288,11 +299,12 @@ public class DBHikeDao implements HikeDao {
     }
 
     /**
-     * Method gets the hike with the given name and all its companions, items and meals
-     * from the database.
-     * 
+     * Method gets the hike with the given name and all its companions, items
+     * and meals from the database.
+     *
      * @param name name of the hike
-     * @return hike with its companion, items and meals or null if an error occurred
+     * @return hike with its companion, items and meals or null if an error
+     * occurred
      */
     @Override
     public Hike readHike(String name) {
@@ -328,7 +340,7 @@ public class DBHikeDao implements HikeDao {
             if (rs.next()) {
                 return rs.getInt("id");
             }
-            
+
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -336,7 +348,7 @@ public class DBHikeDao implements HikeDao {
         }
         return 0;
     }
-    
+
     private int fetchCompanionId(String name) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT id FROM Companion WHERE name = ?");
@@ -347,7 +359,7 @@ public class DBHikeDao implements HikeDao {
                 ps.close();
                 rs.close();
                 return rs.getInt("id");
-            } 
+            }
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -374,11 +386,13 @@ public class DBHikeDao implements HikeDao {
         }
         return 0;
     }
-    
-    private int fetchMealId(String name) {
+
+    private int fetchMealId(Meal meal) {
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT id FROM Meal WHERE name = ?");
-            ps.setString(1, name);
+            PreparedStatement ps = connection.prepareStatement("SELECT id FROM Meal WHERE name = ? AND category = ? AND ingr = ?");
+            ps.setString(1, meal.getName());
+            ps.setInt(2, meal.getCategory());
+            ps.setString(3, String.join(",", meal.getIngredients()));
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -386,7 +400,7 @@ public class DBHikeDao implements HikeDao {
                 rs.close();
                 return rs.getInt("id");
             }
-            
+
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -434,7 +448,7 @@ public class DBHikeDao implements HikeDao {
                 item.setId(id);
                 equipment.put(name, item);
             }
-            
+
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -443,9 +457,9 @@ public class DBHikeDao implements HikeDao {
         return equipment;
     }
 
-    private HashMap<String, Meal> fetchMeals(Hike hike) {
-        HashMap<String, Meal> meals = new HashMap<>();
-        
+    private ArrayList<Meal> fetchMeals(Hike hike) {
+        ArrayList<Meal> meals = new ArrayList<>();
+
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT M.id, M.name, category, ingr FROM Hikes H JOIN Hi_Me ON H.id = h_id JOIN Meal M ON m_id = M.id WHERE h_id = ?");
             ps.setInt(1, hike.getId());
@@ -453,9 +467,9 @@ public class DBHikeDao implements HikeDao {
 
             while (rs.next()) {
                 Meal meal = formatMeal(rs);
-                meals.put(meal.getName(), meal);
+                meals.add(meal);
             }
-            
+
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -463,13 +477,33 @@ public class DBHikeDao implements HikeDao {
         }
         return meals;
     }
-    
+
+    private ArrayList<Meal> fetchAllMeals() {
+        ArrayList<Meal> meals = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Meal");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Meal meal = formatMeal(rs);
+                meals.add(meal);
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            return null;
+        }
+        return meals;
+    }
+
     private Meal formatMeal(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         int category = rs.getInt("category");
         String ingr = rs.getString("ingr");
-              
+
         Meal meal = new Meal(name, category);
         meal.setId(id);
         meal.setIngredients(formatIngredients(ingr));
@@ -478,7 +512,7 @@ public class DBHikeDao implements HikeDao {
 
     private ArrayList<String> formatIngredients(String ingr) {
         ArrayList<String> ingredients = new ArrayList<>();
-        
+
         if (ingr.length() != 0) {
             String[] pcs = ingr.split(", ");
             for (int i = 0; i < pcs.length; i++) {
@@ -490,9 +524,10 @@ public class DBHikeDao implements HikeDao {
 
     /**
      * Method updates the given hikes data into the database.
-     * 
+     *
      * @param hike hike to update
-     * @return 1 if update succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if update succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int updateHike(Hike hike) {
@@ -518,9 +553,10 @@ public class DBHikeDao implements HikeDao {
 
     /**
      * Method removes the given hike from the database.
-     * 
+     *
      * @param name the name for the hike to be removed
-     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int deleteHike(String name) {
@@ -531,7 +567,7 @@ public class DBHikeDao implements HikeDao {
             }
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hikes WHERE id = ?");
-            ps.setInt(1, id);            
+            ps.setInt(1, id);
             int executeUpdate = ps.executeUpdate();
 
             ps.close();
@@ -540,13 +576,14 @@ public class DBHikeDao implements HikeDao {
             return -1;
         }
     }
-    
+
     /**
      * Method removes the given companion from the database.
-     * 
+     *
      * @param hike hike to remove the companion from
      * @param name name of the companion to be deleted
-     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int deleteCompanion(Hike hike, String name) {
@@ -558,7 +595,7 @@ public class DBHikeDao implements HikeDao {
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_Co WHERE c_id = ? AND h_id = ?");
             ps.setInt(1, id);
-            ps.setInt(2, hike.getId());            
+            ps.setInt(2, hike.getId());
             int executeUpdate = ps.executeUpdate();
 
             ps.close();
@@ -567,18 +604,19 @@ public class DBHikeDao implements HikeDao {
             return -1;
         }
     }
-    
+
     /**
      * Method removes the given meal from the database.
-     * 
+     *
      * @param hike hike to remove the meal from
      * @param name name of the meal to be deleted
-     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
-    public int deleteMeal(Hike hike, String name) {
+    public int deleteMeal(Hike hike, Meal meal) {
         try {
-            int id = fetchMealId(name);
+            int id = fetchMealId(meal);
             if (id == 0) {
                 return -1;
             }
@@ -594,13 +632,14 @@ public class DBHikeDao implements HikeDao {
             return -1;
         }
     }
-    
+
     /**
      * Method removes the given item from the database.
-     * 
+     *
      * @param hike hike to remove the item from
      * @param name name of the item to be deleted
-     * @return 1 if deletion succeeded and 0 if not and -1 if an exception occurred
+     * @return 1 if deletion succeeded and 0 if not and -1 if an exception
+     * occurred
      */
     @Override
     public int deleteItem(Hike hike, String name) {
@@ -612,7 +651,7 @@ public class DBHikeDao implements HikeDao {
 
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Hi_It WHERE i_id = ? AND h_id = ?");
             ps.setInt(1, id);
-            ps.setInt(2, hike.getId());            
+            ps.setInt(2, hike.getId());
             int executeUpdate = ps.executeUpdate();
 
             ps.close();
@@ -623,15 +662,16 @@ public class DBHikeDao implements HikeDao {
     }
 
     /**
-     * Method lists past or upcoming hikes in the database with their basic data.
-     * 
+     * Method lists past or upcoming hikes in the database with their basic
+     * data.
+     *
      * @param upcoming whether past or upcoming hikes are to be listed
      * @return list of hikes
      */
     @Override
     public List<Hike> list(boolean upcoming) {
         ArrayList<Hike> hikes = new ArrayList<>();
-        
+
         int upc = 0;
         if (upcoming) {
             upc = 1;

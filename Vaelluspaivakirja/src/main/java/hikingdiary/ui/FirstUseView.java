@@ -37,7 +37,6 @@ public class FirstUseView {
         VBox v = new VBox();
         v.getChildren().addAll(intro, username, ready);
 
-        gp.setPrefSize(300, 180);
         gp.setAlignment(Pos.CENTER);
         gp.setVgap(10);
         gp.setHgap(10);

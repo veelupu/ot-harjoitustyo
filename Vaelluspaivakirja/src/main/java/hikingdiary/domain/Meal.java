@@ -5,6 +5,7 @@
 package hikingdiary.domain;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Class representing a single meal
@@ -81,6 +82,22 @@ public class Meal implements Comparable<Meal> {
     @Override
     public String toString() {
         return this.name + " (" + this.categoryName + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        
+        if (!(o instanceof Meal)) {
+            return false;
+        }
+        Meal oMeal = (Meal) o;
+        return (this.name.equals(oMeal.getName()) && this.category == oMeal.getCategory() && this.ingredients.equals(oMeal.getIngredients()));
     }
 
     @Override

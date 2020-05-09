@@ -8,7 +8,6 @@ import hikingdiary.domain.Companion;
 import hikingdiary.domain.Hike;
 import hikingdiary.domain.Item;
 import hikingdiary.domain.Meal;
-import java.sql.*;
 import java.util.*;
 
 /**
@@ -24,7 +23,7 @@ public interface HikeDao {
     int updateHike(Hike hike);
     int deleteHike(String name);
     int deleteCompanion(Hike hike, String name);
-    int deleteMeal(Hike hike, String name);
+    int deleteMeal(Hike hike, Meal meal);
     int deleteItem(Hike hike, String name);
     List<Hike> list(boolean upcoming);
 }

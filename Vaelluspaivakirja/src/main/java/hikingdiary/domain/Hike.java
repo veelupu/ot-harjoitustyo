@@ -26,7 +26,7 @@ public class Hike implements Comparable<Hike> {
     private String locationEnd;
     private HashMap<LocalDate, DayTrip> dayTrips;
     private ArrayList<String> companions;
-    private HashMap<String, Meal> meals;
+    private ArrayList<Meal> meals;
     private HashMap<String, Item> equipment;
     private double rucksackWeightBeg;
     private double rucksackWeightEnd;
@@ -49,7 +49,7 @@ public class Hike implements Comparable<Hike> {
         this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
         this.companions = new ArrayList<>();
-        this.meals = new HashMap<>();
+        this.meals = new ArrayList<>();
         this.equipment = new HashMap<>();
     }
 
@@ -201,10 +201,10 @@ public class Hike implements Comparable<Hike> {
      * @return whether did the method add the meal or not
      */
     public boolean addMeal(Meal meal) {
-        if (this.meals.containsKey(meal.getName())) {
+        if (this.meals.contains(meal)) {
             return false;
         }
-        this.meals.put(meal.getName(), meal);
+        this.meals.add(meal);
         return true;
     }
 
@@ -216,7 +216,7 @@ public class Hike implements Comparable<Hike> {
      */
     public String formatMeals() {
         StringBuilder items = new StringBuilder();
-        for (Meal meal : this.meals.values()) {
+        for (Meal meal : this.meals) {
             items.append(meal.toString() + "\n");
         }
         return items.toString();
@@ -229,20 +229,20 @@ public class Hike implements Comparable<Hike> {
      */
     public ArrayList<Meal> getMeals() {
         ArrayList<Meal> meals = new ArrayList<>();
-        for (Meal meal : this.meals.values()) {
+        for (Meal meal : this.meals) {
             meals.add(meal);
         }
         Collections.sort(meals);
         return meals;
     }
     
-    public void setMeals(HashMap<String, Meal> mealList) {
+    public void setMeals(ArrayList<Meal> mealList) {
         this.meals = mealList;
     }
     
-    public boolean removeMeal(String name) {
-        if (this.meals.containsKey(name)) {
-            this.meals.remove(name);
+    public boolean removeMeal(Meal meal) {
+        if (this.meals.contains(meal)) {
+            this.meals.remove(meal.getName());
             return true;
         }
         return false;
