@@ -3,13 +3,13 @@
 
 Vaelluspäiväkirja-sovelluksen avulla sovelluksen käyttäjän on helppoa ja kätevää pitää kirjaa menneistä vaelluksistaan sekä suunnitella tulevia vaelluksiaan. Sovellukseen voi tallentaa tiedot vaelluksistaan päivämatkoja, rinkan painoa, seuralaisia, säätä sekä ruoka- ja varustelistoja myöten. Sovelluksessa voi selata ja hakea erikseen menneitä ja tulevia vaelluksiaan sekä käyttää menneiden vaellusten listoja ja päivämatkatietoja uusien vaellusten suunnittelun pohjana.
 
-Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko sekä toiminnallisuus uuden vaelluksen lisäämiseksi, menneiden ja tulevien vaellusten listaamiseksi, valitun vaelluksen näyttämiseksi sekä käyttäjänimen vaihtamiseksi. Vaellukselle on tällä hetkellä mahdollista lisätä seuraavat tiedot: nimi, vuosi, rinkan alku- ja loppupaino, mahdolliset seuralaiset sekä tieto siitä, onko kyseessä mennyt vai tuleva vaellus.
+Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko sekä toiminnallisuus uuden vaelluksen lisäämiseksi, menneiden ja tulevien vaellusten listaamiseksi, valitun vaelluksen näyttämiseksi sekä käyttäjänimen vaihtamiseksi. Vaellukselle on mahdollista lisätä seuraavat tiedot: nimi, vuosi, alku- ja loppupiste, rinkan alku- ja loppupaino, mahdolliset seuralaiset, ruokalista, varustelista, päivämatkat sekä tieto siitä, onko kyseessä mennyt vai tuleva vaellus.
 
 ## Dokumentaatio
 
 [Käyttöohje](dokumentointi/kayttoohje.md)
 
-[Alustava määrittelydokumentti](dokumentointi/maarittelydokumentti.md)
+[Määrittelydokumentti](dokumentointi/maarittelydokumentti.md)
 
 [Sovellusarkkitehtuuri](dokumentointi/sovellusarkkitehtuuri.md)
 
@@ -22,6 +22,12 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 [Viikko 5](/releases/tag/viikko5)
 
 [Viikko 6](/releases/tag/viikko6)
+
+[Loppupalautus](/releases/tag/loppupalautus)
+
+## Konfigurointi
+
+Sovellus on tehty Javan versiolla 11. Graafinen käyttöliittymä on tehty JavaFX:n versiolla 14.
 
 ## Komentorivitoiminnot
 
