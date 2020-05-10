@@ -62,6 +62,8 @@ Meal list -nappia vaellusnäkymässä painamalla pääsee tarkastelemaan vaelluk
 
 Companion -nappia vaellusnäkymässä painamalla pääsee tarkastelemaan vaellukselle tallennettuja seuralaisia, poistamaan seuralaisia sekä lisäämään uusia seuralaisia. Poistaminen tapahtuu painamalla Remove companion -nappia, syöttämällä poistettavan seuralaisen nimen tekstikenttään ja painamalla lopuksi Delete-nappia.
 
+<img src="../dokumentointi/companion-view.png" width="70%" alt="Image of companion list view"/>
+
 ## Asetukset
 
 Valitsemalla yläpalkin valikossa Settings pääsee vaihtamaan käyttäjänimeään. Käyttäjänimi vaihdetaan kirjoittamalla tekstikenttään uusi käyttäjänimi ja painamalla lopuksi Change my username -nappia.
