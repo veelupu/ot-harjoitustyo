@@ -42,8 +42,8 @@ public class Hike implements Comparable<Hike> {
         this.name = name;
         this.year = year;
         this.upcoming = upcoming;
-        this.locationStart = "";
-        this.locationEnd = "";
+        this.locationStart = " ";
+        this.locationEnd = " ";
         this.rucksackWeightBeg = rucksackWeightBeg;
         this.rucksackWeightEnd = rucksackWeightEnd;
         this.dayTrips = new HashMap<>();
