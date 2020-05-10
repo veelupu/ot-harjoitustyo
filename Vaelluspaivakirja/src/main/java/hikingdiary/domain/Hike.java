@@ -342,7 +342,12 @@ public class Hike implements Comparable<Hike> {
      */
     public boolean removeMeal(Meal meal) {
         if (this.meals.contains(meal)) {
-            this.meals.remove(meal.getName());
+            for (Meal m : this.meals) {
+                if (m.equals(meal)) {
+                    meals.remove(m);
+                    break;
+                }
+            }
             return true;
         }
         return false;

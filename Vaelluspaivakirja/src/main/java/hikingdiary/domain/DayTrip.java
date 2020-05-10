@@ -52,6 +52,7 @@ public class DayTrip implements Comparable<DayTrip> {
 
     public void setDate(LocalDate date) {
         this.date = date;
+        this.weekday = DayOfWeek.from((TemporalAccessor) this.date).getValue();
     }
 
     /**

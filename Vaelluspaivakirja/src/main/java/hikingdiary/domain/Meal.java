@@ -39,16 +39,8 @@ public class Meal implements Comparable<Meal> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getCategory() {
         return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
     }
 
     public ArrayList<String> getIngredients() {

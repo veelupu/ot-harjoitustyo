@@ -102,29 +102,6 @@ public class Controller {
     }
 
     /**
-     * Method gets all the hikes from the database.
-     *
-     * @see hikingdiary.dao.DBHikeDao#list(boolean)
-     * @return list of hikes or null if an error occurred
-     */
-    public List<Hike> listHikes() {
-        List<Hike> hikes = new ArrayList<>();
-
-        try {
-            hikes = hikeDao.list(false);
-            for (Hike h : hikeDao.list(true)) {
-                hikes.add(h);
-            }
-        } catch (Exception e) {
-            return null;
-        }
-
-        Collections.sort(hikes);
-        Collections.reverse(hikes);
-        return hikes;
-    }
-
-    /**
      * Method gets all the past-marked hikes from the database and sorts them.
      *
      * @see hikingdiary.dao.DBHikeDao#list(boolean)
