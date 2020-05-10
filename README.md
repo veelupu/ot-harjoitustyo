@@ -19,13 +19,13 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 
 ## Releaset
 
-[Viikko 5](/releases/tag/viikko5)
+[Viikko 5](https://github.com/veelupu/ot-harjoitustyo/releases/tag/viikko5)
 
-[Viikko 6](/releases/tag/viikko6)
+[Viikko 6](https://github.com/veelupu/ot-harjoitustyo/releases/tag/viikko6)
 
-[Loppupalautus](/releases/tag/loppupalautus)
+[Loppupalautus](https://github.com/veelupu/ot-harjoitustyo/releases/tag/loppupalautus)
 
-## Konfigurointi
+## Konfiguraatio
 
 Sovellus on tehty Javan versiolla 11. Graafinen käyttöliittymä on tehty JavaFX:n versiolla 14.
 
