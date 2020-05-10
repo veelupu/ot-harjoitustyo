@@ -9,7 +9,7 @@ Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko se
 
 [Käyttöohje](dokumentointi/kayttoohje.md)
 
-[Alustava määrittelydokumentti](dokumentointi/alustava_maarittelydokumentti.md)
+[Alustava määrittelydokumentti](dokumentointi/maarittelydokumentti.md)
 
 [Sovellusarkkitehtuuri](dokumentointi/sovellusarkkitehtuuri.md)
 
