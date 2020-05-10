@@ -16,4 +16,9 @@
     <suppress files="hikingdiary.ui.CompanionView.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="hikingdiary.ui.EquipmentView.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="hikingdiary.ui.MealListView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.DayTripListView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.DayTripView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.LocationView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.MealView.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="hikingdiary.ui.RucksacWView.java" checks="[a-zA-Z0-9]*"/>
 </suppressions>

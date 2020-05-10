@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -91,26 +90,29 @@ public class DBDayTripDao implements DayTripDao {
     public int create(int hikeId, DayTrip dt) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO DayTrips (hikeId, date, start, end, dist, hours, weather) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, hikeId);
-            ps.setString(2, dt.getDate().toString());
-            ps.setString(3, dt.getStartingPoint());
-            ps.setString(4, dt.getEndingPoint());
-            ps.setDouble(5, dt.getWalkDist());
-            ps.setDouble(6, dt.getWalkTime());
-            ps.setString(7, dt.getWeather());
-
+            fillPreparedStatementForCreate(ps, hikeId, dt);
+            
             int executeUpdate = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            int id = rs.getInt(1);
-            dt.setId(id);
+            dt.setId(rs.getInt(1));
 
             ps.close();
             rs.close();
             return executeUpdate;
-        } catch (SQLException e) {
-            return -1;
+        } catch (SQLException e) { 
+            return -1; 
         }
+    }
+    
+    private void fillPreparedStatementForCreate(PreparedStatement ps, int hikeId, DayTrip dt) throws SQLException {
+        ps.setInt(1, hikeId);
+        ps.setString(2, dt.getDate().toString());
+        ps.setString(3, dt.getStartingPoint());
+        ps.setString(4, dt.getEndingPoint());
+        ps.setDouble(5, dt.getWalkDist());
+        ps.setDouble(6, dt.getWalkTime());
+        ps.setString(7, dt.getWeather());
     }
 
     /**

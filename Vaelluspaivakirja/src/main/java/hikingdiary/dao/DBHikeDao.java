@@ -123,8 +123,8 @@ public class DBHikeDao implements HikeDao {
     @Override
     public int createCompanion(Hike hike, Companion comp) {
         try {
-            int executeUpdate = 0;
             int id = fetchCompanionId(comp.getName());
+            int executeUpdate = 0;
 
             if (id == -1) {
                 return -1;
@@ -135,13 +135,12 @@ public class DBHikeDao implements HikeDao {
                 executeUpdate += ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
-                id = rs.getInt(1);
-                comp.setId(id);
+                comp.setId(rs.getInt(1));
 
                 ps.close();
                 rs.close();
             }
-            executeUpdate += addHikeCompanion(hike, id);
+            executeUpdate += addHikeCompanion(hike, comp.getId());
             return executeUpdate;
         } catch (SQLException e) {
             return -1;
@@ -176,7 +175,6 @@ public class DBHikeDao implements HikeDao {
     public int createItem(Hike hike, Item item) {
         try {
             int id = fetchItemId(item.getName());
-            item.setId(id);
             int executeUpdate = 0;
 
             if (id == -1) {
@@ -189,13 +187,12 @@ public class DBHikeDao implements HikeDao {
                 executeUpdate += ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
-                id = rs.getInt(1);
-                item.setId(id);
 
+                id = rs.getInt(1);
                 ps.close();
                 rs.close();
-
             }
+            item.setId(id);
             executeUpdate += addHikeItem(hike, item);
             return executeUpdate;
         } catch (SQLException e) {
@@ -250,38 +247,46 @@ public class DBHikeDao implements HikeDao {
     @Override
     public int createMeal(Hike hike, Meal meal) {
         try {
-            ArrayList<Meal> meals = fetchAllMeals();
-            if (meals == null) {
-                return -1;
-            }
-            int id = 0;
-            if (meals.contains(meal)) {
-                for (Meal m : meals) {
-                    if (m.equals(meal)) {
-                        id = m.getId();
-                    }
-                }
-                return addHikeMeal(hike, id);
+            int e = mealInTheDB(hike, meal);
+            if (e != 0) {
+                return e;
             }
 
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Meal (name, category, ingr) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, meal.getName());
-            ps.setInt(2, meal.getCategory());
-            ps.setString(3, String.join(", ", meal.getIngredients()));
+            prepareStatementForCreateMeal(ps, meal);
 
             int executeUpdate = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            id = rs.getInt(1);
-            meal.setId(id);
+            meal.setId(rs.getInt(1));
 
             ps.close();
             rs.close();
-            executeUpdate += addHikeMeal(hike, id);
+            executeUpdate += addHikeMeal(hike, meal.getId());
             return executeUpdate;
         } catch (SQLException e) {
             return -1;
         }
+    }
+
+    private int mealInTheDB(Hike hike, Meal meal) {
+        ArrayList<Meal> meals = fetchAllMeals();
+        if (meals == null) {
+            return -1;
+        }
+        for (Meal m : meals) {
+            if (m.equals(meal)) {
+                int id = m.getId();
+                return addHikeMeal(hike, id);
+            }
+        }
+        return 0;
+    }
+
+    private void prepareStatementForCreateMeal(PreparedStatement ps, Meal meal) throws SQLException {
+        ps.setString(1, meal.getName());
+        ps.setInt(2, meal.getCategory());
+        ps.setString(3, String.join(", ", meal.getIngredients()));
     }
 
     private int addHikeMeal(Hike hike, int id) {
@@ -444,14 +449,10 @@ public class DBHikeDao implements HikeDao {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
-                Double weight = rs.getDouble("weight");
-                int count = rs.getInt("count");
-                Item item = new Item(name, weight, count);
+                Item item = new Item(rs.getString("name"), rs.getDouble("weight"), rs.getInt("count"));
                 item.setId(id);
-                equipment.put(name, item);
+                equipment.put(item.getName(), item);
             }
-
             ps.close();
             rs.close();
         } catch (SQLException e) {
@@ -675,21 +676,13 @@ public class DBHikeDao implements HikeDao {
     public List<Hike> list(boolean upcoming) {
         ArrayList<Hike> hikes = new ArrayList<>();
 
-        int upc = 0;
-        if (upcoming) {
-            upc = 1;
-        }
-
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT id, name, year FROM Hikes WHERE upcoming = ?");
-            ps.setInt(1, upc);
+            ps.setBoolean(1, upcoming);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), false);
-                if (upc == 1) {
-                    hike.setUpcoming(true);
-                }
+                Hike hike = new Hike(rs.getString("name"), rs.getInt("year"), upcoming);
                 hike.setId(rs.getInt("id"));
                 hikes.add(hike);
             }

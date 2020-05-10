@@ -21,6 +21,10 @@ public class Companion {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
