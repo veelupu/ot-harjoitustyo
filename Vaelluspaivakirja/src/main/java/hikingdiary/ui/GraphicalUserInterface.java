@@ -11,7 +11,6 @@ import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
-import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
