@@ -39,7 +39,7 @@ public class MealTest {
     
 
     @Test
-    public void getCategoryNameReturnCorrectName() {
+    public void getCategoryNameReturnsCorrectName() {
         assertEquals("Snack", meal0.getCategoryName());
         assertEquals("Breakfast", meal1.getCategoryName());
         assertEquals("Lunch", meal2.getCategoryName());

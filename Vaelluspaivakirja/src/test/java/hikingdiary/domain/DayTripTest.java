@@ -5,6 +5,7 @@
 package hikingdiary.domain;
 
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,6 +34,16 @@ public class DayTripTest {
         assertEquals("Wednesday", dt.getWeekday());
         dt.setDate(LocalDate.of(2020, 5, 10));
         assertEquals("Sunday", dt.getWeekday());
+        dt.setDate(LocalDate.of(2019, 7, 22));
+        assertEquals("Monday", dt.getWeekday());
+        dt.setDate(LocalDate.of(2019, 7, 23));
+        assertEquals("Tuesday", dt.getWeekday());
+        dt.setDate(LocalDate.of(2019, 7, 25));
+        assertEquals("Thursday", dt.getWeekday());
+        dt.setDate(LocalDate.of(2019, 7, 26));
+        assertEquals("Friday", dt.getWeekday());
+        dt.setDate(LocalDate.of(2019, 7, 27));
+        assertEquals("Saturday", dt.getWeekday());
     }
     
     @Test

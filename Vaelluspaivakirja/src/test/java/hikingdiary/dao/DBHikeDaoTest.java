@@ -45,7 +45,7 @@ public class DBHikeDaoTest {
     }
     
     @Test
-    public void readHikeReturnsAHikeWithAllItsElements() {
+    public void readHikeReturnsTheHikeWithAllItsElementsIfExistingAndNullIfNot() {
         Companion comp = new Companion("Antti");
         Item item = new Item("trangia", 1);
         Meal meal = new Meal("chili con papu", 3);
@@ -53,10 +53,12 @@ public class DBHikeDaoTest {
         hikeDao.createItem(hike, item);
         hikeDao.createMeal(hike, meal);
         Hike h = hikeDao.readHike("Kaldoaivi");
+        assertEquals(hike, h);
         assertTrue(h.formatCompanions().contains("Antti"));
         assertTrue(h.formatEquipment().contains("trangia"));
         assertTrue(h.formatMeals().contains("chili"));
         assertEquals(1, h.getMeals().size());
+        assertEquals(null, hikeDao.readHike("Kevo"));
     }
     
     @Test

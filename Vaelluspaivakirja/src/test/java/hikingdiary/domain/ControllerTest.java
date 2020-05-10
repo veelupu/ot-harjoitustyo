@@ -67,17 +67,18 @@ public class ControllerTest {
     }
     
     @Test
-    public void removeHikeRemovesTheHikeFromTheDatabase() {
+    public void removeHikeRemovesTheHikeFromTheDatabaseIfExisting() {
         c.createNewHike("Kaldoaivi", 2019, false);
         assertEquals(1, c.listPastHikes().size());
         Hike hike = c.getHike("Kaldoaivi");
         c.removeHike(hike);
         assertEquals(0, c.listPastHikes().size());
         assertEquals(null, c.getHike("Kaldoaivi"));
+        assertFalse(c.removeHike(hike));
     }
     
     @Test
-    public void updateHikeUpdatesHikeCorrectly() {
+    public void updateHikeUpdatesHikeCorrectlyIfExisting() {
         c.createNewHike("Kaldoaivi", 2019, false);
         Hike hike = c.getHike("Kaldoaivi");
         assertFalse(hike.isUpcoming());
@@ -98,6 +99,8 @@ public class ControllerTest {
         assertTrue(17.5 == hike2.getRucksackWeightEnd());
         assertEquals("Pulmankijärvi", hike2.getLocationStart());
         assertEquals("Adolfin kammi", hike2.getLocationEnd());
+        Hike hike3 = new Hike("Kevo", 2013, false);
+        assertFalse(c.updateHike(hike3));
     }
     
     @Test
@@ -158,17 +161,18 @@ public class ControllerTest {
     }
     
     @Test
-    public void addCompanionAddsTheCompanionToTheGivenHike() {
+    public void addCompanionAddsTheCompanionToTheGivenHikeIfNotExistingAlready() {
         c.createNewHike("Kaldoaivi", 2018, false);
         Companion comp = new Companion("Pekko");
         Hike hike = c.getHike("Kaldoaivi");
         assertFalse(hike.formatCompanions().contains(comp.getName()));
         c.addCompanion(hike, comp);
         assertTrue(hike.formatCompanions().contains(comp.getName()));
+        assertFalse(c.addCompanion(hike, comp));
     }
     
     @Test
-    public void removeCompanionRemovesCompanionOfTheGivenHike() {
+    public void removeCompanionRemovesCompanionOfTheGivenHikeIfExisting() {
         c.createNewHike("Kaldoaivi", 2017, false);
         Companion comp = new Companion("Pekko");
         Hike hike = c.getHike("Kaldoaivi");
@@ -176,6 +180,7 @@ public class ControllerTest {
         assertTrue(hike.formatCompanions().contains("Pekko"));
         c.removeCompanion(hike, comp.getName());
         assertFalse(hike.formatCompanions().contains("Pekko"));
+        assertFalse(c.removeCompanion(hike, "Kaisu"));
     }
 
     @Test
@@ -195,7 +200,7 @@ public class ControllerTest {
     }
     
     @Test
-    public void removeItemRemovesTheItemFromTheGivenHike() {
+    public void removeItemRemovesTheItemFromTheGivenHikeIfExisting() {
         c.createNewHike("Kaldoaivi", 2019, false);
         Item item = new Item("makuupussi", 1);
         Hike hike = c.getHike("Kaldoaivi");
@@ -203,10 +208,11 @@ public class ControllerTest {
         assertTrue(hike.formatEquipment().contains(item.getName()));
         c.removeItem(hike, item.getName());
         assertFalse(hike.formatEquipment().contains(item.getName()));
+        assertFalse(c.removeItem(hike, "juomapullo"));
     }
     
     @Test
-    public void addMealAddsAMealToTheGivenHike() {
+    public void addMealAddsAMealToTheGivenHikeIfNotExistingAlready() {
         c.createNewHike("Kaldoaivi", 2020, true);
         Meal meal = new Meal("letut ja vadelmahillo", 4);
         Hike hike = c.getHike("Kaldoaivi");
@@ -215,10 +221,11 @@ public class ControllerTest {
         c.addMeal(hike, meal);
         assertEquals(1, hike.getMeals().size());
         assertTrue(hike.formatMeals().contains(meal.getName()));
+        assertFalse(c.addMeal(hike, meal));
     }
     
     @Test
-    public void removeMealRemovesTheMealFromTheGivenHike() {
+    public void removeMealRemovesTheMealFromTheGivenHikeIfExisting() {
         c.createNewHike("Karhunkierros", 2020, true);
         Meal meal = new Meal("letut ja vadelmahillo", 4);
         Hike hike = c.getHike("Karhunkierros");
@@ -228,6 +235,7 @@ public class ControllerTest {
         assertTrue(c.removeMeal(hike, meal));
         assertEquals(0, hike.getMeals().size());
         assertFalse(hike.formatMeals().contains(meal.getName()));
+        assertFalse(c.removeMeal(hike, new Meal("pähkinäsekoitus", 5)));
     }
     
     @Test
