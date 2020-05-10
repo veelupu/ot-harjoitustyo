@@ -28,6 +28,7 @@ public class CreateHikeView {
 
     Controller c;
     boolean upcoming;
+    Hike hike;
 
     public CreateHikeView(Controller c) {
         this.c = c;
@@ -93,10 +94,11 @@ public class CreateHikeView {
         error.setBackground(new Background(bgF));
 
         bReady.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
             try {
                 int year = Integer.parseInt(tfYear.getText());
                 String name = tfName.getText();
-                Hike hike = c.createNewHike(name, Integer.valueOf(tfYear.getText()), this.upcoming);
+                hike = c.createNewHike(name, Integer.valueOf(tfYear.getText()), this.upcoming);
                 
                 if (hike == null) {
                     messageBox.getChildren().add(exists);
@@ -113,7 +115,7 @@ public class CreateHikeView {
                 
                 if (rucksacWEnd.getLength() != 0) {
                     hike.setRucksackWeightEnd(Double.parseDouble(rucksacWEnd.getText()));
-                    if (c.updateHike(hike)) {
+                    if (!c.updateHike(hike)) {
                         messageBox.getChildren().add(error);
                         return;
                     }
@@ -124,19 +126,38 @@ public class CreateHikeView {
                 tfName.clear();
                 tfYear.clear();
                 
-            } catch (Exception e) {
+            } catch (Exception e1) {
                 messageBox.getChildren().add(error);
+                c.removeHike(hike);
                 return;
             }
             messageBox.getChildren().add(done);
         });
         
         tfName.setOnMouseClicked((event) -> {
-            messageBox.getChildren().remove(done);
-            messageBox.getChildren().remove(error);
-            messageBox.getChildren().remove(exists);
+            messageBox.getChildren().removeAll(done, error, exists);
+        });
+        
+        tfYear.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
+        });
+        
+        rucksacWBeg.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
+        });
+        
+        rucksacWEnd.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
         });
 
+        bPast.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
+        });
+        
+        bUpcoming.setOnMouseClicked((event) -> {
+            messageBox.getChildren().removeAll(done, error, exists);
+        });
+        
         bigBox.getChildren().addAll(lName, tfName, lYear, tfYear, middleBox, rucksacBeg, rucksacWBeg, rucksacEnd, rucksacWEnd, messageBox);
         gp.add(bigBox, 0, 0);
         
