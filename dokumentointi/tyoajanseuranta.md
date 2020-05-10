@@ -22,5 +22,6 @@
 | 8.5.2020 | 9 | Ulkoasun hiomista, lisää toiminnallisuutta, luokkien siistimistä |
 | 9.5.2020 | 10 | Virheiden etsimistä ja korjaamista, ulkoasun hiomista, testejä |
 | 10.5.2020 | 3 | Testejä, tyylivirheiden korjaamista |
+| | 4,5 | Dokumentation viimeistelyä, virheiden korjaamista, palautus |
 
-**Yhteensä** 97,5 tuntia
+**Yhteensä** 102 tuntia
