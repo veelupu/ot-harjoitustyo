@@ -5,6 +5,8 @@ Vaelluspäiväkirja-sovelluksen avulla sovelluksen käyttäjän on helppoa ja k�
 
 Tähän mennessä graafiselle käyttöliittymälle on toteutettu päävalikko sekä toiminnallisuus uuden vaelluksen lisäämiseksi, menneiden ja tulevien vaellusten listaamiseksi, valitun vaelluksen näyttämiseksi sekä käyttäjänimen vaihtamiseksi. Vaellukselle on mahdollista lisätä seuraavat tiedot: nimi, vuosi, alku- ja loppupiste, rinkan alku- ja loppupaino, mahdolliset seuralaiset, ruokalista, varustelista, päivämatkat sekä tieto siitä, onko kyseessä mennyt vai tuleva vaellus.
 
+Vaelluspäiväkirja on Helsingin yliopiston tietojenkäsittelytieteen osaston Ohjelmistotekniikka-kurssin (kevät 2020) harjoitustyö.
+
 ## Dokumentaatio
 
 [Käyttöohje](dokumentointi/kayttoohje.md)
