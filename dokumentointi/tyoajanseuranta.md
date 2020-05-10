@@ -20,5 +20,7 @@
 | 6.5.2020 | 4,5 | Lisää toiminnallisuutta: poistamis- ja muokkaamismahdollisuuksia |
 | 7.5.2020 | 7 | Ulkoasun hiominen, lisää muokkaamismahdollisuuksia |
 | 8.5.2020 | 9 | Ulkoasun hiomista, lisää toiminnallisuutta, luokkien siistimistä |
+| 9.5.2020 | 10 | Virheiden etsimistä ja korjaamista, ulkoasun hiomista, testejä |
+| 10.5.2020 | 3 | Testejä, tyylivirheiden korjaamista |
 
-**Yhteensä** 84,5 tuntia
+**Yhteensä** 97,5 tuntia
