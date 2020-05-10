@@ -11,6 +11,7 @@ import hikingdiary.dao.DBUserDao;
 import hikingdiary.dao.DayTripDao;
 import hikingdiary.dao.HikeDao;
 import hikingdiary.dao.UserDao;
+import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -151,7 +152,7 @@ public class GraphicalUserInterface extends Application {
                     + "-fx-max-height: 80px;");
         }
 
-        Image image = new Image("file:backgroudImage.png", 780, 780, false, true);
+        Image image = new Image("/backgroudImage.png", 780, 780, false, true);
         BackgroundImage bgImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 BackgroundSize.DEFAULT);
 
