@@ -14,7 +14,7 @@ Kun sovellusta käytetään ensimmäistä kertaa, avautuu aluksi näkymä, jossa
 
 <img src="../dokumentointi/first-use-view.png" width="50%" alt="Image of first use view"/>
 
-HUOM! Mikäli samalla tietokoneella on käytetty aikaisemmin jotakin Vaelluspäiväkirjan aiempaa versiota, tulee käyttäjän ennen uuden version käytön aloitusta poistaa kotihakemistonsa juureen tallennettu .hikes.db -tiedosto. HUOM! Tällöin kaikkien vaellusten tallennetut tiedot poistetaan, joten mikäli käyttäjä haluaa tallentaa tiedot itselleen, se tulee tehdä ennen tiedoston poistamista. Mikäli tiedostoa ei poisteta, kaikki uudet ominaisuudet eivät välttämättä ole käytettävissä.
+Sovellus luo käyttäjän kotihakemiston juureen tiedoston .hikes.db, johon vaellusten ja käyttäjän tiedot tallennetaan. HUOM! Mikäli samalla tietokoneella on käytetty aikaisemmin jotakin Vaelluspäiväkirjan aiempaa versiota, tulee käyttäjän ennen uuden version käytön aloitusta poistaa kotihakemistonsa juureen tallennettu .hikes.db -tiedosto. HUOM! Tällöin kaikkien vaellusten tallennetut tiedot poistetaan, joten mikäli käyttäjä haluaa tallentaa tiedot itselleen, se tulee tehdä ennen tiedoston poistamista. Mikäli tiedostoa ei poisteta, kaikki uudet ominaisuudet eivät välttämättä ole käytettävissä.
 
 Kun sovellus seuraavan kerran avataan, avautuu suoraan päävalikkonäkymä. Päävalikkopalkki pysyy ikkunan yläreunassa koko sovelluksen käytön ajan ja sen avulla voi navigoida nappia painamalla neljään suuntaan: luomaan uutta vaellusta, tarkastelemaan menneitä tai tulevia vaelluksia sekä käyttäjäkohtaisiin asetuksiin.
 
