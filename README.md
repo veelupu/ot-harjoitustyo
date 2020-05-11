@@ -82,4 +82,4 @@ generoitua JavaDocia pääsee tarkastelemaan avamaalla tiedosto _target/site/api
 
 ## Sovelluksen taustakuva
 
-Kuva: <a href="https://pixabay.com/fi/users/GDJ-1086657/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=3846595">Gordon Johnson</a> <a href="https://pixabay.com/fi/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=3846595"> Pixabay (Public Domain)</a>
+Kuva: <a href="https://pixabay.com/fi/users/GDJ-1086657/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=3846595">Gordon Johnson</a> <a href="https://pixabay.com/fi/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=3846595"> Pixabay (kaupallinen käyttö sallittu Pixabayn lisenssillä, nimeämistä ei edellytetä)</a>
